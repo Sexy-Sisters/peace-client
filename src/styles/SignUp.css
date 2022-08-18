@@ -1,0 +1,51 @@
+.SignUp {
+  /* display: none; */
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10000;
+  background-color: rgba(0, 0, 0, 0.8);
+  animation: modal-show 0.3s;
+}
+
+.SignUp .modalContainer {
+  position: absolute;
+  width: 450px;
+  height: 600px;
+  /* left: 50%;
+  top: 50%;
+  transform: translateX(-50%); */
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  background-color: white;
+  text-align: center;
+}
+@keyframes modal-show {
+  from{
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+};
+.SignUp h1{
+  margin: 60px;
+}
+
+.SignUp input{
+  width: 80%;
+  height: 50px;
+  margin: 5px;
+}
+
+.SignUp button{
+  margin: 10px;
+  margin-top: 60px;
+  width: 150px;
+  height: 50px;
+}
