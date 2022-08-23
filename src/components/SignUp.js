@@ -49,9 +49,11 @@ function SignUp(props) {
 
   const signUp = () => {
     console.log(signUpInputs);
+    onClick();
   };
   const Login = () => {
     console.log(loginInputs);
+    onClick();
   };
 
   return (
@@ -93,7 +95,10 @@ function SignUp(props) {
             <button className="SignUp-button" onClick={() => signUp()}>
               가입하기
             </button>
-            <button className="SignUp-button" onClick={() => changeTypeInModal()}>
+            <button
+              className="SignUp-button"
+              onClick={() => changeTypeInModal()}
+            >
               로그인
             </button>
           </div>
@@ -121,7 +126,10 @@ function SignUp(props) {
             <button className="Login-button" onClick={() => Login()}>
               로그인
             </button>
-            <button className="Login-button" onClick={() => changeTypeInModal()}>
+            <button
+              className="Login-button"
+              onClick={() => changeTypeInModal()}
+            >
               회원가입
             </button>
           </div>
