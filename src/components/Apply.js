@@ -18,20 +18,13 @@ function Apply() {
       setMusic(null);
       setError(null);
       setLoading(true);
-      const response = await getSongInfo();
-      setMusic(response);
+      // const response = await getSongInfo();
+      // setMusic(response);
     } catch (error) {
       console.log(error.response.status);
       setError(error);
     }
     setLoading(false);
-  };
-
-  const getSongInfo = () => {
-    return axios.get(
-      `https://ws.audioscrobbler.com/2.0/?method=track.search&track=${song}&api_key=a7b431d3d0705a9bd1b0398f6f6cb0dd&format=json`,
-      { withCredentials: true }
-    );
   };
 
   if (loading) return <div>로딩중..</div>;
