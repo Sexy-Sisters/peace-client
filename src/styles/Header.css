@@ -1,3 +1,37 @@
-.Header{
+header{
     background-color: #cdcdcd;
+    height: 100px;
+    z-index: 2;
+    position: fixed;
+    width: 100%;
+    font-size: 20px;
+}
+.Header-list{
+    position: absolute;
+    left: 150px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    height: 100px;
+    align-items: center;
+}
+.Header-list span{
+    cursor: pointer;
+}
+.Header-signup{
+    position: absolute;
+    right: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    height: 100px;
+}
+.Header-signup span{
+    cursor: pointer;
+}
+.Header-logo{
+    height: 100px;
+    position: absolute;
+    left: 0px;
 }

@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import axios from "axios";
 import "../styles/SignUp.css";
 
 function SignUp(props) {
+  const instance = axios.create({
+    baseURL: "http://10.150.151.125:8080/api",
+  });
   const { onClick, changeType, type } = props;
+  const inputRef = useRef([]);
   const [signUpInputs, setSignUpInputs] = useState({
     name: "",
-    nickname: "",
+    nickName: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
   const [loginInputs, setLoginInputs] = useState({
     email: "",
@@ -19,9 +25,10 @@ function SignUp(props) {
     type
       ? setSignUpInputs({
           name: "",
-          nickname: "",
+          nickName: "",
           email: "",
           password: "",
+          confirmPassword: "",
         })
       : setLoginInputs({
           email: "",
@@ -35,7 +42,12 @@ function SignUp(props) {
       ...signUpInputs,
       [name]: value,
     };
-    setSignUpInputs(nextInputs);
+    setSignUpInputs({
+      name: nextInputs.name,
+      nickName: nextInputs.nickName,
+      email: nextInputs.email,
+      password: nextInputs.password,
+    });
   };
 
   const onChangeLogin = (e) => {
@@ -44,14 +56,40 @@ function SignUp(props) {
       ...loginInputs,
       [name]: value,
     };
-    setLoginInputs(nextInputs);
+    setLoginInputs({
+      email: nextInputs.email,
+      password: nextInputs.password,
+    });
   };
 
   const signUp = () => {
-    console.log(signUpInputs);
+    if (() => checkBlank()) {
+      postSignUp();
+      onClick();
+    }
   };
   const Login = () => {
     console.log(loginInputs);
+    onClick();
+  };
+
+  const postSignUp = async () => {
+    try {
+      await instance.post("user", signUpInputs);
+    } catch (e) {
+      console.log(e.data);
+    }
+  };
+
+  const checkBlank = () => {
+    for (let i = 0; i < inputRef.current.length; i++) {
+      if (inputRef.current[i].value === "") {
+        console.log(inputRef.current[i].name + "을 입력하세요");
+        inputRef.current[i].focus();
+        return false;
+      }
+    }
+    return true;
   };
 
   return (
@@ -66,35 +104,53 @@ function SignUp(props) {
               value={signUpInputs.name}
               onChange={(e) => onChangeSignUp(e)}
               className="SignUp-input"
+              ref={(el) => (inputRef.current[0] = el)}
             />
             <input
-              name="nickname"
+              name="nickName"
               placeholder="닉네임"
-              value={signUpInputs.nickname}
+              value={signUpInputs.nickName}
               onChange={(e) => onChangeSignUp(e)}
               className="SignUp-input"
+              ref={(el) => (inputRef.current[1] = el)}
             />
             <input
               name="email"
+              type="email"
               placeholder="이메일주소"
               value={signUpInputs.email}
               onChange={(e) => onChangeSignUp(e)}
               className="SignUp-input"
+              ref={(el) => (inputRef.current[2] = el)}
             />
             <input
               name="password"
+              type="password"
               placeholder="비밀번호"
               value={signUpInputs.password}
               onChange={(e) => onChangeSignUp(e)}
               className="SignUp-input"
+              ref={(el) => (inputRef.current[3] = el)}
+            />
+            <input
+              name="confirmPassword"
+              type="password"
+              placeholder="비밀번호 확인"
+              value={signUpInputs.confirmPassword}
+              onChange={(e) => onChangeSignUp(e)}
+              className="SignUp-input"
+              ref={(el) => (inputRef.current[4] = el)}
             />
           </div>
           <div>
+            <button
+              className="SignUp-button"
+              onClick={() => changeTypeInModal()}
+            >
+              로그인
+            </button>
             <button className="SignUp-button" onClick={() => signUp()}>
               가입하기
-            </button>
-            <button className="SignUp-button" onClick={() => changeTypeInModal()}>
-              로그인
             </button>
           </div>
         </div>
@@ -118,11 +174,14 @@ function SignUp(props) {
             />
           </div>
           <div>
+            <button
+              className="Login-button"
+              onClick={() => changeTypeInModal()}
+            >
+              회원가입
+            </button>
             <button className="Login-button" onClick={() => Login()}>
               로그인
-            </button>
-            <button className="Login-button" onClick={() => changeTypeInModal()}>
-              회원가입
             </button>
           </div>
         </div>
