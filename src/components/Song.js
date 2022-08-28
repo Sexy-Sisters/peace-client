@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Header from "./Header";
 // import axios from "axios";
-import "../styles/Apply.css";
+import "../styles/Song.css";
 
-function Apply() {
+function Song() {
   const [song, setSong] = useState("");
   const [music, setMusic] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -44,4 +44,4 @@ function Apply() {
   );
 }
 
-export default Apply;
+export default Song;

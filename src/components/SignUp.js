@@ -4,14 +4,15 @@ import "../styles/SignUp.css";
 
 function SignUp(props) {
   const instance = axios.create({
-    baseURL: "http://10.150.151.125:8080/api",
+    baseURL: "http://172.30.1.35:8080/api",
   });
   const { onClick, changeType, type } = props;
   const inputRef = useRef([]);
+  const checkEmail = useRef();
   const [signUpInputs, setSignUpInputs] = useState({
-    name: "",
-    nickName: "",
-    email: "",
+    name: "test1",
+    nickName: "test1",
+    email: "jsm8109jsm@gmail.com",
     password: "",
     confirmPassword: "",
   });
@@ -19,6 +20,9 @@ function SignUp(props) {
     email: "",
     password: "",
   });
+  const [sendCode, setSendCode] = useState(true);
+  const [issueCode, setIssueCode] = useState("");
+  const [certification, setCertification] = useState("");
 
   const changeTypeInModal = () => {
     changeType();
@@ -75,7 +79,7 @@ function SignUp(props) {
 
   const postSignUp = async () => {
     try {
-      await instance.post("user", signUpInputs);
+      setIssueCode(await instance.post("user", signUpInputs));
     } catch (e) {
       console.log(e.data);
     }
@@ -90,6 +94,29 @@ function SignUp(props) {
       }
     }
     return true;
+  };
+
+  const sendIssueCode = async () => {
+    setSendCode(false);
+    try {
+      await instance.get(`user/issue-code?email=${signUpInputs.email}`);
+      console.log("인증보냄");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const sendCheckCode = async () => {
+    try {
+      (await instance.post(`user/check-code`, {
+        code: issueCode,
+        email: signUpInputs.email,
+      })) && setCertification("인증 성공!");
+    } catch (error) {
+      console.log(error);
+      alert("인증에 실패했습니다.");
+      onClick();
+    }
   };
 
   return (
@@ -120,9 +147,27 @@ function SignUp(props) {
               placeholder="이메일주소"
               value={signUpInputs.email}
               onChange={(e) => onChangeSignUp(e)}
-              className="SignUp-input"
+              className="SignUp-input email"
               ref={(el) => (inputRef.current[2] = el)}
             />
+            <button className="sendCheckCode" onClick={() => sendIssueCode()}>
+              인증받기
+            </button>
+            <input
+              name="code"
+              type="text"
+              placeholder="인증번호 확인"
+              className="SignUp-input email"
+              ref={checkEmail}
+              disabled={sendCode}
+              value={issueCode}
+              onChange={(e) => setIssueCode(e.target.value)}
+            />
+            <button className="sendCheckCode" onClick={() => sendCheckCode()}>
+              확인하기
+            </button>
+            <br />
+            <span className="certification">{certification}</span>
             <input
               name="password"
               type="password"
