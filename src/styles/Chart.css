@@ -1,0 +1,28 @@
+.Chart-div{
+    padding-top: 100px;
+}
+
+.ChartList-div{
+    border: 2px solid black;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+
+.ChartList-div img{
+    width: 50px;
+}
+
+.ChartList-div div{
+    display: flex;
+    flex-direction: column;
+}
+
+.ChartList-name{
+    display: inline-block;
+    font-size: 20px;
+}
+
+.ChartList-artist{
+
+}
