@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Header from "./Header";
+import axios from "axios";
 // import axios from "axios";
-import "../styles/Apply.css";
+import "../styles/Song.css";
 
-function Apply() {
+function Song() {
   const [song, setSong] = useState("");
   const [music, setMusic] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -18,13 +19,21 @@ function Apply() {
       setMusic(null);
       setError(null);
       setLoading(true);
-      // const response = await getSongInfo();
-      // setMusic(response);
+      const response = await getSongInfo();
+      setMusic(response);
+      console.log(music);
     } catch (error) {
       console.log(error.response.status);
       setError(error);
     }
     setLoading(false);
+  };
+
+  const getSongInfo = () => {
+    return axios.get(
+      `https://ws.audioscrobbler.com/2.0/?method=track.search&track=${song}&api_key=a7b431d3d0705a9bd1b0398f6f6cb0dd&format=json`,
+      { withCredentials: true }
+    );
   };
 
   if (loading) return <div>로딩중..</div>;
@@ -44,4 +53,4 @@ function Apply() {
   );
 }
 
-export default Apply;
+export default Song;
