@@ -33,19 +33,11 @@ function Song() {
       headers: {},
     };
 
-    let str = "";
-
-    await axios(config)
-      .then(function (response) {
-        // console.log(response.data);
-        str = JSON.stringify(response.data);
-        // console.log(str);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
-    return str;
+    try {
+      return JSON.stringify((await axios(config)).data)
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   if (loading) return <div>로딩중..</div>;
