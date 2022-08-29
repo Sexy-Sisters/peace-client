@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import axios from "axios";
 // import axios from "axios";
@@ -15,30 +15,42 @@ function Song() {
   };
 
   const search = async () => {
-    try {
-      setMusic(null);
-      setError(null);
-      setLoading(true);
-      const response = await getSongInfo();
-      setMusic(response);
-      console.log(music);
-    } catch (error) {
-      console.log(error.response.status);
-      setError(error);
-    }
+    setMusic(null);
+    setError(null);
+    setLoading(true);
+    const response = await getSongInfo();
+    console.log(response);
+    setMusic(response);
     setLoading(false);
   };
 
-  const getSongInfo = () => {
-    return axios.get(
-      `https://ws.audioscrobbler.com/2.0/?method=track.search&track=${song}&api_key=a7b431d3d0705a9bd1b0398f6f6cb0dd&format=json`,
-      { withCredentials: true }
-    );
+  const getSongInfo = async () => {
+    var axios = require("axios");
+
+    var config = {
+      method: "get",
+      url: `https://ws.audioscrobbler.com/2.0/?method=track.search&track=${song}&api_key=a7b431d3d0705a9bd1b0398f6f6cb0dd&format=json`,
+      headers: {},
+    };
+
+    let str = "";
+
+    await axios(config)
+      .then(function (response) {
+        // console.log(response.data);
+        str = JSON.stringify(response.data);
+        // console.log(str);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    return str;
   };
 
   if (loading) return <div>로딩중..</div>;
   if (error) return <div>에러 발생..</div>;
-  console.log(music);
+  // console.log(music);
 
   return (
     <div>
