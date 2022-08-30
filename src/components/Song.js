@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Header from "./Header";
 import "../styles/Song.css";
 
 function SongList({ item }) {
+  const instance = axios.create({
+    baseURL: "http://10.150.151.125:8080/api",
+  });
+  const requestSong = async () => {
+    try {
+      await instance.post("song", {
+        ...item,
+        imgUrl: "asdf",
+      });
+      console.log("신청완료!");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
-      <span on>
+      <span onClick={() => requestSong()}>
         {item.singer} - {item.title}
       </span>
       <br />
@@ -18,10 +33,19 @@ function Song() {
   const [music, setMusic] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [searched, setSearched] = useState(false);
 
   const onChange = (e) => {
     setSong(e.target.value);
   };
+
+  useEffect(() => {
+    search();
+    if (song === "") {
+      setLoading(false);
+      setMusic([]);
+    }
+  }, [song]);
 
   const search = async () => {
     setMusic(null);
@@ -29,15 +53,19 @@ function Song() {
     setLoading(true);
     const response = await getSongInfo();
     const songList = JSON.parse(response);
-    console.log(songList);
+    if (songList.results.trackmatches.track.length === 0) {
+      setSearched(false);
+    } else {
+      setSearched(true);
+    }
     let newSongList = [];
     for (let i = 0; i < songList.results.trackmatches.track.length; i++) {
       newSongList = newSongList.concat({
         singer: songList.results.trackmatches.track[i].artist,
         title: songList.results.trackmatches.track[i].name,
       });
-      setMusic(newSongList);
     }
+    setMusic(newSongList);
     setLoading(false);
   };
 
@@ -68,10 +96,18 @@ function Song() {
         <input type="text" onChange={(e) => onChange(e)} value={song} />
         <button onClick={search}>검색</button>
         <br />
-        {music &&
+        {loading ? (
+          <>
+            <span>로딩중~</span>
+            <img src="./images/loading.gif" alt="로딩중~" />
+          </>
+        ) : searched ? (
           music.map((item, index) => {
             return <SongList item={item} key={index} />;
-          })}
+          })
+        ) : (
+          <span>검색 결과가 없습니다.</span>
+        )}
         {/* <input type="file" /> */}
       </div>
     </div>
