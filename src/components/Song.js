@@ -8,10 +8,11 @@ function SongList({ item }) {
     baseURL: "http://10.150.151.125:8080/api",
   });
   const requestSong = async () => {
+    console.log(item);
     try {
       await instance.post("song", {
         ...item,
-        imgUrl: "asdf",
+        imgUrl: "추가예정",
       });
       console.log("신청완료!");
     } catch (error) {
@@ -19,12 +20,12 @@ function SongList({ item }) {
     }
   };
   return (
-    <>
+    <div className="SongList-div">
       <span onClick={() => requestSong()}>
         {item.singer} - {item.title}
       </span>
       <br />
-    </>
+    </div>
   );
 }
 
@@ -74,7 +75,7 @@ function Song() {
 
     var config = {
       method: "get",
-      url: `https://ws.audioscrobbler.com/2.0/?method=track.search&track=${song}&api_key=a7b431d3d0705a9bd1b0398f6f6cb0dd&format=json&limit=5`,
+      url: `https://ws.audioscrobbler.com/2.0/?method=track.search&track=${song}&api_key=a7b431d3d0705a9bd1b0398f6f6cb0dd&format=json&limit=10`,
       headers: {},
     };
 
@@ -91,10 +92,14 @@ function Song() {
   return (
     <div>
       <Header />
-      <div className="Apply-div">
+      <div className="Song-div">
         <h1 className="title">기상송 신청하기</h1>
-        <input type="text" onChange={(e) => onChange(e)} value={song} />
-        <button onClick={search}>검색</button>
+        <input
+          type="text"
+          onChange={(e) => onChange(e)}
+          value={song}
+          className="Song-input"
+        />
         <br />
         {loading ? (
           <>
@@ -102,9 +107,11 @@ function Song() {
             <img src="./images/loading.gif" alt="로딩중~" />
           </>
         ) : searched ? (
-          music.map((item, index) => {
-            return <SongList item={item} key={index} />;
-          })
+          <div className="Song-List">
+            {music.map((item, index) => {
+              return <SongList item={item} key={index} />;
+            })}
+          </div>
         ) : (
           <span>검색 결과가 없습니다.</span>
         )}
