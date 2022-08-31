@@ -2,11 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "./Header";
 import "../styles/Song.css";
+import { instance } from "../instance/instance";
 
 function SongList({ item }) {
-  const instance = axios.create({
-    baseURL: "http://10.150.151.125:8080/api",
-  });
   const requestSong = async () => {
     console.log(item);
     try {

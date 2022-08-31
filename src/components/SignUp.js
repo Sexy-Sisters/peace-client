@@ -1,11 +1,9 @@
 import React, { useRef, useState } from "react";
 import axios from "axios";
 import "../styles/SignUp.css";
+import { instance } from "../instance/instance";
 
 function SignUp(props) {
-  const instance = axios.create({
-    baseURL: "http://10.150.151.125:8080/api",
-  });
   const { onClick, changeType, type } = props;
   const inputRef = useRef([]);
   const [signUpInputs, setSignUpInputs] = useState({
