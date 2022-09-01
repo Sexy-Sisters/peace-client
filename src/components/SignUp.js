@@ -17,12 +17,13 @@ function SignUp(props) {
     confirmPassword: "",
   });
   const [loginInputs, setLoginInputs] = useState({
-    email: "",
-    password: "",
+    email: "jsm@gmail.com",
+    password: "password",
   });
   const [sendCode, setSendCode] = useState(true);
   const [issueCode, setIssueCode] = useState("");
   const [certification, setCertification] = useState("");
+  const [token, setToken] = useState({});
 
   const changeTypeInModal = () => {
     changeType();
@@ -74,14 +75,27 @@ function SignUp(props) {
   };
   const Login = () => {
     console.log(loginInputs);
+    postLogin();
     onClick();
   };
 
   const postSignUp = async () => {
     try {
       setIssueCode(await instance.post("user", signUpInputs));
+      console.log("가입완료!");
     } catch (e) {
       console.log(e.data);
+    }
+  };
+
+  const postLogin = async () => {
+    try {
+      setToken(
+        await instance.post("auth", loginInputs, { withCredentials: true })
+      );
+      console.log(token);
+    } catch (error) {
+      console.log(error.data);
     }
   };
 
@@ -205,6 +219,7 @@ function SignUp(props) {
           <div>
             <input
               name="email"
+              type="email"
               placeholder="이메일주소"
               value={loginInputs.email}
               onChange={(e) => onChangeLogin(e)}
@@ -212,6 +227,7 @@ function SignUp(props) {
             />
             <input
               name="password"
+              type="password"
               placeholder="비밀번호"
               value={loginInputs.password}
               onChange={(e) => onChangeLogin(e)}

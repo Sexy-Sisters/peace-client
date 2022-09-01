@@ -4,33 +4,41 @@ import axios from "axios";
 import "../styles/Chart.css";
 
 function ChartList({ data }) {
-  const [chart, setChart] = useState([]);
-  const instance = axios.create({
-    baseURL: "http://10.150.151.125:8080/api",
-  });
-  useEffect(() => {
-    getSongChart();
-    console.log(chart);
-  }, []);
-  const getSongChart = async () => {
-    try {
-      setChart(await instance.get("song"));
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <div className="ChartList-div">
-      <img src={data.img} alt="앨범커버" />
+      {/* <img src={data.imgUrl} alt="앨범커버" /> */}
+      <img src="./images/logo.png" alt="앨범커버" />
       <div>
-        <span className="ChartList-name">{data.name}</span>
-        <span className="ChartList-artist">{data.artist}</span>
+        <span className="ChartList-name">{data.title}</span>
+        <span className="ChartList-artist">{data.singer}</span>
       </div>
     </div>
   );
 }
 
 function Chart() {
+  const [chart, setChart] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const instance = axios.create({
+    baseURL: "http://10.150.151.125:8080/api",
+  });
+
+  useEffect(() => {
+    const getSongChart = async () => {
+      try {
+        setLoading(true);
+        const response = await instance.get("song");
+        console.log(response.data);
+        setChart(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+      setLoading(false);
+    };
+    getSongChart();
+    console.log(chart);
+  }, []);
+
   const sampleData = [
     {
       id: 1,
@@ -54,14 +62,21 @@ function Chart() {
   return (
     <div>
       <Header />
-      <div className="Chart-div">
-        <h1 className="title">BSSM 차트</h1>
-        <div className="ChartList">
-          {sampleData.map((item) => {
-            return <ChartList data={item} key={item.id} />;
-          })}
+      {loading ? (
+        <div className="Chart-div">
+          <span>로딩중~</span>
         </div>
-      </div>
+      ) : (
+        <div className="Chart-div">
+          <h1 className="title">BSSM 차트</h1>
+          <div className="ChartList">
+            {chart.length &&
+              chart.map((item) => {
+                return <ChartList data={item} key={item.id} />;
+              })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
