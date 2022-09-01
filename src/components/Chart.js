@@ -1,8 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./Header";
+import axios from "axios";
 import "../styles/Chart.css";
 
 function ChartList({ data }) {
+  const [chart, setChart] = useState([]);
+  const instance = axios.create({
+    baseURL: "http://10.150.151.125:8080/api",
+  });
+  useEffect(() => {
+    getSongChart();
+    console.log(chart);
+  }, []);
+  const getSongChart = async () => {
+    try {
+      setChart(await instance.get("song"));
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="ChartList-div">
       <img src={data.img} alt="앨범커버" />

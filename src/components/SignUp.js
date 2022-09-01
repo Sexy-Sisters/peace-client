@@ -4,7 +4,7 @@ import "../styles/SignUp.css";
 
 function SignUp(props) {
   const instance = axios.create({
-    baseURL: "http://172.30.1.35:8080/api",
+    baseURL: "http://10.150.151.125:8080/api",
   });
   const { onClick, changeType, type } = props;
   const inputRef = useRef([]);
