@@ -1,13 +1,10 @@
 import React, { useRef, useState } from "react";
-import axios from "axios";
 import "../styles/SignUp.css";
 import  { atom, useRecoilState } from 'recoil'
 import {v1} from 'uuid';
+import { instance } from '../instance/instance';
 
 function SignUp(props) {
-  const instance = axios.create({
-    baseURL: "http://192.168.0.9:8090/api",
-  });
   const tokenState = atom({
     key: `tokenState/${v1()}`,
     default: ''
