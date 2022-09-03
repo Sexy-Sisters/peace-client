@@ -1,28 +1,35 @@
 import React, { useRef, useState } from "react";
 import axios from "axios";
 import "../styles/SignUp.css";
+import  { atom, useRecoilState } from 'recoil'
+import {v1} from 'uuid';
 
 function SignUp(props) {
   const instance = axios.create({
-    baseURL: "http://172.30.1.35:8080/api",
+    baseURL: "http://192.168.0.9:8090/api",
+  });
+  const tokenState = atom({
+    key: `tokenState/${v1()}`,
+    default: ''
   });
   const { onClick, changeType, type } = props;
   const inputRef = useRef([]);
   const checkEmail = useRef();
   const [signUpInputs, setSignUpInputs] = useState({
-    name: "test1",
-    nickName: "test1",
-    email: "jsm8109jsm@gmail.com",
+    name: "",
+    nickName: "",
+    email: "",
     password: "",
     confirmPassword: "",
   });
   const [loginInputs, setLoginInputs] = useState({
-    email: "",
-    password: "",
+    email: "jsm@gmail.com",
+    password: "password",
   });
   const [sendCode, setSendCode] = useState(true);
   const [issueCode, setIssueCode] = useState("");
   const [certification, setCertification] = useState("");
+  const [token, setToken] = useRecoilState(tokenState);
 
   const changeTypeInModal = () => {
     changeType();
@@ -72,8 +79,15 @@ function SignUp(props) {
       onClick();
     }
   };
-  const Login = () => {
-    console.log(loginInputs);
+  const Login = async () => {
+    try {
+      const response = await instance.post("auth", loginInputs);
+      console.log(response.data);
+      setToken(response.data);
+      console.log(token);
+    } catch (error) {
+      console.log(error);
+    }
     onClick();
   };
 
@@ -81,7 +95,7 @@ function SignUp(props) {
     try {
       setIssueCode(await instance.post("user", signUpInputs));
     } catch (e) {
-      console.log(e.data);
+      console.log(e);
     }
   };
 
@@ -122,6 +136,7 @@ function SignUp(props) {
   return (
     <div className="SignUp" onClick={onClick}>
       {type ? (
+        //회원가입
         <div className="modalContainer" onClick={(e) => e.stopPropagation()}>
           <h1 className="SignUp-title">회원가입</h1>
           <div>
@@ -200,11 +215,13 @@ function SignUp(props) {
           </div>
         </div>
       ) : (
+        //로그인
         <div className="modalContainer" onClick={(e) => e.stopPropagation()}>
           <h1 className="Login-title">로그인</h1>
           <div>
             <input
               name="email"
+              type="email"
               placeholder="이메일주소"
               value={loginInputs.email}
               onChange={(e) => onChangeLogin(e)}
@@ -212,6 +229,7 @@ function SignUp(props) {
             />
             <input
               name="password"
+              type="password"
               placeholder="비밀번호"
               value={loginInputs.password}
               onChange={(e) => onChangeLogin(e)}
