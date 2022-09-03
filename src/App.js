@@ -1,13 +1,13 @@
 import "./App.css";
 import Main from "./components/Main";
 import { Routes, Route } from "react-router-dom";
-import Apply from "./components/Apply";
+import Song from "./components/Song";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Main />} />
-      <Route path="/apply" element={<Apply/>}/>
+      <Route path="/song" element={<Song />} />
     </Routes>
   );
 }

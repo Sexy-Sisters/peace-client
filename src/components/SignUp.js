@@ -1,13 +1,17 @@
 import React, { useRef, useState } from "react";
-import axios from "axios";
 import "../styles/SignUp.css";
+import  { atom, useRecoilState } from 'recoil'
+import {v1} from 'uuid';
+import { instance } from '../instance/instance';
 
 function SignUp(props) {
-  const instance = axios.create({
-    baseURL: "http://10.150.151.125:8080/api",
+  const tokenState = atom({
+    key: `tokenState/${v1()}`,
+    default: ''
   });
   const { onClick, changeType, type } = props;
   const inputRef = useRef([]);
+  const checkEmail = useRef();
   const [signUpInputs, setSignUpInputs] = useState({
     name: "",
     nickName: "",
@@ -16,9 +20,13 @@ function SignUp(props) {
     confirmPassword: "",
   });
   const [loginInputs, setLoginInputs] = useState({
-    email: "",
-    password: "",
+    email: "jsm@gmail.com",
+    password: "password",
   });
+  const [sendCode, setSendCode] = useState(true);
+  const [issueCode, setIssueCode] = useState("");
+  const [certification, setCertification] = useState("");
+  const [token, setToken] = useRecoilState(tokenState);
 
   const changeTypeInModal = () => {
     changeType();
@@ -68,16 +76,23 @@ function SignUp(props) {
       onClick();
     }
   };
-  const Login = () => {
-    console.log(loginInputs);
+  const Login = async () => {
+    try {
+      const response = await instance.post("auth", loginInputs);
+      console.log(response.data);
+      setToken(response.data);
+      console.log(token);
+    } catch (error) {
+      console.log(error);
+    }
     onClick();
   };
 
   const postSignUp = async () => {
     try {
-      await instance.post("user", signUpInputs);
+      setIssueCode(await instance.post("user", signUpInputs));
     } catch (e) {
-      console.log(e.data);
+      console.log(e);
     }
   };
 
@@ -92,9 +107,33 @@ function SignUp(props) {
     return true;
   };
 
+  const sendIssueCode = async () => {
+    setSendCode(false);
+    try {
+      await instance.get(`user/issue-code?email=${signUpInputs.email}`);
+      console.log("인증보냄");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const sendCheckCode = async () => {
+    try {
+      (await instance.post(`user/check-code`, {
+        code: issueCode,
+        email: signUpInputs.email,
+      })) && setCertification("인증 성공!");
+    } catch (error) {
+      console.log(error);
+      alert("인증에 실패했습니다.");
+      onClick();
+    }
+  };
+
   return (
     <div className="SignUp" onClick={onClick}>
       {type ? (
+        //회원가입
         <div className="modalContainer" onClick={(e) => e.stopPropagation()}>
           <h1 className="SignUp-title">회원가입</h1>
           <div>
@@ -120,9 +159,27 @@ function SignUp(props) {
               placeholder="이메일주소"
               value={signUpInputs.email}
               onChange={(e) => onChangeSignUp(e)}
-              className="SignUp-input"
+              className="SignUp-input email"
               ref={(el) => (inputRef.current[2] = el)}
             />
+            <button className="sendCheckCode" onClick={() => sendIssueCode()}>
+              인증받기
+            </button>
+            <input
+              name="code"
+              type="text"
+              placeholder="인증번호 확인"
+              className="SignUp-input email"
+              ref={checkEmail}
+              disabled={sendCode}
+              value={issueCode}
+              onChange={(e) => setIssueCode(e.target.value)}
+            />
+            <button className="sendCheckCode" onClick={() => sendCheckCode()}>
+              확인하기
+            </button>
+            <br />
+            <span className="certification">{certification}</span>
             <input
               name="password"
               type="password"
@@ -155,11 +212,13 @@ function SignUp(props) {
           </div>
         </div>
       ) : (
+        //로그인
         <div className="modalContainer" onClick={(e) => e.stopPropagation()}>
           <h1 className="Login-title">로그인</h1>
           <div>
             <input
               name="email"
+              type="email"
               placeholder="이메일주소"
               value={loginInputs.email}
               onChange={(e) => onChangeLogin(e)}
@@ -167,6 +226,7 @@ function SignUp(props) {
             />
             <input
               name="password"
+              type="password"
               placeholder="비밀번호"
               value={loginInputs.password}
               onChange={(e) => onChangeLogin(e)}
