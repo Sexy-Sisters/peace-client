@@ -1,18 +1,16 @@
 import React, { useRef, useState } from "react";
-import axios from "axios";
 import "../styles/SignUp.css";
-
+import { useRecoilState } from 'recoil'
+import { tokenState } from "../atom/token";
+import { instance } from '../instance/instance';
 function SignUp(props) {
-  const instance = axios.create({
-    baseURL: "http://10.150.151.125:8080/api",
-  });
   const { onClick, changeType, type } = props;
   const inputRef = useRef([]);
   const checkEmail = useRef();
   const [signUpInputs, setSignUpInputs] = useState({
-    name: "test1",
-    nickName: "test1",
-    email: "jsm8109jsm@gmail.com",
+    name: "",
+    nickName: "",
+    email: "",
     password: "",
     confirmPassword: "",
   });
@@ -23,22 +21,22 @@ function SignUp(props) {
   const [sendCode, setSendCode] = useState(true);
   const [issueCode, setIssueCode] = useState("");
   const [certification, setCertification] = useState("");
-  const [token, setToken] = useState({});
+  const [token, setToken] = useRecoilState(tokenState);
 
   const changeTypeInModal = () => {
     changeType();
     type
       ? setSignUpInputs({
-          name: "",
-          nickName: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-        })
+        name: "",
+        nickName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      })
       : setLoginInputs({
-          email: "",
-          password: "",
-        });
+        email: "",
+        password: "",
+      });
   };
 
   const onChangeSignUp = (e) => {
@@ -73,18 +71,27 @@ function SignUp(props) {
       onClick();
     }
   };
-  const Login = () => {
-    console.log(loginInputs);
-    postLogin();
+  const Login = async () => {
+    try {
+      const response = await instance.post("auth", loginInputs);
+      setToken(response.data);
+      // console.log(token);
+    } catch (error) {
+      console.log(error);
+    }
     onClick();
   };
+
+  // useEffect(() => {
+  //   console.log(token);
+  // }, [token])
 
   const postSignUp = async () => {
     try {
       setIssueCode(await instance.post("user", signUpInputs));
       console.log("가입완료!");
     } catch (e) {
-      console.log(e.data);
+      console.log(e);
     }
   };
 
@@ -136,6 +143,7 @@ function SignUp(props) {
   return (
     <div className="SignUp" onClick={onClick}>
       {type ? (
+        //회원가입
         <div className="modalContainer" onClick={(e) => e.stopPropagation()}>
           <h1 className="SignUp-title">회원가입</h1>
           <div>
@@ -214,6 +222,7 @@ function SignUp(props) {
           </div>
         </div>
       ) : (
+        //로그인
         <div className="modalContainer" onClick={(e) => e.stopPropagation()}>
           <h1 className="Login-title">로그인</h1>
           <div>
