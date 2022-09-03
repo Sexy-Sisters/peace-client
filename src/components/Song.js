@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import "../styles/Song.css";
 import { instance } from '../instance/instance'
+import { useRecoilValue } from 'recoil';
+import { tokenState } from "../atom/token";
 
 function SongList({ item, setSong }) {
+  const token = useRecoilValue(tokenState);
   const requestSong = async () => {
     try {
       setSong("");
@@ -11,6 +14,10 @@ function SongList({ item, setSong }) {
       await instance.post("song", {
         ...item,
         imgUrl: "추가예정",
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token.accessToken}`
+        }
       });
       console.log("신청완료!");
     } catch (error) {

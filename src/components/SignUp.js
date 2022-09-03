@@ -1,13 +1,9 @@
 import React, { useRef, useState } from "react";
 import "../styles/SignUp.css";
-import  { atom, useRecoilState } from 'recoil'
-import {v1} from 'uuid';
+import { useRecoilState } from 'recoil'
+import { tokenState } from "../atom/token";
 import { instance } from '../instance/instance';
 function SignUp(props) {
-  const tokenState = atom({
-    key: `tokenState/${v1()}`,
-    default: ''
-  });
   const { onClick, changeType, type } = props;
   const inputRef = useRef([]);
   const checkEmail = useRef();
@@ -31,16 +27,16 @@ function SignUp(props) {
     changeType();
     type
       ? setSignUpInputs({
-          name: "",
-          nickName: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-        })
+        name: "",
+        nickName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      })
       : setLoginInputs({
-          email: "",
-          password: "",
-        });
+        email: "",
+        password: "",
+      });
   };
 
   const onChangeSignUp = (e) => {
@@ -78,14 +74,17 @@ function SignUp(props) {
   const Login = async () => {
     try {
       const response = await instance.post("auth", loginInputs);
-      console.log(response.data);
       setToken(response.data);
-      console.log(token);
+      // console.log(token);
     } catch (error) {
       console.log(error);
     }
     onClick();
   };
+
+  // useEffect(() => {
+  //   console.log(token);
+  // }, [token])
 
   const postSignUp = async () => {
     try {
