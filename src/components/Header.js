@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../styles/Header.css";
 import SignUp from "./SignUp";
+import { Link } from "react-router-dom";
 
 function Header() {
   const [modal, setModal] = useState(false);
@@ -13,9 +14,13 @@ function Header() {
   };
   return (
     <header>
-      <img src="./images/logo.png" alt="로고" className="Header-logo" />
+      <Link to="/">
+        <img src="./images/logo.png" alt="로고" className="Header-logo" />
+      </Link>
       <div className="Header-list">
-        <span>기상송 신청</span>
+        <Link to="/song">
+          <span>기상송 신청</span>
+        </Link>
         <span>BSSM 차트</span>
         <span>투표하기</span>
         <span>피드백</span>
