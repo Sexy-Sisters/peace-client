@@ -14,14 +14,16 @@ function Header() {
   };
   return (
     <header>
-      <Link to="/">
+      <Link to="/" style={{ textDecoration: 'none' }}>
         <img src="./images/logo.png" alt="로고" className="Header-logo" />
       </Link>
       <div className="Header-list">
         <Link to="/song">
           <span>기상송 신청</span>
         </Link>
-        <span>BSSM 차트</span>
+        <Link to="/chart">
+          <span>BSSM 차트</span>
+        </Link>
         <span>투표하기</span>
         <span>피드백</span>
       </div>

@@ -1,4 +1,4 @@
-header{
+header {
     background-color: #cdcdcd;
     height: 100px;
     z-index: 2;
@@ -6,7 +6,8 @@ header{
     width: 100%;
     font-size: 20px;
 }
-.Header-list{
+
+.Header-list {
     position: absolute;
     left: 150px;
     display: flex;
@@ -15,10 +16,20 @@ header{
     height: 100px;
     align-items: center;
 }
-.Header-list span{
+
+.Header-list span {
     cursor: pointer;
 }
-.Header-signup{
+
+a:visited {
+    color: black;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+.Header-signup {
     position: absolute;
     right: 40px;
     display: flex;
@@ -27,10 +38,12 @@ header{
     gap: 20px;
     height: 100px;
 }
-.Header-signup span{
+
+.Header-signup span {
     cursor: pointer;
 }
-.Header-logo{
+
+.Header-logo {
     height: 100px;
     position: absolute;
     left: 0px;
