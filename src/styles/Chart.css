@@ -1,0 +1,40 @@
+.Chart-div{
+    padding-top: 100px;
+}
+
+.ChartList{
+    width: 80%;
+    margin: 0 auto;
+}
+
+.ChartList-div{
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+
+.ChartList-div img{
+    width: 50px;
+    margin-right: 20px;
+}
+
+.ChartList-div div{
+    display: flex;
+    flex-direction: column;
+}
+
+.ChartList-name{
+    display: inline-block;
+    font-size: 20px;
+}
+
+.ChartList-artist{
+
+}
+
+.ChartList-div:last-child{
+    border: 2px solid black;
+}

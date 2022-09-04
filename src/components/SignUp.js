@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import "../styles/SignUp.css";
-import { useRecoilState } from 'recoil'
-import { tokenState } from "../atom/token";
+import { useSetRecoilState } from 'recoil'
+import { tokenState } from "../atom";
 import { instance } from '../instance/instance';
 function SignUp(props) {
   const { onClick, changeType, type } = props;
@@ -21,7 +21,7 @@ function SignUp(props) {
   const [sendCode, setSendCode] = useState(true);
   const [issueCode, setIssueCode] = useState("");
   const [certification, setCertification] = useState("");
-  const [token, setToken] = useRecoilState(tokenState);
+  const setToken = useSetRecoilState(tokenState);
 
   const changeTypeInModal = () => {
     changeType();
@@ -89,6 +89,7 @@ function SignUp(props) {
   const postSignUp = async () => {
     try {
       setIssueCode(await instance.post("user", signUpInputs));
+      console.log("가입완료!");
     } catch (e) {
       console.log(e);
     }

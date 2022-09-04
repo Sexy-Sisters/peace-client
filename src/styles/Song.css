@@ -9,6 +9,9 @@
     font-size: 20px;
     padding: 5px;
     margin-bottom: 1px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 
 .SongList-div{
