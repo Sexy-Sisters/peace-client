@@ -4,7 +4,10 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import {RecoilRoot} from "recoil";
+import { RecoilRoot } from "recoil";
+import ReactModal from "react-modal";
+
+ReactModal.setAppElement('#root');
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

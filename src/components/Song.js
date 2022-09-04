@@ -2,31 +2,19 @@ import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import "../styles/Song.css";
 import { instance } from '../instance/instance'
-import { useRecoilValue } from 'recoil';
-import { tokenState } from "../atom/token";
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
+import { tokenState, musicState, songState, isSelectedMusicState } from "../atom";
 
-function SongList({ item, setSong }) {
-  const token = useRecoilValue(tokenState);
-  const requestSong = async () => {
-    try {
-      setSong("");
-      console.log(item);
-      await instance.post("song", {
-        ...item,
-        imgUrl: "추가예정",
-      }, {
-        headers: {
-          'Authorization': `Bearer ${token.accessToken}`
-        }
-      });
-      console.log("신청완료!");
-    } catch (error) {
-      console.log(error);
-    }
+function SongList({ item }) {
+  const setSong = useSetRecoilState(songState);
+  const setIsSelectedMusic = useSetRecoilState(isSelectedMusicState);
+  const selectSong = async () => {
+    setSong(`${item.singer} - ${item.title}`);
+    setIsSelectedMusic(true);
   };
   return (
     <div className="SongList-div">
-      <span onClick={() => requestSong()}>
+      <span onClick={() => selectSong()}>
         {item.singer} - {item.title}
       </span>
       <br />
@@ -35,14 +23,21 @@ function SongList({ item, setSong }) {
 }
 
 function Song() {
-  const [song, setSong] = useState("");
-  const [music, setMusic] = useState(null);
+  const [song, setSong] = useRecoilState(songState);
+  const [music, setMusic] = useRecoilState(musicState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searched, setSearched] = useState(false);
+  const token = useRecoilValue(tokenState);
+  const [isSelectedMusic, setIsSelectedMusic] = useRecoilState(isSelectedMusicState);
 
   useEffect(() => {
-    search();
+    if (isSelectedMusic) {
+      setMusic([]);
+    }
+    else {
+      search();
+    }
     if (song === "") {
       setLoading(false);
       setMusic([]);
@@ -50,11 +45,12 @@ function Song() {
   }, [song]);
 
   const onChange = (e) => {
+    setIsSelectedMusic(false);
     setSong(e.target.value);
   };
 
   const search = async () => {
-    setMusic(null);
+    setMusic([]);
     setError(null);
     setLoading(true);
     const response = await getSongInfo();
@@ -87,9 +83,7 @@ function Song() {
 
     await axios(config)
       .then(function (response) {
-        // console.log(response.data);
         str = JSON.stringify(response.data);
-        // console.log(str);
       })
       .catch(function (error) {
         console.log(error);
@@ -99,6 +93,25 @@ function Song() {
   };
 
   if (error) return <div>에러 발생..</div>;
+
+  const requestSong = async () => {
+    try {
+      let newSong = song.split(' - ');
+      console.log(newSong)
+      await instance.post("song", {
+        title: newSong[1],
+        singer: newSong[0],
+        imgUrl: "추가예정",
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token.accessToken}`
+        }
+      });
+      console.log("신청완료!");
+    } catch (res) {
+      console.log(res.response.data.message);
+    }
+  };
 
   return (
     <div>
@@ -120,12 +133,14 @@ function Song() {
         ) : searched ? (
           <div className="Song-List">
             {music.map((item, index) => {
-              return <SongList item={item} key={index} setSong={setSong} />;
+              return <SongList item={item} key={index} />;
             })}
           </div>
         ) : (
           <span>검색 결과가 없습니다.</span>
         )}
+        <br />
+        <button onClick={() => requestSong()}>신청하기</button>
         {/* <input type="file" /> */}
       </div>
     </div>
