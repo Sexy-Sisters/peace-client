@@ -3,14 +3,16 @@ import Header from "./Header";
 import "../styles/Song.css";
 import { instance } from '../instance/instance'
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
-import { tokenState, musicState, songState, isSelectedMusicState } from "../atom";
+import { tokenState, musicState, songState, isSelectedMusicState, disabledState } from "../atom";
 
 function SongList({ item }) {
   const setSong = useSetRecoilState(songState);
   const setIsSelectedMusic = useSetRecoilState(isSelectedMusicState);
+  const setDisabled = useSetRecoilState(disabledState);
   const selectSong = async () => {
     setSong(`${item.singer} - ${item.title}`);
     setIsSelectedMusic(true);
+    setDisabled(false);
   };
   return (
     <div className="SongList-div">
@@ -29,7 +31,9 @@ function Song() {
   const [error, setError] = useState(null);
   const [searched, setSearched] = useState(false);
   const token = useRecoilValue(tokenState);
+  const [searchError, setSearchError] = useState('검색 결과가 없습니다.');
   const [isSelectedMusic, setIsSelectedMusic] = useRecoilState(isSelectedMusicState);
+  const [disabled, setDisabled] = useRecoilState(disabledState);
 
   useEffect(() => {
     if (isSelectedMusic) {
@@ -53,12 +57,16 @@ function Song() {
     setMusic([]);
     setError(null);
     setLoading(true);
+    setSearchError('');
     const response = await getSongInfo();
     const songList = JSON.parse(response);
     if (songList.results.trackmatches.track.length === 0) {
       setSearched(false);
+      setSearchError('검색 결과가 없습니다.');
+      setDisabled(true);
     } else {
       setSearched(true);
+      setSearchError('');
     }
     let newSongList = [];
     for (let i = 0; i < songList.results.trackmatches.track.length; i++) {
@@ -95,21 +103,26 @@ function Song() {
   if (error) return <div>에러 발생..</div>;
 
   const requestSong = async () => {
-    try {
-      let newSong = song.split(' - ');
-      console.log(newSong)
-      await instance.post("song", {
-        title: newSong[1],
-        singer: newSong[0],
-        imgUrl: "추가예정",
-      }, {
-        headers: {
-          'Authorization': `Bearer ${token.accessToken}`
-        }
-      });
-      console.log("신청완료!");
-    } catch (res) {
-      console.log(res.response.data.message);
+    if (!song) {
+      setSearchError('노래가 선택되지 않았습니다.');
+    }
+    else {
+      try {
+        let newSong = song.split(' - ');
+        await instance.post("song", {
+          title: newSong[1],
+          singer: newSong[0],
+          imgUrl: "추가예정",
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token.accessToken}`
+          }
+        });
+        console.log("신청완료!");
+      } catch (res) {
+        console.log(res.response.data.message);
+        setSearchError(res.response.data.message);
+      }
     }
   };
 
@@ -123,6 +136,7 @@ function Song() {
           onChange={(e) => onChange(e)}
           value={song}
           className="Song-input"
+          style={{ border: searchError === '하루에 한 곡만 신청할 수 있습니다.' && '3px solid red' }}
         />
         <br />
         {loading ? (
@@ -130,17 +144,16 @@ function Song() {
             <span>로딩중~</span>
             <img src="./images/loading.gif" alt="로딩중~" />
           </>
-        ) : searched ? (
+        ) : searched && (
           <div className="Song-List">
             {music.map((item, index) => {
               return <SongList item={item} key={index} />;
             })}
           </div>
-        ) : (
-          <span>검색 결과가 없습니다.</span>
         )}
+        <span style={{ color: searchError === '하루에 한 곡만 신청할 수 있습니다.' && 'red' }}>{searchError}</span>
         <br />
-        <button onClick={() => requestSong()}>신청하기</button>
+        <button onClick={() => requestSong()} disabled={disabled}>신청하기</button>
         {/* <input type="file" /> */}
       </div>
     </div>

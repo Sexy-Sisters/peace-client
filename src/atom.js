@@ -20,3 +20,8 @@ export const isSelectedMusicState = atom({
     key: `isSelectedMusicState/${v1()}`,
     default: false
 });
+
+export const disabledState = atom({
+    key: `disabled/${v1()}`,
+    default: true
+});
