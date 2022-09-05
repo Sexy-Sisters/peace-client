@@ -1,8 +1,7 @@
 import React, { useRef, useState } from "react";
 import "../styles/SignUp.css";
-import { useSetRecoilState } from 'recoil'
-import { tokenState } from "../atom";
 import { instance } from '../instance/instance';
+import { setCookie } from "../Cookies";
 function SignUp(props) {
   const { onClick, changeType, type } = props;
   const inputRef = useRef([]);
@@ -15,14 +14,12 @@ function SignUp(props) {
     confirmPassword: "",
   });
   const [loginInputs, setLoginInputs] = useState({
-    email: "jsm@gmail.com",
-    password: "password",
+    email: "jsm8109jsm@gmail.com",
+    password: "",
   });
   const [sendCode, setSendCode] = useState(true);
   const [issueCode, setIssueCode] = useState("");
   const [certification, setCertification] = useState("");
-  const setToken = useSetRecoilState(tokenState);
-
   const changeTypeInModal = () => {
     changeType();
     type
@@ -74,8 +71,17 @@ function SignUp(props) {
   const Login = async () => {
     try {
       const response = await instance.post("auth", loginInputs);
-      setToken(response.data);
+      if (response.accessToken) {
+        setCookie('access-token', response.accessToken, {
+          path: "/",
+          secure: true,
+          sameSite: 'none',
+        })
+      }
+      // setToken(response.data);
+      // token.refreshToken && localStorage.setItem('refresh-token', token.refreshToken);
       // console.log(token);
+      response.refreshToken && localStorage.setItem('refresh-token', response.refreshToken);
     } catch (error) {
       console.log(error);
     }

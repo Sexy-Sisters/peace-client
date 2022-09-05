@@ -3,11 +3,22 @@ import Header from "./Header";
 import { instance } from "../instance/instance";
 import { AiFillLike } from "react-icons/ai";
 import "../styles/Chart.css";
+import { getCookie } from "../Cookies";
 
-function ChartList({ data, index }) {
+function ChartList({ data, id }) {
   let today = new Date();
   let hour = today.getHours();
-  console.log(index);
+  const pushLike = async () => {
+    try {
+      await instance.post(`song/${id}/up`, {
+        headers: {
+          'Authorization': `Bearer ${getCookie('access-token')}`
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <div className="ChartList-div">
       {/* <img src={data.imgUrl} alt="앨범커버" /> */}
@@ -16,7 +27,8 @@ function ChartList({ data, index }) {
         <span className="ChartList-name">{data.title}</span>
         <span className="ChartList-artist">{data.singer}</span>
         <span className="ChartList-artist">{hour - data.createdHour}</span>
-        <AiFillLike />
+        <span className="ChartList-artist">{data.userName}</span>
+        <span><button onClick={() => pushLike()}><AiFillLike /></button> {data.numberOfUps}</span>
       </div>
     </div>
   );
@@ -31,7 +43,6 @@ function Chart() {
       try {
         setLoading(true);
         const response = await instance.get("song");
-        console.log(response.data);
         setChart(response.data);
       } catch (error) {
         console.log(error);
@@ -53,8 +64,8 @@ function Chart() {
           <h1 className="title">BSSM 차트</h1>
           <div className="ChartList">
             {chart.length ?
-              chart.map((item, index) => {
-                return <ChartList data={item} key={index} />;
+              chart.map((item) => {
+                return <ChartList data={item} key={item.id} id={item.id} />;
               }) : <span>노래가 없습니다.</span>}
           </div>
         </div>
