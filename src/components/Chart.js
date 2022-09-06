@@ -8,13 +8,27 @@ import { getCookie } from "../Cookies";
 function ChartList({ data, id }) {
   let today = new Date();
   let hour = today.getHours();
+  const [pushed, setPushed] = useState(false);
   const pushLike = async () => {
     try {
-      await instance.post(`song/${id}/up`, {
-        headers: {
-          'Authorization': `Bearer ${getCookie('access-token')}`
+      {
+        if (pushed) {
+          await instance.post(`song/${id}/up`, {
+            headers: {
+              'Authorization': `Bearer ${getCookie('access-token')}`
+            }
+          })
+          setPushed(true);
         }
-      });
+        else {
+          await instance.delete(`song/${id}/up`, {
+            headers: {
+              'Authorization': `Bearer ${getCookie('access-token')}`
+            }
+          })
+          setPushed(false);
+        }
+      };
     } catch (error) {
       console.log(error);
     }
@@ -28,7 +42,7 @@ function ChartList({ data, id }) {
         <span className="ChartList-artist">{data.singer}</span>
         <span className="ChartList-artist">{hour - data.createdHour}</span>
         <span className="ChartList-artist">{data.userName}</span>
-        <span><button onClick={() => pushLike()}><AiFillLike /></button> {data.numberOfUps}</span>
+        <span><button onClick={() => pushLike()}><AiFillLike color={pushed ? 'red' : 'black'} /></button> {data.numberOfUps}</span>
       </div>
     </div>
   );
