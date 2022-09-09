@@ -8,29 +8,47 @@ function ChartList({ data, id }) {
   let today = new Date();
   let hour = today.getHours();
   const [pushed, setPushed] = useState(false);
-  const pushLike = async () => {
-    console.log(localStorage.getItem('access-token'));
+
+  const pushLike = () => {
+    pushed ? cancelLike() : upLike();
+  }
+
+  const upLike = async () => {
+    if (!localStorage.getItem('access-token')) {
+      alert('로그인이 필요합니다!');
+      return;
+    }
     try {
-      if (pushed) {
-        await instance.delete(`song/${id}/up`, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('access-token')}`
-          }
-        })
-        setPushed(true);
-      }
-      else {
-        await instance.post(`song/${id}/up`, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('access-token')}`
-          }
-        })
-        setPushed(false);
-      }
+      await instance.post(`song/${id}/up`, null, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('access-token')}`
+        }
+      });
+      setPushed(true);
+      console.log('따봉박음!');
     } catch (error) {
       console.log(error);
     }
   }
+
+  const cancelLike = async () => {
+    if (!localStorage.getItem('access-token')) {
+      alert('로그인이 필요합니다!');
+      return;
+    }
+    try {
+      await instance.delete(`song/${id}/up`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('access-token')}`
+        }
+      });
+      setPushed(false);
+      console.log('따봉취소!');
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div className="ChartList-div">
       {/* <img src={data.imgUrl} alt="앨범커버" /> */}
@@ -38,7 +56,7 @@ function ChartList({ data, id }) {
       <div>
         <span className="ChartList-name">{data.title}</span>
         <span className="ChartList-artist">{data.singer}</span>
-        <span className="ChartList-artist">{hour - data.createdHour}</span>
+        {/* <span className="ChartList-artist">{hour - data.createdHour}</span> */}
         <span className="ChartList-artist">{data.userName}</span>
         <span><button onClick={() => pushLike()}><AiFillLike color={pushed ? 'red' : 'black'} /></button> {data.numberOfUps}</span>
       </div>
@@ -69,7 +87,9 @@ function Chart() {
       <Header />
       {loading ? (
         <div className="Chart-div">
+          <h1 className="title">BSSM 차트</h1>
           <span>로딩중~</span>
+          <img src="../images/loading.gif" alt="로딩중~" />
         </div>
       ) : (
         <div className="Chart-div">

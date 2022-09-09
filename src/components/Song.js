@@ -4,7 +4,6 @@ import "../styles/Song.css";
 import { instance } from '../instance/instance'
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { musicState, songState, isSelectedMusicState, disabledState } from "../atom";
-import { getCookie } from "../Cookies";
 
 function SongList({ item }) {
   const setSong = useSetRecoilState(songState);
