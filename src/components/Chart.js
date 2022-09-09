@@ -3,32 +3,30 @@ import Header from "./Header";
 import { instance } from "../instance/instance";
 import { AiFillLike } from "react-icons/ai";
 import "../styles/Chart.css";
-import { getCookie } from "../Cookies";
 
 function ChartList({ data, id }) {
   let today = new Date();
   let hour = today.getHours();
   const [pushed, setPushed] = useState(false);
   const pushLike = async () => {
+    console.log(localStorage.getItem('access-token'));
     try {
-      {
-        if (pushed) {
-          await instance.post(`song/${id}/up`, {
-            headers: {
-              'Authorization': `Bearer ${getCookie('access-token')}`
-            }
-          })
-          setPushed(true);
-        }
-        else {
-          await instance.delete(`song/${id}/up`, {
-            headers: {
-              'Authorization': `Bearer ${getCookie('access-token')}`
-            }
-          })
-          setPushed(false);
-        }
-      };
+      if (pushed) {
+        await instance.delete(`song/${id}/up`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access-token')}`
+          }
+        })
+        setPushed(true);
+      }
+      else {
+        await instance.post(`song/${id}/up`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access-token')}`
+          }
+        })
+        setPushed(false);
+      }
     } catch (error) {
       console.log(error);
     }

@@ -115,13 +115,14 @@ function Song() {
           imgUrl: "추가예정",
         }, {
           headers: {
-            'Authorization': `Bearer ${getCookie('access-token')}`
+            'Authorization': `Bearer ${localStorage.getItem('access-token')}`
           }
         });
         console.log("신청완료!");
       } catch (res) {
         console.log(res.response.data.message);
         setSearchError(res.response.data.message);
+        console.log(res);
       }
     }
   };
