@@ -1,5 +1,6 @@
 .Chart-div{
     padding-top: 100px;
+    box-sizing: border-box;
 }
 
 .ChartList{
@@ -7,20 +8,30 @@
     margin: 0 auto;
 }
 
+.title{
+    text-align: center;
+}
+
 .ChartList-div{
-    border-top: 2px solid black;
-    border-left: 2px solid black;
-    border-right: 2px solid black;
     display: flex;
     flex-direction: row;
     padding: 10px;
     position: relative;
+    width: 90%;
 }   
 
 .ChartList-div img{
     width: 50px;
     height: 50px;
     margin-right: 20px;
+}
+
+.ChartList-root{
+    display: flex;
+    flex-direction: row;
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
 }
 
 .ChartList-div div{
@@ -33,11 +44,20 @@
     font-size: 20px;
 }
 
-.ChartList-artist{
-    
+.ChartList-rank-div{
+    border-right: 2px solid black;
+    padding: 5px;
+    font-size: 18px;
+    line-height: 50px;
+    width: 50px;
+    text-align: center;
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    border-left: 2px solid black;
 }
 
-.ChartList-div:last-child{
+.ChartList-root:last-child{
     border: 2px solid black;
 }
 
