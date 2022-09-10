@@ -1,10 +1,12 @@
 header {
-    background-color: #cdcdcd;
+    background-color: black;
     height: 100px;
     z-index: 2;
     position: fixed;
     width: 100%;
     font-size: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .Header-list {
@@ -19,8 +21,8 @@ header {
 
 .Header-list span {
     cursor: pointer;
+    color: white;
 }
-
 a:visited {
     color: black;
 }
@@ -37,6 +39,7 @@ a:link {
     align-items: center;
     gap: 20px;
     height: 100px;
+    color: white;
 }
 
 .Header-signup span {

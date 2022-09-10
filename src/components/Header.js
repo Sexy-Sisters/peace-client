@@ -36,6 +36,7 @@ function Header() {
       </div>
       {localStorage.getItem('access-token') ?
         <div className="Header-signup">
+          <span onClick={logout}>마이페이지</span>
           <span onClick={logout}>로그아웃</span>
         </div>
         :
