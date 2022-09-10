@@ -3,7 +3,7 @@
 }
 
 .ChartList{
-    width: 80%;
+    width: 40%;
     margin: 0 auto;
 }
 
@@ -14,7 +14,8 @@
     display: flex;
     flex-direction: row;
     padding: 10px;
-}
+    position: relative;
+}   
 
 .ChartList-div img{
     width: 50px;
@@ -33,9 +34,20 @@
 }
 
 .ChartList-artist{
-
+    
 }
 
 .ChartList-div:last-child{
     border: 2px solid black;
+}
+
+.ChartList-right{
+    position: absolute;
+    right: 20px;
+    text-align: right;
+}
+
+.ChartList-right button{
+    border: none;
+    background-color: transparent;
 }
