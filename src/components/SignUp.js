@@ -212,9 +212,9 @@ function SignUp(props) {
         </div>
       ) : (
         //로그인
-        <div className="modalContainer" onClick={(e) => e.stopPropagation()}>
+        <div className="Login-modalContainer" onClick={(e) => e.stopPropagation()}>
           <h1 className="Login-title">로그인</h1>
-          <div>
+          <div className="Login-input-div">
             <input
               name="email"
               type="email"

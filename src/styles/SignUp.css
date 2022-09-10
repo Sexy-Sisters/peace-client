@@ -22,6 +22,20 @@
   text-align: center;
   border-radius: 25px;
 }
+
+.Login-modalContainer{
+  position: absolute;
+  width: 450px;
+  height: 400px;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  background-color: #383838;
+  text-align: center;
+  border-radius: 25px;
+}
 @keyframes modal-show {
   from{
     opacity: 0;
@@ -110,10 +124,14 @@
   margin: 60px;
 }
 
-.Login input{
+.Login-input{
   width: 80%;
   height: 50px;
   margin: 5px;
+}
+
+.Login-input-div{
+  margin-top: 40px;
 }
 
 .Login button{
