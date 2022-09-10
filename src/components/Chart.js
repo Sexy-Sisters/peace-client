@@ -8,7 +8,7 @@ function ChartList({ data, id, index }) {
   let today = new Date();
   let hour = today.getHours();
   const [pushed, setPushed] = useState(false);
-  const [like, setLike] = useState(data.numberOfUps);
+  const [like, setLike] = useState(data.point);
 
   useEffect(() => {
     const isPushed = async () => {
@@ -100,7 +100,7 @@ function Chart() {
     const getSongChart = async () => {
       try {
         setLoading(true);
-        const response = await instance.get("song");
+        const response = await instance.get("chart");
         setChart(response.data);
       } catch (error) {
         console.log(error);
@@ -115,13 +115,13 @@ function Chart() {
       <Header />
       {loading ? (
         <div className="Chart-div">
-          <h1 className="title">BSSM 차트</h1>
+          <h1 className="title">BSSM 월간차트</h1>
           <span>로딩중~</span>
           <img src="../images/loading.gif" alt="로딩중~" />
         </div>
       ) : (
         <div className="Chart-div">
-          <h1 className="title">BSSM 차트</h1>
+          <h1 className="title">BSSM 월간차트</h1>
           <div className="ChartList">
             {chart.length ?
               chart.map((item, index) => {
