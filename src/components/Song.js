@@ -130,7 +130,8 @@ function Song() {
     <div>
       <Header />
       <div className="Song-div">
-        <h1 className="title">기상송 신청하기</h1>
+        <h1 className="title">Request Song</h1>
+        <br/>
         <input
           type="text"
           onChange={(e) => onChange(e)}
