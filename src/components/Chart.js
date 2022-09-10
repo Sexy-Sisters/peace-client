@@ -8,7 +8,7 @@ function ChartList({ data, id, index }) {
   let today = new Date();
   let hour = today.getHours();
   const [pushed, setPushed] = useState(false);
-  const [like, setLike] = useState(data.numberOfUps);
+  const [like, setLike] = useState(data.point);
 
   useEffect(() => {
     const isPushed = async () => {
@@ -71,18 +71,22 @@ function ChartList({ data, id, index }) {
   }
 
   return (
-    <div className="ChartList-div">
-      {/* <img src={data.imgUrl} alt="앨범커버" /> */}
-      <span>{index+1}</span>
-      <img src="./images/logo.png" alt="앨범커버" />
-      <div className="ChartList-left">
-        <span className="ChartList-name">{data.title}</span>
-        <span className="ChartList-artist">{data.singer}</span>
-        {/* <span className="ChartList-artist">{hour - data.createdHour}</span> */}
+    <div className="ChartList-root">
+      <div className="ChartList-rank-div">
+        <span className="ChartList-rank">{index + 1}</span>
       </div>
-      <div className="ChartList-right">
-        <span className="ChartList-artist">신청자 : {data.userName}</span>
-        <span><button onClick={() => pushLike()}><AiFillLike color={pushed ? 'red' : 'black'} /></button> {like}</span>
+      <div className="ChartList-div">
+        {/* <img src={data.imgUrl} alt="앨범커버" /> */}
+        <img src="./images/logo.png" alt="앨범커버" />
+        <div className="ChartList-left">
+          <span className="ChartList-name">{data.title}</span>
+          <span className="ChartList-artist">{data.singer}</span>
+          {/* <span className="ChartList-artist">{hour - data.createdHour}</span> */}
+        </div>
+        <div className="ChartList-right">
+          <span className="ChartList-artist">{data.userName}</span>
+          <span><button onClick={() => pushLike()}><AiFillLike color={pushed ? 'red' : 'black'} /></button> {like}</span>
+        </div>
       </div>
     </div>
   );
@@ -96,7 +100,7 @@ function Chart() {
     const getSongChart = async () => {
       try {
         setLoading(true);
-        const response = await instance.get("song");
+        const response = await instance.get("chart");
         setChart(response.data);
       } catch (error) {
         console.log(error);
@@ -111,17 +115,17 @@ function Chart() {
       <Header />
       {loading ? (
         <div className="Chart-div">
-          <h1 className="title">BSSM 차트</h1>
+          <h1 className="title">BSSM 월간차트</h1>
           <span>로딩중~</span>
           <img src="../images/loading.gif" alt="로딩중~" />
         </div>
       ) : (
         <div className="Chart-div">
-          <h1 className="title">BSSM 차트</h1>
+          <h1 className="title">BSSM 월간차트</h1>
           <div className="ChartList">
             {chart.length ?
               chart.map((item, index) => {
-                return <ChartList data={item} key={item.id} id={item.id} index={index}/>;
+                return <ChartList data={item} key={item.id} id={item.id} index={index} />;
               }) : <span>노래가 없습니다.</span>}
           </div>
         </div>
