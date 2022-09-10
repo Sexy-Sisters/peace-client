@@ -116,13 +116,17 @@ function Main() {
       <Header />
       {loading ? (
         <div className="Chart-div">
-          <h1 className="title">BSSM 일간차트</h1>
+        <div className="Chart-title-div">
+          <h1 className="title">Daily Chart</h1>
+        </div>
           <span>로딩중~</span>
           <img src="../images/loading.gif" alt="로딩중~" />
         </div>
       ) : (
         <div className="Chart-div">
-          <h1 className="title">BSSM 일간차트</h1>
+        <div className="Chart-title-div">
+          <h1 className="title">Daily Chart</h1>
+        </div>
           <div className="ChartList">
             {chart.length ?
               chart.map((item, index) => {

@@ -22,7 +22,7 @@ function Header() {
   return (
     <header>
       <Link to="/" style={{ textDecoration: 'none' }}>
-        <img src="./images/logo.png" alt="로고" className="Header-logo" />
+        <span className="Header-logo">BSSM</span>
       </Link>
       <div className="Header-list">
         <Link to="/song">
@@ -31,8 +31,7 @@ function Header() {
         <Link to="/chart">
           <span>BSSM 차트</span>
         </Link>
-        <span>투표하기</span>
-        <span>피드백</span>
+        <a href="https://github.com/Wake-Up-Song/Server/issues"><span>피드백</span></a>
       </div>
       {localStorage.getItem('access-token') ?
         <div className="Header-signup">

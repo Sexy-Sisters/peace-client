@@ -1,6 +1,6 @@
 header {
     background-color: black;
-    height: 100px;
+    height: 70px;
     z-index: 2;
     position: fixed;
     width: 100%;
@@ -15,8 +15,17 @@ header {
     display: flex;
     justify-content: space-between;
     gap: 20px;
-    height: 100px;
+    height: 70px;
     align-items: center;
+}
+
+.Header-logo{
+    cursor: pointer;
+    color: white;
+    position: absolute;
+    left: 30px;
+    font-size: 36px;
+    line-height: 70px;
 }
 
 .Header-list span {
@@ -38,16 +47,17 @@ a:link {
     justify-content: center;
     align-items: center;
     gap: 20px;
-    height: 100px;
+    height: 70px;
     color: white;
+    margin-right: 40px;
 }
 
 .Header-signup span {
     cursor: pointer;
-}
-
-.Header-logo {
-    height: 100px;
-    position: absolute;
-    left: 0px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
 }

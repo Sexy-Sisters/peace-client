@@ -18,7 +18,7 @@ function SignUp(props) {
   });
   const [sendCode, setSendCode] = useState(true);
   const [issueCode, setIssueCode] = useState("");
-  const [certification, setCertification] = useState("");
+  const [certification, setCertification] = useState("　");
   const changeTypeInModal = () => {
     changeType();
     type
@@ -137,6 +137,7 @@ function SignUp(props) {
               onChange={(e) => onChangeSignUp(e)}
               className="SignUp-input"
               ref={(el) => (inputRef.current[0] = el)}
+              onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
             />
             <input
               name="nickName"
@@ -145,6 +146,7 @@ function SignUp(props) {
               onChange={(e) => onChangeSignUp(e)}
               className="SignUp-input"
               ref={(el) => (inputRef.current[1] = el)}
+              onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
             />
             <input
               name="email"
@@ -154,6 +156,7 @@ function SignUp(props) {
               onChange={(e) => onChangeSignUp(e)}
               className="SignUp-input email"
               ref={(el) => (inputRef.current[2] = el)}
+              onKeyPress={(e) => { if (e.key === 'Enter') sendIssueCode() }}
             />
             <button className="sendCheckCode" onClick={() => sendIssueCode()}>
               인증받기
@@ -167,6 +170,7 @@ function SignUp(props) {
               disabled={sendCode}
               value={issueCode}
               onChange={(e) => setIssueCode(e.target.value)}
+              onKeyPress={(e) => { if (e.key === 'Enter') sendCheckCode() }}
             />
             <button className="sendCheckCode" onClick={() => sendCheckCode()}>
               확인하기
@@ -181,6 +185,7 @@ function SignUp(props) {
               onChange={(e) => onChangeSignUp(e)}
               className="SignUp-input"
               ref={(el) => (inputRef.current[3] = el)}
+              onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
             />
             <input
               name="confirmPassword"
@@ -190,25 +195,26 @@ function SignUp(props) {
               onChange={(e) => onChangeSignUp(e)}
               className="SignUp-input"
               ref={(el) => (inputRef.current[4] = el)}
+              onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
             />
           </div>
           <div>
             <button
-              className="SignUp-button"
+              className="SignUp-button first"
               onClick={() => changeTypeInModal()}
             >
               로그인
             </button>
-            <button className="SignUp-button" onClick={() => signUp()}>
+            <button className="SignUp-button second" onClick={() => signUp()}>
               가입하기
             </button>
           </div>
         </div>
       ) : (
         //로그인
-        <div className="modalContainer" onClick={(e) => e.stopPropagation()}>
+        <div className="Login-modalContainer" onClick={(e) => e.stopPropagation()}>
           <h1 className="Login-title">로그인</h1>
-          <div>
+          <div className="Login-input-div">
             <input
               name="email"
               type="email"
@@ -216,6 +222,7 @@ function SignUp(props) {
               value={loginInputs.email}
               onChange={(e) => onChangeLogin(e)}
               className="Login-input"
+              onKeyPress={(e) => { if (e.key === 'Enter') Login() }}
             />
             <input
               name="password"
@@ -224,16 +231,17 @@ function SignUp(props) {
               value={loginInputs.password}
               onChange={(e) => onChangeLogin(e)}
               className="Login-input"
+              onKeyPress={(e) => { if (e.key === 'Enter') Login() }}
             />
           </div>
           <div>
             <button
-              className="Login-button"
+              className="Login-button first"
               onClick={() => changeTypeInModal()}
             >
               회원가입
             </button>
-            <button className="Login-button" onClick={() => Login()}>
+            <button className="Login-button second" onClick={() => Login()}>
               로그인
             </button>
           </div>
