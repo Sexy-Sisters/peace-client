@@ -19,6 +19,15 @@ header {
     align-items: center;
 }
 
+.Header-logo{
+    cursor: pointer;
+    color: white;
+    position: absolute;
+    left: 30px;
+    font-size: 36px;
+    line-height: 100px;
+}
+
 .Header-list span {
     cursor: pointer;
     color: white;
@@ -46,8 +55,7 @@ a:link {
     cursor: pointer;
 }
 
-.Header-logo {
+/* .Header-logo {
     height: 100px;
     position: absolute;
-    left: 0px;
-}
+} */
