@@ -6,11 +6,6 @@ export const musicState = atom({
     default: []
 });
 
-export const tokenState = atom({
-    key: `tokenState/${v1()}`,
-    default: {}
-});
-
 export const songState = atom({
     key: `tokenState/${v1()}`,
     default: ""

@@ -12,37 +12,53 @@ function Header() {
   const changeType = () => {
     setIsSignUp((prev) => !prev);
   };
+  const logout = () => {
+    localStorage.removeItem('access-token');
+    localStorage.removeItem('refresh-token');
+    console.log('로그아웃됨!');
+    window.location.reload();
+  }
+  // console.log(localStorage.getItem('access-token'));
   return (
     <header>
-      <Link to="/">
+      <Link to="/" style={{ textDecoration: 'none' }}>
         <img src="./images/logo.png" alt="로고" className="Header-logo" />
       </Link>
       <div className="Header-list">
         <Link to="/song">
           <span>기상송 신청</span>
         </Link>
-        <span>BSSM 차트</span>
+        <Link to="/chart">
+          <span>BSSM 차트</span>
+        </Link>
         <span>투표하기</span>
         <span>피드백</span>
       </div>
-      <div className="Header-signup">
-        <span
-          onClick={() => {
-            setIsSignUp(true);
-            setModal(true);
-          }}
-        >
-          회원가입
-        </span>
-        <span
-          onClick={() => {
-            setIsSignUp(false);
-            setModal(true);
-          }}
-        >
-          로그인
-        </span>
-      </div>
+      {localStorage.getItem('access-token') ?
+        <div className="Header-signup">
+          <span onClick={logout}>마이페이지</span>
+          <span onClick={logout}>로그아웃</span>
+        </div>
+        :
+        <div className="Header-signup">
+          <span
+            onClick={() => {
+              setIsSignUp(true);
+              setModal(true);
+            }}
+          >
+            회원가입
+          </span>
+          <span
+            onClick={() => {
+              setIsSignUp(false);
+              setModal(true);
+            }}
+          >
+            로그인
+          </span>
+        </div>
+      }
       {modal && (
         <SignUp onClick={onClick} changeType={changeType} type={isSignUp} />
       )}

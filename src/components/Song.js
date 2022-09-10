@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import "../styles/Song.css";
 import { instance } from '../instance/instance'
-import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
-import { tokenState, musicState, songState, isSelectedMusicState, disabledState } from "../atom";
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { musicState, songState, isSelectedMusicState, disabledState } from "../atom";
 
 function SongList({ item }) {
   const setSong = useSetRecoilState(songState);
@@ -30,7 +30,6 @@ function Song() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searched, setSearched] = useState(false);
-  const token = useRecoilValue(tokenState);
   const [searchError, setSearchError] = useState('검색 결과가 없습니다.');
   const [isSelectedMusic, setIsSelectedMusic] = useRecoilState(isSelectedMusicState);
   const [disabled, setDisabled] = useRecoilState(disabledState);
@@ -115,13 +114,14 @@ function Song() {
           imgUrl: "추가예정",
         }, {
           headers: {
-            'Authorization': `Bearer ${token.accessToken}`
+            'Authorization': `Bearer ${localStorage.getItem('access-token')}`
           }
         });
         console.log("신청완료!");
       } catch (res) {
         console.log(res.response.data.message);
         setSearchError(res.response.data.message);
+        console.log(res);
       }
     }
   };

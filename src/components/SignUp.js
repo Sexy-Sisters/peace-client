@@ -1,7 +1,5 @@
 import React, { useRef, useState } from "react";
 import "../styles/SignUp.css";
-import { useSetRecoilState } from 'recoil'
-import { tokenState } from "../atom";
 import { instance } from '../instance/instance';
 function SignUp(props) {
   const { onClick, changeType, type } = props;
@@ -15,14 +13,12 @@ function SignUp(props) {
     confirmPassword: "",
   });
   const [loginInputs, setLoginInputs] = useState({
-    email: "jsm@gmail.com",
-    password: "password",
+    email: "jsm8109jsm@gmail.com",
+    password: "",
   });
   const [sendCode, setSendCode] = useState(true);
   const [issueCode, setIssueCode] = useState("");
   const [certification, setCertification] = useState("");
-  const setToken = useSetRecoilState(tokenState);
-
   const changeTypeInModal = () => {
     changeType();
     type
@@ -34,8 +30,8 @@ function SignUp(props) {
         confirmPassword: "",
       })
       : setLoginInputs({
-        email: "",
-        password: "",
+        email: "jsm8109jsm@gmail.com",
+        password: "password"
       });
   };
 
@@ -74,17 +70,15 @@ function SignUp(props) {
   const Login = async () => {
     try {
       const response = await instance.post("auth", loginInputs);
-      setToken(response.data);
-      // console.log(token);
+      const { accessToken, refreshToken } = response.data;
+      accessToken && localStorage.setItem('access-token', accessToken);
+      refreshToken && localStorage.setItem('refresh-token', refreshToken);
+      console.log('로그인됨!');
     } catch (error) {
       console.log(error);
     }
     onClick();
   };
-
-  // useEffect(() => {
-  //   console.log(token);
-  // }, [token])
 
   const postSignUp = async () => {
     try {
