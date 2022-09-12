@@ -5,7 +5,7 @@ import { instance } from '../instance/instance'
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { musicState, songState, isSelectedMusicState, disabledState } from "../atom";
 
-function SongList({ item }) {
+function SongList({ item, focusIndex, index, setFocusIndex }) {
   const setSong = useSetRecoilState(songState);
   const setIsSelectedMusic = useSetRecoilState(isSelectedMusicState);
   const setDisabled = useSetRecoilState(disabledState);
@@ -13,10 +13,13 @@ function SongList({ item }) {
     setSong(`${item.singer} - ${item.title}`);
     setIsSelectedMusic(true);
     setDisabled(false);
+    setFocusIndex(-1);
   };
+
+  const focusStyle = index === focusIndex ? 'darkgray' : 'white';
   return (
-    <div className="SongList-div">
-      <span onClick={() => selectSong()}>
+    <div className="SongList-div" style={{ backgroundColor: focusStyle, transition: 'all ease 0.5s 0s' }} onClick={() => selectSong()}>
+      <span>
         {item.singer} - {item.title}
       </span>
       <br />
@@ -28,11 +31,11 @@ function Song() {
   const [song, setSong] = useRecoilState(songState);
   const [music, setMusic] = useRecoilState(musicState);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [searched, setSearched] = useState(false);
   const [searchError, setSearchError] = useState('검색 결과가 없습니다.');
   const [isSelectedMusic, setIsSelectedMusic] = useRecoilState(isSelectedMusicState);
   const [disabled, setDisabled] = useRecoilState(disabledState);
+  const [focusIndex, setFocusIndex] = useState(-1);
 
   useEffect(() => {
     if (isSelectedMusic) {
@@ -47,6 +50,29 @@ function Song() {
     }
   }, [song]);
 
+  const onKeyDown = (e) => {
+    if (e.keyCode === 40) {
+      setFocusIndex(prev => prev + 1);
+    }
+    else if (e.keyCode === 38) {
+      setFocusIndex(prev => prev - 1);
+    }
+    else if (e.keyCode === 13) {
+      setSong(`${music[focusIndex].singer} - ${music[focusIndex].title}`);
+      setIsSelectedMusic(true);
+      setDisabled(false);
+      setFocusIndex(-1);
+    }
+
+    if (focusIndex < -1) {
+      setFocusIndex(-1);
+    }
+    if (focusIndex > music.length - 1 && e.keyCode === 38) {
+      setFocusIndex(music.length - 1);
+    }
+    console.log(focusIndex);
+  }
+
   const onChange = (e) => {
     setIsSelectedMusic(false);
     setSong(e.target.value);
@@ -54,7 +80,6 @@ function Song() {
 
   const search = async () => {
     setMusic([]);
-    setError(null);
     setLoading(true);
     setSearchError('');
     const response = await getSongInfo();
@@ -99,8 +124,6 @@ function Song() {
     return str;
   };
 
-  if (error) return <div>에러 발생..</div>;
-
   const requestSong = async () => {
     if (!song) {
       setSearchError('노래가 선택되지 않았습니다.');
@@ -131,13 +154,14 @@ function Song() {
       <Header />
       <div className="Song-div">
         <h1 className="title">Request Song</h1>
-        <br/>
+        <br />
         <input
           type="text"
           onChange={(e) => onChange(e)}
           value={song}
           className="Song-input"
           style={{ border: searchError === '하루에 한 곡만 신청할 수 있습니다.' && '3px solid red' }}
+          onKeyDown={(e) => onKeyDown(e)}
         />
         <br />
         {loading ? (
@@ -148,14 +172,13 @@ function Song() {
         ) : searched && (
           <div className="Song-List">
             {music.map((item, index) => {
-              return <SongList item={item} key={index} />;
+              return <SongList item={item} key={index} focusIndex={focusIndex} index={index} setFocusIndex={setFocusIndex} />;
             })}
           </div>
         )}
         <span style={{ color: searchError === '하루에 한 곡만 신청할 수 있습니다.' && 'red' }}>{searchError}</span>
         <br />
-        <button onClick={() => requestSong()} disabled={disabled}>신청하기</button>
-        {/* <input type="file" /> */}
+        <button onClick={() => requestSong()} disabled={disabled} className="request-btn">신청하기</button>
       </div>
     </div>
   );
