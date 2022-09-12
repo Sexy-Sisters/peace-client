@@ -29,7 +29,7 @@
     background-color: white;
 }
 
-.SongList-div:hover, .SongList-div:focus{
+.SongList-div:hover{
     background-color: darkgray;
     transition: all ease 0.5s 0s;
 }
@@ -56,4 +56,6 @@
 
 .request-btn:disabled{
     cursor: default;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: rgba(255, 255, 255, 0.2);
 }
