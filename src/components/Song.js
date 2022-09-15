@@ -176,7 +176,7 @@ function Song() {
             })}
           </div>
         )}
-        <span style={{ color: searchError === '하루에 한 곡만 신청할 수 있습니다.' && 'red' }}>{searchError}</span>
+        <span style={{ color: 'red' }}>{searchError}</span>
         <br />
         <button onClick={() => requestSong()} disabled={disabled} className="request-btn">신청하기</button>
       </div>

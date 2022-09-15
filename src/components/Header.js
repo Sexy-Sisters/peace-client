@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/Header.css";
 import SignUp from "./SignUp";
 import { Link } from "react-router-dom";
+import { instance } from "../instance/instance";
 
 function Header() {
   const [modal, setModal] = useState(false);
   const [isSignUp, setIsSignUp] = useState(true);
+  const [nickname, setNickname] = useState("");
   const onClick = () => {
     setModal((prev) => !prev);
   };
@@ -19,6 +21,23 @@ function Header() {
     window.location.reload();
   }
   // console.log(localStorage.getItem('access-token'));
+  useEffect(() => {
+    if (localStorage.getItem('access-token')) {
+      (async () => {
+        try {
+          const response = await instance.get('auth', {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('access-token')}`
+            }
+          });
+          console.log(response);
+          setNickname(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+    }
+  }, [localStorage.getItem('access-token')]);
   return (
     <header>
       <Link to="/" style={{ textDecoration: 'none' }}>
@@ -35,8 +54,10 @@ function Header() {
       </div>
       {localStorage.getItem('access-token') ?
         <div className="Header-signup">
-          <span onClick={logout}>마이페이지</span>
-          <span onClick={logout}>로그아웃</span>
+          <Link to={"/mypage"} className="Header-btn">
+            <span>{nickname}</span>
+          </Link>
+          <span onClick={logout} className="Header-btn">로그아웃</span>
         </div>
         :
         <div className="Header-signup">

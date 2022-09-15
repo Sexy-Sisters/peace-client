@@ -13,7 +13,7 @@ function SignUp(props) {
     confirmPassword: "",
   });
   const [loginInputs, setLoginInputs] = useState({
-    email: "jsm8109jsm@gmail.com",
+    email: "",
     password: "",
   });
   const [sendCode, setSendCode] = useState(true);
@@ -30,8 +30,8 @@ function SignUp(props) {
         confirmPassword: "",
       })
       : setLoginInputs({
-        email: "jsm8109jsm@gmail.com",
-        password: "password"
+        email: "",
+        password: ""
       });
   };
 
