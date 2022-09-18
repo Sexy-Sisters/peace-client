@@ -71,8 +71,8 @@ function SignUp(props) {
     try {
       const response = await instance.post("auth", loginInputs);
       const { accessToken, refreshToken } = response.data;
-      accessToken && localStorage.setItem('access-token', accessToken);
-      refreshToken && localStorage.setItem('refresh-token', refreshToken);
+      accessToken && sessionStorage.setItem('access-token', accessToken);
+      refreshToken && sessionStorage.setItem('refresh-token', refreshToken);
       console.log('로그인됨!');
     } catch (error) {
       console.log(error);

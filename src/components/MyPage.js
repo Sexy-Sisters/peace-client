@@ -9,20 +9,20 @@ function MyPage() {
   const nav = useNavigate();
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    if (!localStorage.getItem('access-token')) {
+    if (!sessionStorage.getItem('access-token')) {
       console.log('로그인하세용~');
       nav('/');
     }
   }, [])
   const [userInfo, setUserInfo] = useState({});
   useEffect(() => {
-    if (localStorage.getItem('access-token')) {
+    if (sessionStorage.getItem('access-token')) {
       (async () => {
         try {
           setLoading(true);
           const response = await instance.get('user', {
             headers: {
-              'Authorization': `Bearer ${localStorage.getItem('access-token')}`
+              'Authorization': `Bearer ${sessionStorage.getItem('access-token')}`
             }
           });
           setUserInfo({
