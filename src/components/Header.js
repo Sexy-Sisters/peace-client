@@ -21,23 +21,23 @@ function Header() {
     window.location.reload();
   }
   // console.log(localStorage.getItem('access-token'));
-  useEffect(() => {
-    if (localStorage.getItem('access-token')) {
-      (async () => {
-        try {
-          const response = await instance.get('auth', {
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('access-token')}`
-            }
-          });
-          console.log(response);
-          setNickname(response.data);
-        } catch (error) {
-          console.log(error);
-        }
-      })();
-    }
-  }, [localStorage.getItem('access-token')]);
+  // useEffect(() => {
+  //   if (localStorage.getItem('access-token')) {
+  //     (async () => {
+  //       try {
+  //         const response = await instance.get('auth', {
+  //           headers: {
+  //             'Authorization': `Bearer ${localStorage.getItem('access-token')}`
+  //           }
+  //         });
+  //         console.log(response);
+  //         setNickname(response.data);
+  //       } catch (error) {
+  //         console.log(error);
+  //       }
+  //     })();
+  //   }
+  // }, [localStorage.getItem('access-token')]);
   return (
     <header>
       <Link to="/" style={{ textDecoration: 'none' }}>
@@ -55,7 +55,7 @@ function Header() {
       {localStorage.getItem('access-token') ?
         <div className="Header-signup">
           <Link to={"/mypage"} className="Header-btn">
-            <span>{nickname}</span>
+            <span>프로필</span>
           </Link>
           <span onClick={logout} className="Header-btn">로그아웃</span>
         </div>
@@ -66,6 +66,7 @@ function Header() {
               setIsSignUp(true);
               setModal(true);
             }}
+            className="Header-btn"
           >
             회원가입
           </span>
@@ -74,6 +75,7 @@ function Header() {
               setIsSignUp(false);
               setModal(true);
             }}
+            className="Header-btn"
           >
             로그인
           </span>

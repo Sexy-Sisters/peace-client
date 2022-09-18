@@ -1,0 +1,22 @@
+.MyPage-div{
+    padding: 100px 100px 30px 100px;
+    height: 100%;
+}
+
+.MyPage-info{
+    display: flex;
+    flex-direction: row;
+}
+
+.MyPage-img{
+    width: 80px;
+    height: 80px;
+    margin-right: 40px;
+}
+
+.MyPage-nickname{
+    color: white;
+    height: 80px;
+    margin: 0;
+    line-height: 80px;
+}
