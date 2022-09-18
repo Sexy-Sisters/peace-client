@@ -103,7 +103,7 @@ function SignUp(props) {
   const sendIssueCode = async () => {
     setSendCode(false);
     try {
-      await instance.get(`user/issue-code?email=${signUpInputs.email}`);
+      await instance.post(`user/issue-code?email=${signUpInputs.email}`);
       console.log("인증보냄");
     } catch (error) {
       console.log(error);
@@ -112,7 +112,7 @@ function SignUp(props) {
 
   const sendCheckCode = async () => {
     try {
-      (await instance.post(`user/check-code`, {
+      (await instance.delete(`user/check-code`, {
         code: issueCode,
         email: signUpInputs.email,
       })) && setCertification("인증 성공!");
