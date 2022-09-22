@@ -137,7 +137,7 @@ function Song() {
           imgUrl: "추가예정",
         }, {
           headers: {
-            'Authorization': `Bearer ${sessionStorage.getItem('access-token')}`
+            'Authorization': `Bearer ${localStorage.getItem('access-token')}`
           }
         });
         console.log("신청완료!");

@@ -16,7 +16,7 @@ function ChartList({ data, id, index }) {
       try {
         const response = await instance.get(`song/${id}/up`, {
           headers: {
-            'Authorization': `Bearer ${sessionStorage.getItem('access-token')}`
+            'Authorization': `Bearer ${localStorage.getItem('access-token')}`
           }
         });
         setPushed(response.data);
@@ -32,14 +32,14 @@ function ChartList({ data, id, index }) {
   }
 
   const upLike = async () => {
-    if (!sessionStorage.getItem('access-token')) {
+    if (!localStorage.getItem('access-token')) {
       alert('로그인이 필요합니다!');
       return;
     }
     try {
       const response = await instance.post(`song/${id}/up`, null, {
         headers: {
-          'Authorization': `Bearer ${sessionStorage.getItem('access-token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access-token')}`
         }
       });
       console.log(response);
@@ -52,14 +52,14 @@ function ChartList({ data, id, index }) {
   }
 
   const cancelLike = async () => {
-    if (!sessionStorage.getItem('access-token')) {
+    if (!localStorage.getItem('access-token')) {
       alert('로그인이 필요합니다!');
       return;
     }
     try {
       const response = await instance.delete(`song/${id}/up`, {
         headers: {
-          'Authorization': `Bearer ${sessionStorage.getItem('access-token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access-token')}`
         }
       });
       console.log(response.data);

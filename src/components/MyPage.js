@@ -9,20 +9,20 @@ function MyPage() {
   const nav = useNavigate();
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    if (!sessionStorage.getItem('access-token')) {
+    if (!localStorage.getItem('access-token')) {
       console.log('로그인하세용~');
       nav('/');
     }
   }, [])
   const [userInfo, setUserInfo] = useState({});
   useEffect(() => {
-    if (sessionStorage.getItem('access-token')) {
+    if (localStorage.getItem('access-token')) {
       (async () => {
         try {
           setLoading(true);
           const response = await instance.get('user', {
             headers: {
-              'Authorization': `Bearer ${sessionStorage.getItem('access-token')}`
+              'Authorization': `Bearer ${localStorage.getItem('access-token')}`
             }
           });
           setUserInfo({
@@ -37,7 +37,7 @@ function MyPage() {
     }
     setLoading(false);
   }, []);
-  const { nickName, img, requestedSong, name, email, authority } = userInfo;
+  const { nickName, img, requestedSong } = userInfo;
   return (
     <>
       <Header />

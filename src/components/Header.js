@@ -14,8 +14,8 @@ function Header() {
     setIsSignUp((prev) => !prev);
   };
   const logout = () => {
-    sessionStorage.removeItem('access-token');
-    sessionStorage.removeItem('refresh-token');
+    localStorage.removeItem('access-token');
+    localStorage.removeItem('refresh-token');
     console.log('로그아웃됨!');
     window.location.reload();
   }
@@ -33,7 +33,7 @@ function Header() {
         </Link>
         <a href="https://github.com/Wake-Up-Song/Server/issues"><span>피드백</span></a>
       </div>
-      {sessionStorage.getItem('access-token') ?
+      {localStorage.getItem('access-token') ?
         <div className="Header-signup">
           <Link to={"/mypage"} className="Header-btn">
             <span>프로필</span>
