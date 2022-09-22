@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Header from './Header'
 import '../styles/MyPage.css';
 import { instance } from '../instance/instance';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AiFillLike } from "react-icons/ai";
 
 function MyPage() {
@@ -34,9 +34,10 @@ function MyPage() {
           console.log(error);
         }
       })();
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
+  console.log(loading);
   const { nickName, img, requestedSong } = userInfo;
   return (
     <>
@@ -47,7 +48,7 @@ function MyPage() {
           <h3 className='MyPage-nickname'>{nickName}</h3>
         </div>
         <h1>오늘 신청곡</h1>
-        {loading ? (requestedSong ? <div className="ChartList">
+        {!loading ? (requestedSong ? <div className="ChartList">
           <div className="ChartList-root">
             <div className="ChartList-div">
               <img src="./images/logo.png" alt="앨범커버" />
@@ -60,10 +61,9 @@ function MyPage() {
               </div>
             </div>
           </div>
-        </div> : <div><span>아직 신청곡이 없습니다!</span></div>) : <span>로딩중~~~</span>}
+        </div> : <div><span>아직 신청곡이 없습니다!</span><Link to={'/song'}>신청하러 가기</Link></div>) : <span>로딩중~~~</span>}
       </div>
     </>
   )
 }
-
 export default MyPage
