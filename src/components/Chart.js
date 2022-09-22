@@ -5,10 +5,7 @@ import { AiFillLike } from "react-icons/ai";
 import "../styles/Chart.css";
 
 function ChartList({ data, id, index }) {
-  let today = new Date();
-  let hour = today.getHours();
   const [pushed, setPushed] = useState(false);
-  const [like, setLike] = useState(data.point);
 
   useEffect(() => {
     const isPushed = async () => {
@@ -26,50 +23,6 @@ function ChartList({ data, id, index }) {
     isPushed();
   }, [data.numberOfUps, id, pushed]);
 
-  const pushLike = async () => {
-    pushed ? cancelLike() : upLike();
-  }
-
-  const upLike = async () => {
-    if (!localStorage.getItem('access-token')) {
-      alert('로그인이 필요합니다!');
-      return;
-    }
-    try {
-      const response = await instance.post(`song/${id}/up`, null, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access-token')}`
-        }
-      });
-      console.log(response);
-      setLike(response.data);
-      setPushed(true);
-      console.log('따봉박음!');
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const cancelLike = async () => {
-    if (!localStorage.getItem('access-token')) {
-      alert('로그인이 필요합니다!');
-      return;
-    }
-    try {
-      const response = await instance.delete(`song/${id}/up`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access-token')}`
-        }
-      });
-      console.log(response.data);
-      setLike(response.data);
-      setPushed(false);
-      console.log('따봉취소!');
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   return (
     <div className="ChartList-root">
       <div className="ChartList-rank-div">
@@ -85,7 +38,7 @@ function ChartList({ data, id, index }) {
         </div>
         <div className="ChartList-right">
           <span className="ChartList-artist">{data.userName}</span>
-          <span><button onClick={() => pushLike()}><AiFillLike color={pushed ? 'red' : 'black'} /></button> {like}</span>
+          <span><button><AiFillLike color={pushed ? 'red' : 'black'} /></button>{data.point}</span>
         </div>
       </div>
     </div>
