@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/Header.css";
 import SignUp from "./SignUp";
 import { Link } from "react-router-dom";
+import { instance } from "../instance/instance";
 
 function Header() {
   const [modal, setModal] = useState(false);
@@ -18,7 +19,6 @@ function Header() {
     console.log('로그아웃됨!');
     window.location.reload();
   }
-  // console.log(localStorage.getItem('access-token'));
   return (
     <header>
       <Link to="/" style={{ textDecoration: 'none' }}>
@@ -35,8 +35,10 @@ function Header() {
       </div>
       {localStorage.getItem('access-token') ?
         <div className="Header-signup">
-          <span onClick={logout}>마이페이지</span>
-          <span onClick={logout}>로그아웃</span>
+          <Link to={"/mypage"} className="Header-btn">
+            <span>프로필</span>
+          </Link>
+          <span onClick={logout} className="Header-btn">로그아웃</span>
         </div>
         :
         <div className="Header-signup">
@@ -45,6 +47,7 @@ function Header() {
               setIsSignUp(true);
               setModal(true);
             }}
+            className="Header-btn"
           >
             회원가입
           </span>
@@ -53,6 +56,7 @@ function Header() {
               setIsSignUp(false);
               setModal(true);
             }}
+            className="Header-btn"
           >
             로그인
           </span>

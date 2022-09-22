@@ -52,7 +52,7 @@ a:link {
     margin-right: 40px;
 }
 
-.Header-signup span {
+.Header-btn{
     cursor: pointer;
     background-color: white;
     border-radius: 10px;
@@ -60,4 +60,9 @@ a:link {
     color: black;
     font-size: 16px;
     font-weight: bold;
+    width: 100px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    text-align: center;
 }
