@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import { instance } from "../instance/instance";
 import { AiFillLike } from "react-icons/ai";
-import "../styles/Chart.css";
+import "../styles/Chart.scss";
 
 function ChartList({ data, id, index }) {
   const [pushed, setPushed] = useState(false);

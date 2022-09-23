@@ -1,8 +1,46 @@
-html{
-    background-color: #383838;
+$main_blue: #E3E9EF;
+$main_deep_blue: #628BA1;
+$main_deeper_blue: #7895B2;
+
+.Chart{
+    box-sizing: border-box;
+    padding-left: 450px;
+    padding-right: 450px;
+    h3{
+        font-family: 'Syncopate', sans-serif;
+        margin: 0 auto;
+        text-align: right;
+    }
+    .Chart-title{
+        width: 600px;
+        background-color: $main_blue;
+        border-radius: 40px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 36px;
+        height: 100px;
+        .title-vertical{
+            width: 3px;
+            background-color: $main_deeper_blue;
+            height: 60px;
+        }
+    }
+    .title{
+        font-weight: normal;
+        margin: 0;
+        font-size: 50px;
+        color: black;
+        font-family: 'Syncopate', sans-serif;
+        display: inline-block;
+    }
+    .title-icon{
+        color: $main_deeper_blue;
+    }
 }
 
-.Chart-div{
+.Chart{
     padding-top: 100px;
     box-sizing: border-box;
 }
@@ -17,13 +55,6 @@ html{
     width: 100%;
 }
 
-.title{
-    background-color: black;
-    border-radius: 10px;
-    color: white;
-    display: inline-block;
-    padding: 7px;
-}
 
 .ChartList-div{
     display: flex;
