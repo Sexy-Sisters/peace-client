@@ -3,7 +3,7 @@ import Header from "./Header";
 import { instance } from "../instance/instance";
 import { AiFillLike } from "react-icons/ai";
 import "../styles/Chart.css";
-              
+
 
 function ChartList({ data, id, index }) {
   let today = new Date();
@@ -116,17 +116,17 @@ function Main() {
       <Header />
       {loading ? (
         <div className="Chart-div">
-        <div className="Chart-title-div">
-          <h1 className="title">Daily Chart</h1>
-        </div>
+          <div className="Chart-title-div">
+            <h1 className="title">Daily Chart</h1>
+          </div>
           <span>로딩중~</span>
           <img src="../images/loading.gif" alt="로딩중~" />
         </div>
       ) : (
         <div className="Chart-div">
-        <div className="Chart-title-div">
-          <h1 className="title">Daily Chart</h1>
-        </div>
+          <div className="Chart-title-div">
+            <h1 className="title">Daily Chart</h1>
+          </div>
           <div className="ChartList">
             {chart.length ?
               chart.map((item, index) => {
