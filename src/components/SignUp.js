@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import "../styles/SignUp.css";
+import "../styles/SignUp.scss";
 import { instance } from '../instance/instance';
 function SignUp(props) {
   const { onClick, changeType, type } = props;
@@ -16,6 +16,7 @@ function SignUp(props) {
     email: "",
     password: "",
   });
+  const [signUpStep, setSignUpStep] = useState(1);
   const [sendCode, setSendCode] = useState(true);
   const [issueCode, setIssueCode] = useState("");
   const [certification, setCertification] = useState("　");
@@ -62,10 +63,10 @@ function SignUp(props) {
   };
 
   const signUp = () => {
-    if (() => checkBlank()) {
-      postSignUp();
-      onClick();
-    }
+    // if (() => checkBlank()) {
+    postSignUp();
+    setSignUpStep(prev => prev + 1);
+    // }
   };
   const Login = async () => {
     try {
@@ -128,86 +129,96 @@ function SignUp(props) {
       {type ? (
         //회원가입
         <div className="modalContainer" onClick={(e) => e.stopPropagation()}>
-          <h1 className="SignUp-title">회원가입</h1>
-          <div>
-            <input
+          <h1 className="SignUp-title">SIGN UP</h1>
+          <div className="SignUp-input-div">
+            {signUpStep === 1 ? <><input
               name="name"
               placeholder="이름"
               value={signUpInputs.name}
               onChange={(e) => onChangeSignUp(e)}
               className="SignUp-input"
               ref={(el) => (inputRef.current[0] = el)}
-              onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
+              onKeyPress={(e) => { if (e.key === 'Enter') setSignUpStep(prev => prev + 1) }}
             />
-            <input
-              name="nickName"
-              placeholder="닉네임"
-              value={signUpInputs.nickName}
-              onChange={(e) => onChangeSignUp(e)}
-              className="SignUp-input"
-              ref={(el) => (inputRef.current[1] = el)}
-              onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
-            />
-            <input
-              name="email"
-              type="email"
-              placeholder="이메일주소"
-              value={signUpInputs.email}
-              onChange={(e) => onChangeSignUp(e)}
-              className="SignUp-input email"
-              ref={(el) => (inputRef.current[2] = el)}
-              onKeyPress={(e) => { if (e.key === 'Enter') sendIssueCode() }}
-            />
-            <button className="sendCheckCode" onClick={() => sendIssueCode()}>
-              인증받기
-            </button>
-            <input
-              name="code"
-              type="text"
-              placeholder="인증번호 확인"
-              className="SignUp-input email"
-              ref={checkEmail}
-              disabled={sendCode}
-              value={issueCode}
-              onChange={(e) => setIssueCode(e.target.value)}
-              onKeyPress={(e) => { if (e.key === 'Enter') sendCheckCode() }}
-            />
-            <button className="sendCheckCode" onClick={() => sendCheckCode()}>
-              확인하기
-            </button>
-            <br />
-            <span className="certification">{certification}</span>
-            <input
-              name="password"
-              type="password"
-              placeholder="비밀번호"
-              value={signUpInputs.password}
-              onChange={(e) => onChangeSignUp(e)}
-              className="SignUp-input"
-              ref={(el) => (inputRef.current[3] = el)}
-              onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
-            />
-            <input
-              name="confirmPassword"
-              type="password"
-              placeholder="비밀번호 확인"
-              value={signUpInputs.confirmPassword}
-              onChange={(e) => onChangeSignUp(e)}
-              className="SignUp-input"
-              ref={(el) => (inputRef.current[4] = el)}
-              onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
-            />
+              <input
+                name="nickName"
+                placeholder="닉네임"
+                value={signUpInputs.nickName}
+                onChange={(e) => onChangeSignUp(e)}
+                className="SignUp-input"
+                ref={(el) => (inputRef.current[1] = el)}
+                onKeyPress={(e) => { if (e.key === 'Enter') setSignUpStep(prev => prev + 1) }}
+              /></> : (
+              signUpStep === 2 ?
+                <>
+                  <div className="email-div">
+                    <input
+                      name="email"
+                      type="email"
+                      placeholder="이메일주소"
+                      value={signUpInputs.email}
+                      onChange={(e) => onChangeSignUp(e)}
+                      className="SignUp-input email"
+                      ref={(el) => (inputRef.current[2] = el)}
+                      onKeyPress={(e) => { if (e.key === 'Enter') sendIssueCode() }}
+                    />
+                    <button className="sendCheckCode" onClick={() => sendIssueCode()}>
+                      인증
+                    </button>
+                  </div>
+                  <div className="email-div">
+                    <input
+                      name="code"
+                      type="text"
+                      placeholder="인증번호 확인"
+                      className="SignUp-input email"
+                      ref={checkEmail}
+                      disabled={sendCode}
+                      value={issueCode}
+                      onChange={(e) => setIssueCode(e.target.value)}
+                      onKeyPress={(e) => { if (e.key === 'Enter') sendCheckCode() }}
+                    />
+                    <button className="sendCheckCode" onClick={() => sendCheckCode()}>
+                      확인
+                    </button>
+                  </div>
+                  {/* <span className="certification">{certification}</span> */}
+                </> : (signUpStep === 3 ? <>
+                  <input
+                    name="password"
+                    type="password"
+                    placeholder="비밀번호"
+                    value={signUpInputs.password}
+                    onChange={(e) => onChangeSignUp(e)}
+                    className="SignUp-input"
+                    ref={(el) => (inputRef.current[3] = el)}
+                    onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
+                  />
+                  <input
+                    name="confirmPassword"
+                    type="password"
+                    placeholder="비밀번호 확인"
+                    value={signUpInputs.confirmPassword}
+                    onChange={(e) => onChangeSignUp(e)}
+                    className="SignUp-input"
+                    ref={(el) => (inputRef.current[4] = el)}
+                    onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
+                  />
+                </>
+                  : <><img src="./images/logo.png" alt="로고" /><span className="message">회원가입 되었습니다.<br />
+                    로그인해주세요!</span></>))}
           </div>
-          <div>
-            <button
-              className="SignUp-button first"
-              onClick={() => changeTypeInModal()}
-            >
-              로그인
-            </button>
-            <button className="SignUp-button second" onClick={() => signUp()}>
-              가입하기
-            </button>
+          {signUpStep !== 4 && <div className="step-div">
+            <span style={{ backgroundColor: signUpStep >= 1 ? '#7895B2' : '#E3E9EF' }} className='step'></span>
+            <span style={{ backgroundColor: signUpStep >= 2 ? '#7895B2' : '#E3E9EF' }} className='step'></span>
+            <span style={{ backgroundColor: signUpStep >= 3 ? '#7895B2' : '#E3E9EF' }} className='step'></span>
+          </div>}
+          <div className="next">
+            {signUpStep === 3 ? <button className="SignUp-button" onClick={() => signUp()}>
+              회원가입
+            </button> : (signUpStep !== 4 && <button className="SignUp-button" onClick={() => setSignUpStep(prev => prev + 1)}>
+              NEXT
+            </button>)}
           </div>
         </div>
       ) : (

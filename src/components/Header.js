@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Header.scss";
 import SignUp from "./SignUp";
+import Modal from "react-modal";
 import { Link } from "react-router-dom";
 import { instance } from "../instance/instance";
 
@@ -62,9 +63,26 @@ function Header() {
           </span>
         </div>
       }
-      {modal && (
+      <Modal isOpen={modal}
+        onRequestClose={() => setModal(false)}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(134, 134, 134, 0.2)",
+            zIndex: 100,
+          },
+          content: {
+            width: "700px",
+            height: "500px",
+            margin: "auto",
+            borderRadius: "20px",
+            padding: 0,
+            overflowX: "hidden",
+            backgroundColor: '#FFF9F1',
+          },
+        }}>
+        <div className="modal-header"></div>
         <SignUp onClick={onClick} changeType={changeType} type={isSignUp} />
-      )}
+      </Modal>
     </header>
   );
 }

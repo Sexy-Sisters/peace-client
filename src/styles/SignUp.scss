@@ -1,0 +1,180 @@
+$main_blue: #E3E9EF;
+
+.modal-header{
+  height: 60px;
+  background-color: $main_blue;
+}
+.SignUp{
+  padding: 10px;
+  font-weight: normal;
+  .SignUp-title{
+    color: black;
+    font-size: 40px;
+    margin: 40px;
+    text-align: center;
+    font-family: 'Syncopate', sans-serif;
+  }
+  .next{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .SignUp-button{
+      width: 150px;
+      height: 50px;
+      border-radius: 20px;
+      border: none;
+      color: black;
+      background-color: $main_blue;
+      font-family: 'Syncopate', sans-serif;
+      font-size: 24px;
+      cursor: pointer;
+      margin: 0 auto;
+      &:hover{
+        transition: all ease 0.5s 0s;
+        background-color: #97B5D2;
+      }
+    }
+  }
+  .SignUp-input-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    img{
+      width: 280px;
+    }
+    .message{
+      text-align: center;
+      font-size: 24px;
+      font-family: "Gothic A1", sans-serif;
+    }
+    .SignUp-input{
+      width: 600px;
+      height: 60px;
+      background-color: #F5EDE1;;
+      border-radius: 20px;
+      border: none;
+      color: white;
+      padding-left: 10px;
+    }
+    .email-div{
+      display: flex;
+      justify-content: space-between;
+      width: 600px;
+      .email{
+        width: 470px;
+      }
+      .sendCheckCode{
+        height: 60px;
+        width: 100px;
+        border-radius: 20px;
+        border: none;
+        color: black;
+        background-color: $main_blue;
+        cursor: pointer;
+      }
+    }
+  }
+  .step-div{
+    display: flex;
+    width: 680px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    .step{
+      width: 20px;
+      height: 20px;
+      border-radius: 10px;
+    }
+  }
+}
+
+
+// @keyframes modal-show {
+//   from{
+//     opacity: 0;
+//   }
+//   to{
+//     opacity: 1;
+//   }
+// };
+
+// .SignUp h1{
+//   margin: 60px;
+// }
+
+// .SignUp input::placeholder{
+//   color: white;
+// }
+
+
+// .SignUp-button.first, .Login-button.first{
+//   left: 60px;
+// }
+
+// .SignUp-button.second, .Login-button.second{
+//   right: 60px;
+// }
+
+
+// .SignUp-input.email{
+//   width: 65%;
+// }
+
+// .Login {
+//   position: fixed;
+//   top: 0;
+//   right: 0;
+//   bottom: 0;
+//   left: 0;
+//   z-index: 10000;
+//   background-color: rgba(0, 0, 0, 0.8);
+//   animation: modal-show 0.2s;
+// }
+
+// .Login .modalContainer {
+//   position: absolute;
+//   width: 450px;
+//   height: 600px;
+//   left: 0;
+//   right: 0;
+//   top: 0;
+//   bottom: 0;
+//   margin: auto;
+//   background-color: white;
+//   text-align: center;
+// }
+
+// .Login h1{
+//   margin: 60px;
+// }
+
+// .Login-input{
+//   width: 80%;
+//   height: 50px;
+//   margin: 5px;
+// }
+
+// .Login-input-div{
+//   margin-top: 40px;
+// }
+
+// .Login button{
+//   margin: 10px;
+//   margin-top: 60px;
+//   width: 150px;
+//   height: 50px;
+// }
+
+// .certification{
+//   color: red;
+//   font-size: 4px;
+//   display: block;
+// }
+
+// .SignUp-title, .Login-title{
+//   color: white;
+// }
