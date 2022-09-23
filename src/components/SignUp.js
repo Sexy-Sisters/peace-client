@@ -1,10 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "../styles/SignUp.scss";
+import { AiOutlineCloseCircle, AiOutlineCheckCircle } from 'react-icons/ai';
 import { instance } from '../instance/instance';
 function SignUp(props) {
   const { onClick, changeType, type } = props;
   const inputRef = useRef([]);
   const checkEmail = useRef();
+  const [correctPassword, setCorrectPassword] = useState(false);
   const [signUpInputs, setSignUpInputs] = useState({
     name: "",
     nickName: "",
@@ -36,6 +38,12 @@ function SignUp(props) {
       });
   };
 
+  useEffect(() => {
+    if (signUpInputs.confirmPassword !== "" && signUpInputs.password !== "" && (signUpInputs.confirmPassword === signUpInputs.password)) {
+      setCorrectPassword(true);
+    }
+  }, [signUpInputs.confirmPassword]);
+
   const onChangeSignUp = (e) => {
     const { name, value } = e.target;
     const nextInputs = {
@@ -47,6 +55,7 @@ function SignUp(props) {
       nickName: nextInputs.nickName,
       email: nextInputs.email,
       password: nextInputs.password,
+      confirmPassword: nextInputs.confirmPassword,
     });
   };
 
@@ -194,16 +203,19 @@ function SignUp(props) {
                     ref={(el) => (inputRef.current[3] = el)}
                     onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
                   />
-                  <input
-                    name="confirmPassword"
-                    type="password"
-                    placeholder="비밀번호 확인"
-                    value={signUpInputs.confirmPassword}
-                    onChange={(e) => onChangeSignUp(e)}
-                    className="SignUp-input"
-                    ref={(el) => (inputRef.current[4] = el)}
-                    onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
-                  />
+                  <span className="confirm">
+                    <input
+                      name="confirmPassword"
+                      type="password"
+                      placeholder="비밀번호 확인"
+                      value={signUpInputs.confirmPassword}
+                      onChange={(e) => onChangeSignUp(e)}
+                      className="SignUp-input confirmPassword"
+                      ref={(el) => (inputRef.current[4] = el)}
+                      onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
+                    />
+                    {correctPassword ? <AiOutlineCheckCircle className="icon" size={24} /> : <AiOutlineCloseCircle className="icon" size={24} />}
+                  </span>
                 </>
                   : <><img src="./images/logo.png" alt="로고" /><span className="message">회원가입 되었습니다.<br />
                     로그인해주세요!</span></>))}

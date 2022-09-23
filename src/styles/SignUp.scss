@@ -5,6 +5,7 @@ $main_blue: #E3E9EF;
   background-color: $main_blue;
 }
 .SignUp{
+  box-sizing: border-box;
   padding: 10px;
   font-weight: normal;
   .SignUp-title{
@@ -56,12 +57,12 @@ $main_blue: #E3E9EF;
       border-radius: 20px;
       border: none;
       color: white;
-      padding-left: 10px;
+      padding-left: 20px;
     }
     .email-div{
       display: flex;
       justify-content: space-between;
-      width: 600px;
+      width: 622px;
       .email{
         width: 470px;
       }
@@ -73,6 +74,14 @@ $main_blue: #E3E9EF;
         color: black;
         background-color: $main_blue;
         cursor: pointer;
+      }
+    }
+    .confirm{
+      position: relative;
+      svg{
+        position: absolute;
+        right: 20px;
+        top: 20px;
       }
     }
   }
