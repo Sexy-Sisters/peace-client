@@ -4,16 +4,14 @@ import '../styles/MyPage.css';
 import { instance } from '../instance/instance';
 import { Link, useNavigate } from 'react-router-dom';
 import { AiFillLike } from "react-icons/ai";
+import { ImCross } from "react-icons/im";
+import RefreshToken from '../hooks/ExpirationToken';
 
 function MyPage() {
   const nav = useNavigate();
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    if (!localStorage.getItem('access-token')) {
-      console.log('로그인하세용~');
-      nav('/');
-    }
-  }, [])
+  const [isSongExist, setIsSongExist] = useState(false);
+
   const [userInfo, setUserInfo] = useState({});
   useEffect(() => {
     if (localStorage.getItem('access-token')) {
@@ -25,20 +23,37 @@ function MyPage() {
               'Authorization': `Bearer ${localStorage.getItem('access-token')}`
             }
           });
+          setIsSongExist(response.data.requestedSong ? true : false);
           setUserInfo({
             ...response.data,
             img: './images/logo.png',
           })
-          console.log(response.data.requestedSong.title)
         } catch (error) {
           console.log(error);
+          RefreshToken(error.response.data.message);
         }
       })();
       setLoading(false);
     }
-  }, []);
-  console.log(loading);
+  }, [isSongExist]);
   const { nickName, img, requestedSong } = userInfo;
+
+  const deleteSong = async () => {
+    try {
+      setLoading(true);
+      const response = await instance.delete(`song/${requestedSong.id}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('access-token')}`
+        }
+      });
+      console.log(response);
+      setIsSongExist(false);
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  }
+
   return (
     <>
       <Header />
@@ -48,7 +63,7 @@ function MyPage() {
           <h3 className='MyPage-nickname'>{nickName}</h3>
         </div>
         <h1>오늘 신청곡</h1>
-        {!loading ? (requestedSong ? <div className="ChartList">
+        {!loading ? (isSongExist ? <div className="ChartList">
           <div className="ChartList-root">
             <div className="ChartList-div">
               <img src="./images/logo.png" alt="앨범커버" />
@@ -59,6 +74,7 @@ function MyPage() {
               <div className="ChartList-right">
                 <span><AiFillLike /> {requestedSong.numberOfUps}</span>
               </div>
+              <ImCross onClick={() => deleteSong()} />
             </div>
           </div>
         </div> : <div><span>아직 신청곡이 없습니다!</span><Link to={'/song'}>신청하러 가기</Link></div>) : <span>로딩중~~~</span>}
