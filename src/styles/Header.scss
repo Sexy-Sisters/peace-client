@@ -1,0 +1,60 @@
+$main_blue: #E3E9EF;
+$main_deep_blue: #628BA1;
+
+@import url('https://fonts.googleapis.com/css2?family=Gothic+A1:wght@300&family=Syncopate&display=swap');
+
+header {
+    font-family: "Gothic A1", sans-serif;
+    background-color: $main_blue;
+    height: 72px;
+    z-index: 2;
+    position: fixed;
+    width: 100%;
+    font-size: 27px;
+    img{
+        height: 72px;
+        cursor: pointer;
+        position: absolute;
+        left: 36px;
+        top: 3px;
+    }
+    .English{
+        font-family: 'Syncopate', sans-serif;
+    }
+    .list{
+        display: flex;
+        justify-content: space-between;
+        gap: 50px;
+        height: 72px;
+        align-items: center;
+        position: absolute;
+        left: 250px;
+        a{
+            &:visited{
+                color: black;
+            }
+            &:link{
+                text-decoration: none;
+            }
+        }
+        span{
+            cursor: pointer;
+            color: black;
+        }
+    }
+    .signup{
+        position: absolute;
+        right: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 50px;
+        height: 72px;
+        color: black;
+        margin-right: 40px;
+        font-family: 'Syncopate', sans-serif;
+        .btn{
+            cursor: pointer;
+        }
+    }
+}

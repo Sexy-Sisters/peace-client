@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../styles/Header.css";
+import "../styles/Header.scss";
 import SignUp from "./SignUp";
 import { Link } from "react-router-dom";
 import { instance } from "../instance/instance";
@@ -22,43 +22,43 @@ function Header() {
   return (
     <header>
       <Link to="/" style={{ textDecoration: 'none' }}>
-        <span className="Header-logo">BSSM</span>
+        <img src="./images/logo.png" alt="로고" />
       </Link>
-      <div className="Header-list">
+      <div className="Header list">
         <Link to="/song">
           <span>기상송 신청</span>
         </Link>
         <Link to="/chart">
-          <span>BSSM 차트</span>
+          <span><span className="Header English">BSSM</span> 차트</span>
         </Link>
         <a href="https://github.com/Wake-Up-Song/Server/issues"><span>피드백</span></a>
       </div>
       {localStorage.getItem('access-token') ?
-        <div className="Header-signup">
-          <Link to={"/mypage"} className="Header-btn">
+        <div className="Header signup">
+          <Link to={"/mypage"} className="Header btn">
             <span>프로필</span>
           </Link>
-          <span onClick={logout} className="Header-btn">로그아웃</span>
+          <span onClick={logout} className="Header btn">로그아웃</span>
         </div>
         :
-        <div className="Header-signup">
+        <div className="Header signup">
           <span
             onClick={() => {
               setIsSignUp(true);
               setModal(true);
             }}
-            className="Header-btn"
+            className="Header btn"
           >
-            회원가입
+            SIGN UP
           </span>
           <span
             onClick={() => {
               setIsSignUp(false);
               setModal(true);
             }}
-            className="Header-btn"
+            className="Header btn"
           >
-            로그인
+            LOGIN
           </span>
         </div>
       }
