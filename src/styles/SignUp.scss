@@ -30,6 +30,9 @@ $main_blue: #E3E9EF;
       font-size: 24px;
       cursor: pointer;
       margin: 0 auto;
+      &.login{
+        margin-top: 60px;
+      }
       &:hover{
         transition: all ease 0.5s 0s;
         background-color: #97B5D2;
@@ -56,7 +59,7 @@ $main_blue: #E3E9EF;
       background-color: #F5EDE1;;
       border-radius: 20px;
       border: none;
-      color: white;
+      color: black;
       padding-left: 20px;
     }
     .email-div{
@@ -78,10 +81,14 @@ $main_blue: #E3E9EF;
     }
     .confirm{
       position: relative;
-      svg{
+      .icon{
         position: absolute;
         right: 20px;
         top: 20px;
+        color: #676767;
+        &.button{
+          cursor: pointer;
+        }
       }
     }
   }

@@ -1,12 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
 import "../styles/SignUp.scss";
-import { AiOutlineCloseCircle, AiOutlineCheckCircle } from 'react-icons/ai';
+import { AiOutlineCloseCircle, AiOutlineCheckCircle, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { instance } from '../instance/instance';
 function SignUp(props) {
   const { onClick, changeType, type } = props;
   const inputRef = useRef([]);
   const checkEmail = useRef();
   const [correctPassword, setCorrectPassword] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [signUpInputs, setSignUpInputs] = useState({
     name: "",
     nickName: "",
@@ -42,7 +43,10 @@ function SignUp(props) {
     if (signUpInputs.confirmPassword !== "" && signUpInputs.password !== "" && (signUpInputs.confirmPassword === signUpInputs.password)) {
       setCorrectPassword(true);
     }
-  }, [signUpInputs.confirmPassword]);
+    else {
+      setCorrectPassword(false);
+    }
+  }, [signUpInputs.confirmPassword, signUpInputs.password]);
 
   const onChangeSignUp = (e) => {
     const { name, value } = e.target;
@@ -70,6 +74,11 @@ function SignUp(props) {
       password: nextInputs.password,
     });
   };
+
+  const visibleCheck = () => {
+    setVisible(prev => !prev);
+    console.log(visible);
+  }
 
   const signUp = () => {
     // if (() => checkBlank()) {
@@ -203,7 +212,7 @@ function SignUp(props) {
                     ref={(el) => (inputRef.current[3] = el)}
                     onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
                   />
-                  <span className="confirm">
+                  <div className="confirm">
                     <input
                       name="confirmPassword"
                       type="password"
@@ -215,7 +224,7 @@ function SignUp(props) {
                       onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
                     />
                     {correctPassword ? <AiOutlineCheckCircle className="icon" size={24} /> : <AiOutlineCloseCircle className="icon" size={24} />}
-                  </span>
+                  </div>
                 </>
                   : <><img src="./images/logo.png" alt="로고" /><span className="message">회원가입 되었습니다.<br />
                     로그인해주세요!</span></>))}
@@ -235,36 +244,33 @@ function SignUp(props) {
         </div>
       ) : (
         //로그인
-        <div className="Login-modalContainer" onClick={(e) => e.stopPropagation()}>
-          <h1 className="Login-title">로그인</h1>
-          <div className="Login-input-div">
+        <div className="SignUp-modalContainer" onClick={(e) => e.stopPropagation()}>
+          <h1 className="SignUp-title">로그인</h1>
+          <div className="SignUp-input-div">
             <input
               name="email"
               type="email"
               placeholder="이메일주소"
               value={loginInputs.email}
               onChange={(e) => onChangeLogin(e)}
-              className="Login-input"
+              className="SignUp-input"
               onKeyPress={(e) => { if (e.key === 'Enter') Login() }}
             />
-            <input
-              name="password"
-              type="password"
-              placeholder="비밀번호"
-              value={loginInputs.password}
-              onChange={(e) => onChangeLogin(e)}
-              className="Login-input"
-              onKeyPress={(e) => { if (e.key === 'Enter') Login() }}
-            />
+            <div className="confirm">
+              <input
+                name="password"
+                type={visible ? "text" : "password"}
+                placeholder="비밀번호"
+                value={loginInputs.password}
+                onChange={(e) => onChangeLogin(e)}
+                className="SignUp-input"
+                onKeyPress={(e) => { if (e.key === 'Enter') Login() }}
+              />
+              {visible ? <AiOutlineEye className="icon button" size={24} onClick={() => setVisible(prev => !prev)} /> : <AiOutlineEyeInvisible className="icon button" size={24} onClick={() => setVisible(prev => !prev)} />}
+            </div>
           </div>
-          <div>
-            <button
-              className="Login-button first"
-              onClick={() => changeTypeInModal()}
-            >
-              회원가입
-            </button>
-            <button className="Login-button second" onClick={() => Login()}>
+          <div className="next">
+            <button className="SignUp-button login" onClick={() => Login()}>
               로그인
             </button>
           </div>
