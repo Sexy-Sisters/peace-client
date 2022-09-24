@@ -38,8 +38,11 @@ $main_blue: #E3E9EF;
         margin-top: 60px;
       }
       &:hover{
-        transition: all ease 0.5s 0s;
+        transition: all ease 0.3s 0s;
         background-color: #97B5D2;
+      }
+      &:disabled{
+        background-color: rgba(227, 233, 239, 0.5);
       }
     }
   }

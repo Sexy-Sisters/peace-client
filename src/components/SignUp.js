@@ -21,23 +21,24 @@ function SignUp(props) {
   });
   const [signUpStep, setSignUpStep] = useState(1);
   const [sendCode, setSendCode] = useState(true);
+  const [disabled, setDisabled] = useState(false);
   const [issueCode, setIssueCode] = useState("");
-  const [certification, setCertification] = useState("　");
-  const changeTypeInModal = () => {
-    changeType();
-    type
-      ? setSignUpInputs({
-        name: "",
-        nickName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      })
-      : setLoginInputs({
-        email: "",
-        password: ""
-      });
-  };
+  const [certification, setCertification] = useState(false);
+  // const changeTypeInModal = () => {
+  //   changeType();
+  //   type
+  //     ? setSignUpInputs({
+  //       name: "",
+  //       nickName: "",
+  //       email: "",
+  //       password: "",
+  //       confirmPassword: "",
+  //     })
+  //     : setLoginInputs({
+  //       email: "",
+  //       password: ""
+  //     });
+  // };
 
   useEffect(() => {
     if (signUpInputs.confirmPassword !== "" && signUpInputs.password !== "" && (signUpInputs.confirmPassword === signUpInputs.password)) {
@@ -96,7 +97,6 @@ function SignUp(props) {
     } catch (error) {
       console.log(error);
     }
-    onClick();
   };
 
   const postSignUp = async () => {
@@ -122,7 +122,8 @@ function SignUp(props) {
   const sendIssueCode = async () => {
     setSendCode(false);
     try {
-      await instance.post(`user/issue-code?email=${signUpInputs.email}`);
+      const response = await instance.post(`user/issue-code?email=${signUpInputs.email}`);
+      console.log(response);
       console.log("인증보냄");
     } catch (error) {
       console.log(error);
@@ -131,16 +132,30 @@ function SignUp(props) {
 
   const sendCheckCode = async () => {
     try {
-      (await instance.delete(`user/check-code`, {
+      const requestObj = {
         code: issueCode,
         email: signUpInputs.email,
-      })) && setCertification("인증 성공!");
+      }
+      console.log(requestObj);
+      const response = await instance.delete(`user/check-code`, { data: requestObj });
+      console.log(response);
+      setCertification(true);
     } catch (error) {
       console.log(error);
       alert("인증에 실패했습니다.");
       onClick();
     }
   };
+
+  useEffect(() => {
+    const { name, nickName, password, confirmPassword } = signUpInputs;
+    if ((signUpStep === 2 && !certification) || (signUpStep === 1 && (name === "" || nickName === "")) || (signUpStep === 3 && (password === "" || confirmPassword === ""))) {
+      setDisabled(true);
+    }
+    else {
+      setDisabled(false);
+    }
+  }, [certification, signUpInputs, signUpStep]);
 
   return (
     <div className="SignUp" onClick={onClick}>
@@ -235,9 +250,9 @@ function SignUp(props) {
             <span style={{ backgroundColor: signUpStep >= 3 ? '#7895B2' : '#E3E9EF' }} className='step'></span>
           </div>}
           <div className="next">
-            {signUpStep === 3 ? <button className="SignUp-button" onClick={() => signUp()}>
+            {signUpStep === 3 ? <button className="SignUp-button" onClick={() => signUp()} disabled={disabled}>
               회원가입
-            </button> : (signUpStep !== 4 && <button className="SignUp-button" onClick={() => setSignUpStep(prev => prev + 1)}>
+            </button> : (signUpStep !== 4 && <button className="SignUp-button" onClick={() => setSignUpStep(prev => prev + 1)} disabled={disabled}>
               NEXT
             </button>)}
           </div>
