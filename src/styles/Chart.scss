@@ -6,6 +6,10 @@ $main_deeper_blue: #7895B2;
     box-sizing: border-box;
     padding-left: 450px;
     padding-right: 450px;
+    &.long{
+        padding-left: 400px;
+        padding-right: 400px;
+    }
     h3{
         font-family: 'Syncopate', sans-serif;
         margin: 0 auto;
@@ -21,6 +25,9 @@ $main_deeper_blue: #7895B2;
         justify-content: center;
         gap: 36px;
         height: 100px;
+        &.long{
+            width: 700px;
+        }
         .title-vertical{
             width: 3px;
             background-color: $main_deeper_blue;

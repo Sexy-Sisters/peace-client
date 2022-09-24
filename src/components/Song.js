@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "./Header";
-import "../styles/Song.css";
+import "../styles/Song.scss";
 import { instance } from '../instance/instance'
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { musicState, songState, isSelectedMusicState, disabledState } from "../atom";
@@ -16,13 +16,14 @@ function SongList({ item, focusIndex, index, setFocusIndex }) {
     setFocusIndex(-1);
   };
 
-  const focusStyle = index === focusIndex ? 'darkgray' : 'white';
+  const focusStyle = index === focusIndex ? '#F5EDE1' : '#FFF9F1';
   return (
     <div className="SongList-div" style={{ backgroundColor: focusStyle, transition: 'all ease 0.5s 0s' }} onClick={() => selectSong()}>
-      <span>
-        {item.singer} - {item.title}
-      </span>
-      <br />
+      <img src="./images/cover.png" alt={`${item.singer}의 ${item.title} 앨범 커버`} />
+      <div className="text">
+        <span className="item">{item.title}</span>
+        <span className="item">{item.singer}</span>
+      </div>
     </div>
   );
 }
@@ -153,32 +154,35 @@ function Song() {
     <div>
       <Header />
       <div className="Song-div">
-        <h1 className="title">Request Song</h1>
-        <br />
-        <input
-          type="text"
-          onChange={(e) => onChange(e)}
-          value={song}
-          className="Song-input"
-          style={{ border: searchError === '하루에 한 곡만 신청할 수 있습니다.' && '3px solid red' }}
-          onKeyDown={(e) => onKeyDown(e)}
-        />
-        <br />
-        {loading ? (
-          <>
-            <span>로딩중~</span>
-            <img src="./images/loading.gif" alt="로딩중~" />
-          </>
-        ) : searched && (
-          <div className="Song-List">
-            {music.map((item, index) => {
-              return <SongList item={item} key={index} focusIndex={focusIndex} index={index} setFocusIndex={setFocusIndex} />;
-            })}
+        <div className="Song-div main">
+          <div className="modal-header song"></div>
+          <div className="Song-div content">
+            <input
+              type="text"
+              onChange={(e) => onChange(e)}
+              value={song}
+              className="Song-input"
+              style={{ border: searchError === '하루에 한 곡만 신청할 수 있습니다.' && '3px solid red' }}
+              onKeyDown={(e) => onKeyDown(e)}
+              placeholder='신청곡을 검색해보세요.'
+            />
+            <br />
+            {song === "" ? <div className="nonSearch"><img src="./images/sun.png" alt="디자인" className="sun" /> <span>검색어를 입력해주세요.</span></div> : (loading ? (
+              <>
+                <span>로딩중~</span>
+                <img src="./images/loading.gif" alt="로딩중~" />
+              </>
+            ) : searched && (
+              <div className="Song-List">
+                {music.map((item, index) => {
+                  return <SongList item={item} key={index} focusIndex={focusIndex} index={index} setFocusIndex={setFocusIndex} />;
+                })}
+              </div>
+            ))}
+            <span style={{ color: 'red' }}>{searchError}</span>
+            <button onClick={() => requestSong()} disabled={disabled} className="request-btn">신청하기</button>
           </div>
-        )}
-        <span style={{ color: 'red' }}>{searchError}</span>
-        <br />
-        <button onClick={() => requestSong()} disabled={disabled} className="request-btn">신청하기</button>
+        </div>
       </div>
     </div>
   );

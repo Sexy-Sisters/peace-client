@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import { instance } from "../instance/instance";
 import { AiFillLike } from "react-icons/ai";
-import { HiMusicNote } from "react-icons/hi";
 import "../styles/Chart.scss";
 import { ImMusic } from "react-icons/im";
 
