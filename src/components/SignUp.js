@@ -1,11 +1,9 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/SignUp.scss";
 import { AiOutlineCloseCircle, AiOutlineCheckCircle, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { instance } from '../instance/instance';
 function SignUp(props) {
-  const { onClick, changeType, type } = props;
-  const inputRef = useRef([]);
-  const checkEmail = useRef();
+  const { onClick, type } = props;
   const [correctPassword, setCorrectPassword] = useState(false);
   const [visible, setVisible] = useState(false);
   const [signUpInputs, setSignUpInputs] = useState({
@@ -24,21 +22,7 @@ function SignUp(props) {
   const [disabled, setDisabled] = useState(false);
   const [issueCode, setIssueCode] = useState("");
   const [certification, setCertification] = useState(false);
-  // const changeTypeInModal = () => {
-  //   changeType();
-  //   type
-  //     ? setSignUpInputs({
-  //       name: "",
-  //       nickName: "",
-  //       email: "",
-  //       password: "",
-  //       confirmPassword: "",
-  //     })
-  //     : setLoginInputs({
-  //       email: "",
-  //       password: ""
-  //     });
-  // };
+  const [loginResult, setLoginResult] = useState();
 
   useEffect(() => {
     if (signUpInputs.confirmPassword !== "" && signUpInputs.password !== "" && (signUpInputs.confirmPassword === signUpInputs.password)) {
@@ -76,11 +60,6 @@ function SignUp(props) {
     });
   };
 
-  const visibleCheck = () => {
-    setVisible(prev => !prev);
-    console.log(visible);
-  }
-
   const signUp = () => {
     // if (() => checkBlank()) {
     postSignUp();
@@ -93,9 +72,11 @@ function SignUp(props) {
       const { accessToken, refreshToken } = response.data;
       accessToken && localStorage.setItem('access-token', accessToken);
       refreshToken && localStorage.setItem('refresh-token', refreshToken);
+      setLoginResult(true);
       console.log('로그인됨!');
     } catch (error) {
       console.log(error);
+      setLoginResult(false);
     }
   };
 
@@ -106,17 +87,6 @@ function SignUp(props) {
     } catch (e) {
       console.log(e);
     }
-  };
-
-  const checkBlank = () => {
-    for (let i = 0; i < inputRef.current.length; i++) {
-      if (inputRef.current[i].value === "") {
-        console.log(inputRef.current[i].name + "을 입력하세요");
-        inputRef.current[i].focus();
-        return false;
-      }
-    }
-    return true;
   };
 
   const sendIssueCode = async () => {
@@ -170,7 +140,6 @@ function SignUp(props) {
               value={signUpInputs.name}
               onChange={(e) => onChangeSignUp(e)}
               className="SignUp-input"
-              ref={(el) => (inputRef.current[0] = el)}
               onKeyPress={(e) => { if (e.key === 'Enter') setSignUpStep(prev => prev + 1) }}
             />
               <input
@@ -179,7 +148,6 @@ function SignUp(props) {
                 value={signUpInputs.nickName}
                 onChange={(e) => onChangeSignUp(e)}
                 className="SignUp-input"
-                ref={(el) => (inputRef.current[1] = el)}
                 onKeyPress={(e) => { if (e.key === 'Enter') setSignUpStep(prev => prev + 1) }}
               /></> : (
               signUpStep === 2 ?
@@ -192,7 +160,6 @@ function SignUp(props) {
                       value={signUpInputs.email}
                       onChange={(e) => onChangeSignUp(e)}
                       className="SignUp-input email"
-                      ref={(el) => (inputRef.current[2] = el)}
                       onKeyPress={(e) => { if (e.key === 'Enter') sendIssueCode() }}
                     />
                     <button className="sendCheckCode" onClick={() => sendIssueCode()}>
@@ -205,7 +172,6 @@ function SignUp(props) {
                       type="text"
                       placeholder="인증번호 확인"
                       className="SignUp-input email"
-                      ref={checkEmail}
                       disabled={sendCode}
                       value={issueCode}
                       onChange={(e) => setIssueCode(e.target.value)}
@@ -224,7 +190,6 @@ function SignUp(props) {
                     value={signUpInputs.password}
                     onChange={(e) => onChangeSignUp(e)}
                     className="SignUp-input"
-                    ref={(el) => (inputRef.current[3] = el)}
                     onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
                   />
                   <div className="confirm">
@@ -235,7 +200,6 @@ function SignUp(props) {
                       value={signUpInputs.confirmPassword}
                       onChange={(e) => onChangeSignUp(e)}
                       className="SignUp-input confirmPassword"
-                      ref={(el) => (inputRef.current[4] = el)}
                       onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
                     />
                     {correctPassword ? <AiOutlineCheckCircle className="icon" size={24} /> : <AiOutlineCloseCircle className="icon" size={24} />}
@@ -259,8 +223,16 @@ function SignUp(props) {
         </div>
       ) : (
         //로그인
-        <div className="SignUp-modalContainer" onClick={(e) => e.stopPropagation()}>
-          <h1 className="SignUp-title">로그인</h1>
+        (loginResult ? <div className="loginResult">
+          <img src="./images/logo.png" alt="로고" />
+          <span>로그인 완료! (´ฅω•ฅ｀)</span>
+          <span>평화로운 아침을 만들어보세요.</span>
+        </div> : loginResult === false ? <div className="loginResult">
+          <img src="./images/logo.png" alt="로고" />
+          <span>로그인 실패 ｡°(´∩ω∩`)°｡</span>
+          <span>이메일이나 비밀번호를 확인해주세요.</span>
+        </div> : (<div className="SignUp-modalContainer" onClick={(e) => e.stopPropagation()}>
+          <h1 className="SignUp-title">LOGIN</h1>
           <div className="SignUp-input-div">
             <input
               name="email"
@@ -289,7 +261,7 @@ function SignUp(props) {
               로그인
             </button>
           </div>
-        </div>
+        </div>))
       )}
     </div>
   );

@@ -37,9 +37,9 @@ function Header() {
       {localStorage.getItem('access-token') ?
         <div className="Header signup">
           <Link to={"/mypage"} className="Header btn">
-            <span>프로필</span>
+            <span>PROFILE</span>
           </Link>
-          <span onClick={logout} className="Header btn">로그아웃</span>
+          <span onClick={logout} className="Header btn">LOGOUT</span>
         </div>
         :
         <div className="Header signup">

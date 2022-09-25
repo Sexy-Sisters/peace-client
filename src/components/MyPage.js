@@ -50,6 +50,7 @@ function MyPage() {
       setIsSongExist(false);
     } catch (error) {
       console.log(error);
+      RefreshToken(error.response.data.message);
     }
     setLoading(false);
   }

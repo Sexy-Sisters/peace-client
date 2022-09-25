@@ -1,7 +1,7 @@
 $main_blue: #E3E9EF;
 $main_deep_blue: #628BA1;
 
-@import url('https://fonts.googleapis.com/css2?family=Gothic+A1:wght@300&family=Syncopate&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gothic+A1:wght@300;400;500&family=Syncopate&display=swap');
 
 header {
     font-family: "Gothic A1", sans-serif;
@@ -11,6 +11,14 @@ header {
     position: fixed;
     width: 100%;
     font-size: 27px;
+        a{
+            &:visited{
+                color: black;
+            }
+            &:link{
+                text-decoration: none;
+            }
+        }
     img{
         height: 72px;
         cursor: pointer;
@@ -29,14 +37,6 @@ header {
         align-items: center;
         position: absolute;
         left: 250px;
-        a{
-            &:visited{
-                color: black;
-            }
-            &:link{
-                text-decoration: none;
-            }
-        }
         span{
             cursor: pointer;
             color: black;

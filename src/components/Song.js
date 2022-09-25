@@ -180,6 +180,7 @@ function Song() {
               </div>
             ))}
             <span style={{ color: 'red' }}>{searchError}</span>
+            <br/>
             <button onClick={() => requestSong()} disabled={disabled} className="request-btn">신청하기</button>
           </div>
         </div>
