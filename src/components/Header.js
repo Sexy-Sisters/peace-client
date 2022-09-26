@@ -81,7 +81,7 @@ function Header() {
           },
         }}>
         <div className="modal-header"></div>
-        <SignUp onClick={onClick} changeType={changeType} type={isSignUp} />
+        <SignUp onClick={onClick} type={isSignUp} />
       </Modal>
     </header>
   );

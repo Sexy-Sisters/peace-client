@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import { instance } from "../instance/instance";
-import { AiFillLike } from "react-icons/ai";
+import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { ImMusic } from "react-icons/im";
 import "../styles/Chart.scss";
 
@@ -41,7 +41,7 @@ function ChartList({ data, id, index }) {
         </div>
       </div>
       <div className="ChartList right long">
-        <span><AiFillLike color={pushed ? 'red' : 'black'} className='icon' /> {data.point}</span>
+        <span>{pushed ? <AiFillLike /> : <AiOutlineLike />} {data.point}</span>
       </div>
     </div>
   );

@@ -119,13 +119,13 @@ function SignUp(props) {
 
   useEffect(() => {
     const { name, nickName, password, confirmPassword } = signUpInputs;
-    if ((signUpStep === 2 && !certification) || (signUpStep === 1 && (name === "" || nickName === "")) || (signUpStep === 3 && (password === "" || confirmPassword === ""))) {
+    if ((signUpStep === 2 && !certification) || (type && (name === "" || nickName === "")) || (signUpStep === 3 && (password === "" || confirmPassword === "")) || (!type && (loginInputs.email === "" || loginInputs.password === ""))) {
       setDisabled(true);
     }
     else {
       setDisabled(false);
     }
-  }, [certification, signUpInputs, signUpStep]);
+  }, [certification, loginInputs.email, loginInputs.password, signUpInputs, signUpStep, type]);
 
   return (
     <div className="SignUp" onClick={onClick}>
@@ -257,7 +257,7 @@ function SignUp(props) {
             </div>
           </div>
           <div className="next">
-            <button className="SignUp-button login" onClick={() => Login()}>
+            <button className="SignUp-button login" onClick={() => Login()} disabled={disabled}>
               로그인
             </button>
           </div>
