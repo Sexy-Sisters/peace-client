@@ -1,0 +1,137 @@
+$main_blue: #E3E9EF;
+
+.modal-header{
+  height: 60px;
+  background-color: $main_blue;
+  &.song{
+    border-radius: 40px 40px 0px 0px;
+    position: relative;
+  }
+}
+.SignUp{
+  box-sizing: border-box;
+  padding: 10px;
+  font-weight: normal;
+  .loginResult{
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    flex-direction: column;
+    img{
+      width: 250px;
+      margin: 50px;
+    }
+    span{
+      font-family: "Gothic A1", sans-serif;
+      &:nth-child(2){
+        font-size: 40px;
+        color: #628BA1;
+      }
+      &:nth-child(3){
+        font-size: 32px;
+        color: black;
+      }
+    }
+  }
+  .SignUp-title{
+    color: black;
+    font-size: 40px;
+    margin: 40px;
+    text-align: center;
+    font-family: 'Syncopate', sans-serif;
+  }
+  .next{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .SignUp-button{
+      width: 150px;
+      height: 50px;
+      border-radius: 20px;
+      border: none;
+      color: black;
+      background-color: $main_blue;
+      font-family: 'Syncopate', sans-serif;
+      font-size: 24px;
+      cursor: pointer;
+      margin: 0 auto;
+      &.login{
+        margin-top: 60px;
+      }
+      &:hover{
+        transition: all ease 0.3s 0s;
+        background-color: #97B5D2;
+      }
+      &:disabled{
+        background-color: rgba(227, 233, 239, 0.5);
+      }
+    }
+  }
+  .SignUp-input-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    img{
+      width: 280px;
+    }
+    .message{
+      text-align: center;
+      font-size: 24px;
+      font-family: "Gothic A1", sans-serif;
+    }
+    .SignUp-input{
+      width: 600px;
+      height: 60px;
+      background-color: #F5EDE1;;
+      border-radius: 20px;
+      border: none;
+      color: black;
+      padding-left: 20px;
+    }
+    .email-div{
+      display: flex;
+      justify-content: space-between;
+      width: 622px;
+      .email{
+        width: 470px;
+      }
+      .sendCheckCode{
+        height: 60px;
+        width: 100px;
+        border-radius: 20px;
+        border: none;
+        color: black;
+        background-color: $main_blue;
+        cursor: pointer;
+      }
+    }
+    .confirm{
+      position: relative;
+      .icon{
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        color: #676767;
+        &.button{
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .step-div{
+    display: flex;
+    width: 680px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    .step{
+      width: 20px;
+      height: 20px;
+      border-radius: 10px;
+    }
+  }
+}

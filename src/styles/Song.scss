@@ -1,0 +1,143 @@
+.Song-div{
+    padding-top: 72px;
+    box-sizing: border-box;
+    text-align: center;
+    &.main{
+        margin-top: 60px;
+        margin-left: 360px;
+        // width: 696px;
+        padding-top: 0;
+        margin-right: 360px;
+        border-radius: 40px;
+        background-color: #FFF9F1;
+    }
+    &.content{
+        padding-top: 40px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+    .Song-input{
+        background-color: #F5EDE1;
+        color: #6D6363;
+        width: 500px;
+        height: 40px;
+        font-size: 16px;
+        border-radius: 100px;
+        border: none;
+        padding: 10px;
+        padding-left: 20px;
+        margin-bottom: 10px;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+    }
+    .SongList-div{
+        width: 500px;
+        height: 80px;
+        border-bottom: 2px solid #F5EDE1;
+        line-height: 20px;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        display: flex;
+        margin: 0 auto;
+        gap: 15px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        align-items: center;
+        background-color: #FFF9F1;
+        img{
+            width: 64px;
+            height: 64px;
+        }
+        .text{
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            .item:nth-child(1){
+                font-size: 24px;
+                height: 24px;
+                width: 400px;
+                overflow:hidden;
+                text-overflow:ellipsis;
+                white-space:nowrap;
+            }
+            .item:nth-child(2){
+                font-size: 20px;
+                height: 20px;
+                width: 400px;
+                overflow:hidden;
+                text-overflow:ellipsis;
+                white-space:nowrap;
+            }
+        }
+    }
+    .request-btn{
+        width: 150px;
+        height: 50px;
+        cursor: pointer;
+        background-color: #E3E9EF;
+        color: black;
+        border-radius: 25px;
+        border: none;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 5px;
+        margin: 30px;
+        &:hover{
+          transition: all ease 0.5s 0s;
+          background-color: #97B5D2;
+        }
+    }
+}
+
+
+.nonSearch{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    .sun{
+        width: 300px;
+        margin: 40px;
+    }
+    span{
+        margin-top: -60px;
+        font-size: 24px;
+        color: #9EB7B7;
+    }
+}
+
+
+
+
+// .SongList-div:hover{
+//     background-color: darkgray;
+//     transition: all ease 0.5s 0s;
+// }
+
+// .SongList-div:last-child{
+//     border: 2px solid black;
+// }
+
+// .Song-List{
+//     display: flex;
+//     gap: 1px;
+//     flex-direction: column;
+// }
+
+// .request-btn{
+//     cursor: pointer;
+//     background-color: black;
+//     border-radius: 10px;
+//     color: white;
+//     font-size: 16px;
+//     font-weight: bold;
+//     padding: 5px;
+// }
+
+// .request-btn:disabled{
+//     cursor: default;
+//     background-color: rgba(0, 0, 0, 0.2);
+//     color: rgba(255, 255, 255, 0.2);
+// }

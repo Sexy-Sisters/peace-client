@@ -1,0 +1,173 @@
+$main_blue: #E3E9EF;
+$main_deep_blue: #628BA1;
+$main_deeper_blue: #7895B2;
+
+.Chart{
+    padding-top: 100px;
+    box-sizing: border-box;
+    padding-left: 400px;
+    padding-right: 400px;
+    font-family: "Gothic A1", sans-serif;
+    // &.long{
+    //     padding-left: 400px;
+    //     padding-right: 400px;
+    // }
+    h3{
+        font-family: 'Syncopate', sans-serif;
+        margin: 0;
+        margin-right: 98px;
+        text-align: right;
+        &.long{
+            margin-right: 48px;
+        }
+    }
+    .Chart-title{
+        width: 500px;
+        margin: 0 auto;
+        margin-bottom: 40px;
+        background-color: $main_blue;
+        border-radius: 40px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 36px;
+        height: 100px;
+        &.long{
+            width: 600px;
+        }
+        .title-vertical{
+            width: 3px;
+            background-color: $main_deeper_blue;
+            height: 60px;
+        }
+    }
+    .title{
+        font-weight: normal;
+        margin: 0;
+        font-size: 40px;
+        color: black;
+        font-family: 'Syncopate', sans-serif;
+        display: inline-block;
+    }
+    .title-icon{
+        color: $main_deeper_blue;
+    }
+}
+
+
+// .Chart-title-div{
+//     text-align: center;
+//     width: 100%;
+// }
+
+.ChartList-top{
+    width: 736px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &:first-child{
+        border-radius: 40px 40px 0px 0px;
+    }
+    &:last-child{
+        border-radius: 0px 0px 40px 40px;
+    }
+}
+
+.ChartList{
+    width: 736px;
+}
+
+// .ChartList-div{
+//     display: flex;
+//     flex-direction: row;
+//     padding: 10px;
+//     position: relative;
+//     width: 90%;
+// }
+
+// .ChartList{
+//     width: 600px;
+// }
+
+
+.ChartList-root{
+    width: 600px;
+    display: flex;
+    flex-direction: row;
+    height: 70px;
+    background-color: #FFFAF1;
+    margin-right: 0;
+    .ChartList-rank{
+        font-size: 24px;
+        text-align: center;
+        color: white;
+        font-weight: bold;
+        width: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        div{
+            width: 36px;
+            height: 36px;
+            line-height: 36px;
+            font-family: 'Syncopate', sans-serif;
+            color: black;
+            border-radius: 8px;
+            border: none;
+            background-color: #D6DEE5;
+        }
+    }
+    .text{
+        // margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        line-height: 20px;
+        gap: 10px;
+        & img{
+            width: 50px;
+            height: 50px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        .left{
+            width: 450px;
+            display: flex;
+            flex-direction: column;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            justify-content: left;
+            white-space:nowrap;
+            .ChartList-name{
+                display: inline-block;
+                font-size: 20px;
+                width: 450px;
+                font-weight: 500;
+            }
+            .ChartList-artist{
+                display: inline-block;
+                width: 450px;
+                font-weight: 400;
+            }
+        }
+    }
+}
+// .ChartList-div div{
+//     display: flex;
+//     flex-direction: column;
+// }
+
+.ChartList .right{
+    font-family: "Gothic A1", sans-serif;
+    width: 60px;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    background-color: #FFFAF1;
+    padding: 10px;
+    &.long{
+        justify-content: center;
+        align-items: center;
+    }
+}

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import { instance } from "../instance/instance";
-import { AiFillLike } from "react-icons/ai";
-import "../styles/Chart.css";
+import { AiFillLike, AiOutlineLike } from "react-icons/ai";
+import "../styles/Chart.scss";
+import { ImMusic } from "react-icons/im";
 
 
 function ChartList({ data, id, index }) {
-  let today = new Date();
-  let hour = today.getHours();
   const [pushed, setPushed] = useState(false);
   const [like, setLike] = useState(data.numberOfUps);
 
@@ -72,31 +71,36 @@ function ChartList({ data, id, index }) {
   }
 
   return (
-    <div className="ChartList-root">
-      <div className="ChartList-rank-div">
-        <span className="ChartList-rank">{index + 1}</span>
+    <div className="ChartList-top">
+      <div className="ChartList-root">
+        <div className="ChartList-rank">
+          <div>{index + 1}</div>
+        </div>
+        <div className="ChartList text">
+          {/* <img src={data.imgUrl} alt="앨범커버" /> */}
+          <img src="./images/cover.png" alt="앨범커버" />
+          <div className="ChartList left">
+            <span className="ChartList-name">{data.title}</span>
+            <span className="ChartList-artist">{data.singer}</span>
+            {/* <span className="ChartList-artist">{hour - data.createdHour}</span> */}
+          </div>
+        </div>
       </div>
-      <div className="ChartList-div">
-        {/* <img src={data.imgUrl} alt="앨범커버" /> */}
-        <img src="./images/logo.png" alt="앨범커버" />
-        <div className="ChartList-left">
-          <span className="ChartList-name">{data.title}</span>
-          <span className="ChartList-artist">{data.singer}</span>
-          {/* <span className="ChartList-artist">{hour - data.createdHour}</span> */}
-        </div>
-        <div className="ChartList-right">
-          <span className="ChartList-artist">{data.userName}</span>
-          <span><button onClick={() => pushLike()}><AiFillLike color={pushed ? 'red' : 'black'} /></button> {like}</span>
-        </div>
+      <div className="ChartList right">
+        <span className="ChartList-username">{data.userName}</span>
+        <span>{pushed ? <AiFillLike onClick={() => pushLike()} /> : <AiOutlineLike onClick={() => pushLike()} />} {like}</span>
       </div>
     </div>
   );
 }
 
 function Main() {
+  let today = new Date();
+  const month = today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : `${today.getMonth() + 1}`;
+  const WEEKDAY = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  let week = WEEKDAY[today.getDay()];
   const [chart, setChart] = useState([]);
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     const getSongChart = async () => {
       try {
@@ -114,27 +118,22 @@ function Main() {
   return (
     <div>
       <Header />
-      {loading ? (
-        <div className="Chart-div">
-          <div className="Chart-title-div">
-            <h1 className="title">Daily Chart</h1>
-          </div>
-          <span>로딩중~</span>
-          <img src="../images/loading.gif" alt="로딩중~" />
+      <div className="Chart">
+        <h3>{`${month}-${today.getDate()} ${week}`}</h3>
+        <div className="Chart-title">
+          <ImMusic className="title-icon" size={60} />
+          <div className="title-vertical"></div>
+          <h1 className="title">DAILY CHART</h1>
         </div>
-      ) : (
-        <div className="Chart-div">
-          <div className="Chart-title-div">
-            <h1 className="title">Daily Chart</h1>
-          </div>
+        {loading ? <><span>로딩중~</span>
+          <img src="../images/loading.gif" alt="로딩중~" /></> :
           <div className="ChartList">
-            {chart.length ?
+            {chart.filter((value, i) => i < 5).length ?
               chart.map((item, index) => {
                 return <ChartList data={item} key={item.id} id={item.id} index={index} />;
               }) : <span>노래가 없습니다.</span>}
-          </div>
-        </div>
-      )}
+          </div>}
+      </div>
     </div>
   );
 }
