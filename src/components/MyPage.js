@@ -5,7 +5,7 @@ import { instance } from '../instance/instance';
 import { Link, useNavigate } from 'react-router-dom';
 import { AiFillLike } from "react-icons/ai";
 import { ImCross } from "react-icons/im";
-import RefreshToken from '../hooks/ExpirationToken';
+import RefreshToken from '../function/ExpirationToken';
 
 function MyPage() {
   const nav = useNavigate();
@@ -26,7 +26,7 @@ function MyPage() {
           setIsSongExist(response.data.requestedSong ? true : false);
           setUserInfo({
             ...response.data,
-            img: './images/logo.png',
+            img: './images/cover.png',
           })
         } catch (error) {
           console.log(error);
@@ -36,7 +36,7 @@ function MyPage() {
       setLoading(false);
     }
   }, [isSongExist]);
-  const { nickName, img, requestedSong } = userInfo;
+  const { nickName, img, requestedSong, name } = userInfo;
 
   const deleteSong = async () => {
     try {
@@ -61,13 +61,14 @@ function MyPage() {
       <div className='MyPage-div'>
         <div className='MyPage-info'>
           <img src={img} alt='프로필 사진' className='MyPage-img' />
-          <h3 className='MyPage-nickname'>{nickName}</h3>
         </div>
+        <h2 className='MyPage-nickname'>{name}</h2>
+        <h3 className='MyPage-nickname'>{nickName}</h3>
         <h1>오늘 신청곡</h1>
         {!loading ? (isSongExist ? <div className="ChartList">
           <div className="ChartList-root">
             <div className="ChartList-div">
-              <img src="./images/logo.png" alt="앨범커버" />
+              <img src="./images/cover.png" alt="앨범커버" />
               <div className="ChartList-left">
                 <span className="ChartList-name">{requestedSong.title}</span>
                 <span className="ChartList-artist">{requestedSong.singer}</span>
