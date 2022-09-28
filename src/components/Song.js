@@ -5,6 +5,7 @@ import { instance } from '../instance/instance'
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { musicState, songState, isSelectedMusicState, disabledState } from "../atom";
 import Modal from "react-modal";
+import ExpirationToken from "../function/ExpirationToken";
 
 function SongList({ item, focusIndex, index, setFocusIndex }) {
   const setSong = useSetRecoilState(songState);
@@ -149,11 +150,31 @@ function Song() {
       } catch (res) {
         console.log(res.response.data.message);
         setSearchError(res.response.data.message);
+        ExpirationToken(res.response.data.message);
         console.log(res);
       }
       setLoading(false);
     }
   };
+
+  const postPlayList = async () => {
+    try {
+      let newSong = song.split(' - ');
+      const response = await instance.post('playlist/', {
+        title: newSong[1],
+        singer: newSong[0],
+        imgUrl: "추가예정",
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+        },
+      })
+      console.log(response)
+    } catch (error) {
+      console.log(error);
+      ExpirationToken(error.response.data.message);
+    }
+  }
 
   return (
     <div>
@@ -186,6 +207,7 @@ function Song() {
             {/* <span style={{ color: 'red' }}>{searchError}</span> */}
             <br />
             <button onClick={() => requestSong()} disabled={disabled} className="request-btn">신청하기</button>
+            <button onClick={() => postPlayList()} disabled={disabled} className="request-btn">플레이리스트 추가</button>
           </div>
         </div>
       </div>
