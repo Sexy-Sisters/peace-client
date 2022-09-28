@@ -81,8 +81,13 @@ function Chart() {
           <div className="title-vertical"></div>
           <h1 className="title">MONTHLY CHART</h1>
         </div>
-        {loading ? <><span>로딩중~</span>
-          <img src="../images/loading.gif" alt="로딩중~" /></> :
+        {loading ?
+          <div className="ChartList">
+            <div className="ChartList-top">
+              <div className="ChartList-root"></div>
+              <div className="ChartList right"></div>
+            </div>
+          </div> :
           <div className="ChartList">
             {chart.filter((value, i) => i < 5).length ?
               chart.map((item, index) => {
