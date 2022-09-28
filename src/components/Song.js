@@ -4,8 +4,10 @@ import "../styles/Song.scss";
 import { instance } from '../instance/instance'
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { musicState, songState, isSelectedMusicState, disabledState } from "../atom";
+import Modal from "react-modal";
+import ExpirationToken from "../function/ExpirationToken";
 
-function SongList({ item, focusIndex, index, setFocusIndex }) {
+function SongList({ item, }) {
   const setSong = useSetRecoilState(songState);
   const setIsSelectedMusic = useSetRecoilState(isSelectedMusicState);
   const setDisabled = useSetRecoilState(disabledState);
@@ -13,12 +15,13 @@ function SongList({ item, focusIndex, index, setFocusIndex }) {
     setSong(`${item.singer} - ${item.title}`);
     setIsSelectedMusic(true);
     setDisabled(false);
-    setFocusIndex(-1);
   };
 
-  const focusStyle = index === focusIndex ? '#F5EDE1' : '#FFF9F1';
+  const [focusStyle, setFocusStyle] = useState('#FFF9F1');
   return (
-    <div className="SongList-div" style={{ backgroundColor: focusStyle, transition: 'all ease 0.5s 0s' }} onClick={() => selectSong()}>
+    <div className="SongList-div" style={{ backgroundColor: focusStyle }}
+      onMouseEnter={() => setFocusStyle('#F5EDE1')}
+      onMouseLeave={() => setFocusStyle('#FFF9F1')} onClick={() => selectSong()}>
       <img src="./images/cover.png" alt={`${item.singer}의 ${item.title} 앨범 커버`} />
       <div className="text">
         <span className="item">{item.title}</span>
@@ -30,10 +33,11 @@ function SongList({ item, focusIndex, index, setFocusIndex }) {
 
 function Song() {
   const [song, setSong] = useRecoilState(songState);
+  const [modal, setModal] = useState(false);
   const [music, setMusic] = useRecoilState(musicState);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
-  const [searchError, setSearchError] = useState('검색 결과가 없습니다.');
+  const [searchError, setSearchError] = useState('');
   const [isSelectedMusic, setIsSelectedMusic] = useRecoilState(isSelectedMusicState);
   const [disabled, setDisabled] = useRecoilState(disabledState);
   const [focusIndex, setFocusIndex] = useState(-1);
@@ -71,7 +75,6 @@ function Song() {
     if (focusIndex > music.length - 1 && e.keyCode === 38) {
       setFocusIndex(music.length - 1);
     }
-    console.log(focusIndex);
   }
 
   const onChange = (e) => {
@@ -126,11 +129,13 @@ function Song() {
   };
 
   const requestSong = async () => {
+    setModal(true);
     if (!song) {
       setSearchError('노래가 선택되지 않았습니다.');
     }
     else {
       try {
+        setLoading(true);
         let newSong = song.split(' - ');
         await instance.post("song", {
           title: newSong[1],
@@ -141,14 +146,38 @@ function Song() {
             'Authorization': `Bearer ${localStorage.getItem('access-token')}`
           }
         });
-        console.log("신청완료!");
+        setSearchError('신청 완료!');
       } catch (res) {
         console.log(res.response.data.message);
         setSearchError(res.response.data.message);
+        ExpirationToken(res.response.data.message);
         console.log(res);
       }
+      setLoading(false);
     }
   };
+
+  const postPlayList = async () => {
+    setModal(true);
+    try {
+      let newSong = song.split(' - ');
+      const response = await instance.post('playlist/', {
+        title: newSong[1],
+        singer: newSong[0],
+        imgUrl: "추가예정",
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+        },
+      })
+      console.log(response);
+      setSearchError('신청완료!');
+    } catch (error) {
+      console.log(error);
+      ExpirationToken(error.response.data.message);
+      setSearchError(error.response.data.message);
+    }
+  }
 
   return (
     <div>
@@ -162,7 +191,6 @@ function Song() {
               onChange={(e) => onChange(e)}
               value={song}
               className="Song-input"
-              style={{ border: searchError === '하루에 한 곡만 신청할 수 있습니다.' && '3px solid red' }}
               onKeyDown={(e) => onKeyDown(e)}
               placeholder='신청곡을 검색해보세요.'
             />
@@ -175,16 +203,41 @@ function Song() {
             ) : searched && (
               <div className="Song-List">
                 {music.map((item, index) => {
-                  return <SongList item={item} key={index} focusIndex={focusIndex} index={index} setFocusIndex={setFocusIndex} />;
+                  return <SongList item={item} key={index} />;
                 })}
               </div>
             ))}
-            <span style={{ color: 'red' }}>{searchError}</span>
-            <br/>
+            {/* <span style={{ color: 'red' }}>{searchError}</span> */}
+            <br />
             <button onClick={() => requestSong()} disabled={disabled} className="request-btn">신청하기</button>
+            <button onClick={() => postPlayList()} disabled={disabled} className="request-btn">플레이리스트 추가</button>
           </div>
         </div>
       </div>
+      <Modal isOpen={modal}
+        onRequestClose={() => setModal(false)}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(134, 134, 134, 0.2)",
+            zIndex: 100,
+          },
+          content: {
+            width: "700px",
+            height: "500px",
+            margin: "auto",
+            borderRadius: "20px",
+            padding: 0,
+            overflowX: "hidden",
+            backgroundColor: '#FFF9F1',
+          },
+        }}>
+        <div className="modal-header"></div>
+        <div className="song-modal">
+          <img src="./images/logo.png" alt="로고" />
+          <br />
+          {searchError && !loading && <span className="searchError">{searchError}</span>}
+        </div>
+      </Modal>
     </div>
   );
 };

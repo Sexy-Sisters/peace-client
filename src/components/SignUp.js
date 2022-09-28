@@ -3,7 +3,7 @@ import "../styles/SignUp.scss";
 import { AiOutlineCloseCircle, AiOutlineCheckCircle, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { instance } from '../instance/instance';
 function SignUp(props) {
-  const { onClick, type } = props;
+  const { type } = props;
   const [correctPassword, setCorrectPassword] = useState(false);
   const [visible, setVisible] = useState(false);
   const [signUpInputs, setSignUpInputs] = useState({
@@ -113,7 +113,6 @@ function SignUp(props) {
     } catch (error) {
       console.log(error);
       alert("인증에 실패했습니다.");
-      onClick();
     }
   };
 
@@ -128,10 +127,10 @@ function SignUp(props) {
   }, [certification, loginInputs.email, loginInputs.password, signUpInputs, signUpStep, type]);
 
   return (
-    <div className="SignUp" onClick={onClick}>
+    <div className="SignUp">
       {type ? (
         //회원가입
-        <div className="modalContainer" onClick={(e) => e.stopPropagation()}>
+        <>
           <h1 className="SignUp-title">SIGN UP</h1>
           <div className="SignUp-input-div">
             {signUpStep === 1 ? <><input
@@ -220,7 +219,7 @@ function SignUp(props) {
               NEXT
             </button>)}
           </div>
-        </div>
+        </>
       ) : (
         //로그인
         (loginResult ? <div className="loginResult">

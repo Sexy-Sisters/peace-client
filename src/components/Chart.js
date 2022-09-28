@@ -4,6 +4,7 @@ import { instance } from "../instance/instance";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { ImMusic } from "react-icons/im";
 import "../styles/Chart.scss";
+import ExpirationToken from "../function/ExpirationToken";
 
 function ChartList({ data, id, index }) {
   const [pushed, setPushed] = useState(false);
@@ -19,6 +20,7 @@ function ChartList({ data, id, index }) {
         setPushed(response.data);
       } catch (error) {
         console.log(error);
+        ExpirationToken(error.response.data.message);
       }
     }
     isPushed();
@@ -79,8 +81,13 @@ function Chart() {
           <div className="title-vertical"></div>
           <h1 className="title">MONTHLY CHART</h1>
         </div>
-        {loading ? <><span>로딩중~</span>
-          <img src="../images/loading.gif" alt="로딩중~" /></> :
+        {loading ?
+          <div className="ChartList">
+            <div className="ChartList-top">
+              <div className="ChartList-root"></div>
+              <div className="ChartList right"></div>
+            </div>
+          </div> :
           <div className="ChartList">
             {chart.filter((value, i) => i < 5).length ?
               chart.map((item, index) => {
