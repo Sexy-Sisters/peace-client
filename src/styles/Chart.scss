@@ -66,12 +66,6 @@ $main_deeper_blue: #7895B2;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    &:first-child{
-        border-radius: 40px 40px 0px 0px;
-    }
-    &:last-child{
-        border-radius: 0px 0px 40px 40px;
-    }
 }
 
 .ChartList{
@@ -97,6 +91,12 @@ $main_deeper_blue: #7895B2;
     height: 70px;
     background-color: #FFFAF1;
     margin-right: 0;
+    &:first-child{
+        border-radius: 40px 40px 0px 0px;
+    }
+    &:last-child{
+        border-radius: 0px 0px 40px 40px;
+    }
     .ChartList-rank{
         font-size: 24px;
         text-align: center;
@@ -163,7 +163,7 @@ $main_deeper_blue: #7895B2;
     height: 40px;
     display: flex;
     border: none;
-    border-radius: 10px;
+    border-radius: 20px;
     flex-direction: column;
     background-color: #FFFAF1;
     padding: 10px;
