@@ -5,7 +5,7 @@ import { instance } from '../instance/instance';
 import { Link, useNavigate } from 'react-router-dom';
 import { AiFillLike } from "react-icons/ai";
 import { ImCross } from "react-icons/im";
-import RefreshToken from '../function/ExpirationToken';
+import ExpirationToken from '../function/ExpirationToken';
 
 function MyPage() {
   const nav = useNavigate();
@@ -28,15 +28,25 @@ function MyPage() {
             ...response.data,
             img: './images/cover.png',
           })
+          const playListResponse = await instance.get(`playlist/${response.data.id}`, {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('access-token')}`
+            }
+          });
+          
         } catch (error) {
           console.log(error);
-          RefreshToken(error.response.data.message);
+          ExpirationToken(error.response.data.message);
         }
       })();
       setLoading(false);
     }
+    else {
+      alert('로그인하세요!!!!!!!!!!!');
+      nav('/');
+    }
   }, [isSongExist]);
-  const { nickName, img, requestedSong, name } = userInfo;
+  const { nickName, img, requestedSong, name, id } = userInfo;
 
   const deleteSong = async () => {
     try {
@@ -50,7 +60,7 @@ function MyPage() {
       setIsSongExist(false);
     } catch (error) {
       console.log(error);
-      RefreshToken(error.response.data.message);
+      ExpirationToken(error.response.data.message);
     }
     setLoading(false);
   }
@@ -80,6 +90,9 @@ function MyPage() {
             </div>
           </div>
         </div> : <div><span>아직 신청곡이 없습니다!</span><Link to={'/song'}>신청하러 가기</Link></div>) : <span>로딩중~~~</span>}
+        <div>
+          <h1>내 플레이리스트</h1>
+        </div>
       </div>
     </>
   )

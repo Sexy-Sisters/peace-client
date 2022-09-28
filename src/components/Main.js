@@ -4,6 +4,7 @@ import { instance } from "../instance/instance";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import "../styles/Chart.scss";
 import { ImMusic } from "react-icons/im";
+import ExpirationToken from "../function/ExpirationToken";
 
 
 function ChartList({ data, id, index }) {
@@ -21,6 +22,7 @@ function ChartList({ data, id, index }) {
         setPushed(response.data);
       } catch (error) {
         console.log(error);
+        ExpirationToken(error.response.data.message);
       }
     }
     isPushed();
@@ -47,6 +49,7 @@ function ChartList({ data, id, index }) {
       console.log('따봉박음!');
     } catch (error) {
       console.log(error);
+      ExpirationToken(error.response.data.message);
     }
   }
 
@@ -67,6 +70,7 @@ function ChartList({ data, id, index }) {
       console.log('따봉취소!');
     } catch (error) {
       console.log(error);
+      ExpirationToken(error.response.data.message);
     }
   }
 
@@ -110,9 +114,9 @@ function Main() {
       } catch (error) {
         console.log(error);
       }
-      setLoading(false);
     };
     getSongChart();
+    setLoading(false);
   }, []);
 
   return (

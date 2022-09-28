@@ -4,6 +4,7 @@ import { instance } from "../instance/instance";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { ImMusic } from "react-icons/im";
 import "../styles/Chart.scss";
+import ExpirationToken from "../function/ExpirationToken";
 
 function ChartList({ data, id, index }) {
   const [pushed, setPushed] = useState(false);
@@ -19,6 +20,7 @@ function ChartList({ data, id, index }) {
         setPushed(response.data);
       } catch (error) {
         console.log(error);
+        ExpirationToken(error.response.data.message);
       }
     }
     isPushed();

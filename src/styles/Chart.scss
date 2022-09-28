@@ -15,10 +15,10 @@ $main_deeper_blue: #7895B2;
     h3{
         font-family: 'Syncopate', sans-serif;
         margin: 0;
-        margin-right: 98px;
+        margin-right: 128px;
         text-align: right;
         &.long{
-            margin-right: 48px;
+            margin-right: 88px;
         }
     }
     .Chart-title{
@@ -26,13 +26,13 @@ $main_deeper_blue: #7895B2;
         margin: 0 auto;
         margin-bottom: 40px;
         background-color: $main_blue;
-        border-radius: 40px;
+        border-radius: 30px;
         padding: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 36px;
-        height: 100px;
+        height: 60px;
         &.long{
             width: 600px;
         }
@@ -45,7 +45,7 @@ $main_deeper_blue: #7895B2;
     .title{
         font-weight: normal;
         margin: 0;
-        font-size: 40px;
+        font-size: 36px;
         color: black;
         font-family: 'Syncopate', sans-serif;
         display: inline-block;
@@ -78,13 +78,12 @@ $main_deeper_blue: #7895B2;
     width: 736px;
 }
 
-// .ChartList-div{
-//     display: flex;
-//     flex-direction: row;
-//     padding: 10px;
-//     position: relative;
-//     width: 90%;
-// }
+.ChartList-div{
+    img{
+        width: 50px;
+        height: 50px;
+    }
+}
 
 // .ChartList{
 //     width: 600px;
@@ -92,7 +91,7 @@ $main_deeper_blue: #7895B2;
 
 
 .ChartList-root{
-    width: 600px;
+    width: 636px;
     display: flex;
     flex-direction: row;
     height: 70px;
@@ -163,6 +162,8 @@ $main_deeper_blue: #7895B2;
     width: 60px;
     height: 40px;
     display: flex;
+    border: none;
+    border-radius: 10px;
     flex-direction: column;
     background-color: #FFFAF1;
     padding: 10px;
