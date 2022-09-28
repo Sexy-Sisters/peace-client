@@ -7,7 +7,7 @@ import { musicState, songState, isSelectedMusicState, disabledState } from "../a
 import Modal from "react-modal";
 import ExpirationToken from "../function/ExpirationToken";
 
-function SongList({ item, focusIndex, index, setFocusIndex }) {
+function SongList({ item, }) {
   const setSong = useSetRecoilState(songState);
   const setIsSelectedMusic = useSetRecoilState(isSelectedMusicState);
   const setDisabled = useSetRecoilState(disabledState);
@@ -15,12 +15,13 @@ function SongList({ item, focusIndex, index, setFocusIndex }) {
     setSong(`${item.singer} - ${item.title}`);
     setIsSelectedMusic(true);
     setDisabled(false);
-    setFocusIndex(-1);
   };
 
-  const focusStyle = index === focusIndex ? '#F5EDE1' : '#FFF9F1';
+  const [focusStyle, setFocusStyle] = useState('#FFF9F1');
   return (
-    <div className="SongList-div" style={{ backgroundColor: focusStyle, transition: 'all ease 0.5s 0s' }} onClick={() => selectSong()}>
+    <div className="SongList-div" style={{ backgroundColor: focusStyle }}
+      onMouseEnter={() => setFocusStyle('#F5EDE1')}
+      onMouseLeave={() => setFocusStyle('#FFF9F1')} onClick={() => selectSong()}>
       <img src="./images/cover.png" alt={`${item.singer}의 ${item.title} 앨범 커버`} />
       <div className="text">
         <span className="item">{item.title}</span>
@@ -74,7 +75,6 @@ function Song() {
     if (focusIndex > music.length - 1 && e.keyCode === 38) {
       setFocusIndex(music.length - 1);
     }
-    console.log(focusIndex);
   }
 
   const onChange = (e) => {
@@ -158,6 +158,7 @@ function Song() {
   };
 
   const postPlayList = async () => {
+    setModal(true);
     try {
       let newSong = song.split(' - ');
       const response = await instance.post('playlist/', {
@@ -169,10 +170,12 @@ function Song() {
           Authorization: `Bearer ${localStorage.getItem("access-token")}`,
         },
       })
-      console.log(response)
+      console.log(response);
+      setSearchError('신청완료!');
     } catch (error) {
       console.log(error);
       ExpirationToken(error.response.data.message);
+      setSearchError(error.response.data.message);
     }
   }
 
@@ -200,7 +203,7 @@ function Song() {
             ) : searched && (
               <div className="Song-List">
                 {music.map((item, index) => {
-                  return <SongList item={item} key={index} focusIndex={focusIndex} index={index} setFocusIndex={setFocusIndex} />;
+                  return <SongList item={item} key={index} />;
                 })}
               </div>
             ))}
@@ -230,6 +233,8 @@ function Song() {
         }}>
         <div className="modal-header"></div>
         <div className="song-modal">
+          <img src="./images/logo.png" alt="로고" />
+          <br />
           {searchError && !loading && <span className="searchError">{searchError}</span>}
         </div>
       </Modal>
