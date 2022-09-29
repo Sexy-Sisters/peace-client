@@ -30,8 +30,10 @@ function MyPage() {
   const nav = useNavigate();
   const [loading, setLoading] = useState(false);
   const [isSongExist, setIsSongExist] = useState(false);
+  const [image, setImage] = useState(false);
+  const [changingImg, setChangingImg] = useState(false);
   const [playlist, setPlayList] = useState([]);
-  const [newProfileImg, setNewProfileImg] = useState("");
+  // const [newProfileImg, setNewProfileImg] = useState("");
   const selectFile = useRef("");
   const imgArr = [
     "/images/cover.png",
@@ -60,7 +62,9 @@ function MyPage() {
       nav("/");
     }
   }, [isSongExist, playlist]);
-  const { nickName, img, requestedSong, name } = userInfo;
+  const { nickName, profileImg, requestedSong, name } = userInfo;
+
+  const profileImgFormData = new FormData();
 
   const deleteSong = async () => {
     try {
@@ -79,21 +83,29 @@ function MyPage() {
     setLoading(false);
   };
 
+
   const changeProfileImg = async () => {
     try {
-      const profileImg = new FormData();
-      profileImg.append("image", newProfileImg);
-      const response = await instance.put(
-        "user/profile/img?image",
-        newProfileImg,
+      await instance.put(
+        "user/profile/img",
+        profileImgFormData,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access-token")}`,
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "multipart/form-data; boundary=<calculated when request is sent>",
           },
         }
       );
-      console.log(response);
+      // console.log(response);
+      const loginResponse = await instance.get("user/profile", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access-token')}`,
+        },
+      });
+      localStorage.setItem('user', JSON.stringify({
+        ...loginResponse.data,
+      }));
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -101,13 +113,22 @@ function MyPage() {
 
   const [modal, setModal] = useState(false);
 
+  const changeImg = (e) => {
+    console.log(e.target.files);
+    profileImgFormData.append('image', e.target.files[0]);
+    setImage(true);
+  }
+
   return (
     <>
       <Header />
       <div className="MyPage-div">
         <div className="MyPage-info">
-          <img src={img} alt="프로필 사진" onClick={() => setModal(true)} className="MyPage-img" />
-          <MdOutlineChangeCircle size={40} onClick={() => setModal(true)} className="change" />
+          <img src={profileImg} alt="프로필 사진" onClick={() => setModal(true)} className="MyPage-img" />
+          {/* <MdOutlineChangeCircle size={40} onClick={() => setModal(true)} className="change" /> */}
+          <button onClick={() => setModal(true)} className="changeBtn">
+            <img src='/images/change.png' alt="프로필 사진" className="change" />
+          </button>
         </div>
         <h2 className="MyPage-nickname">{name}</h2>
         <h3 className="MyPage-nickname">{nickName}</h3>
@@ -149,7 +170,7 @@ function MyPage() {
         <h1>플레이리스트</h1>
         <button onClick={() => changeProfileImg()}>변경하기</button>
 
-        <Link to={`/playlist/${JSON.parse(localStorage.getItem("user")).id}`}>
+        <Link to={`/playlist/${localStorage.getItem("user") && JSON.parse(localStorage.getItem("user")).id}`}>
           <div>
             {imgArr.map((item, index) => {
               return <PlayListImages item={item} index={index} key={index} />;
@@ -174,16 +195,16 @@ function MyPage() {
             },
           }}>
           <div className="modal-header"></div>
-          <img src={img} alt="프로필 사진" className="original-img" />
+          <img src={profileImg} alt="프로필 사진" className="original-img" />
           <input
             type="file"
             style={{ display: "none" }}
             ref={selectFile} //input에 접근 하기위해 useRef사용
-            onChange={(e) => setNewProfileImg(e.target.value)}
+            onChange={(e) => changeImg(e)}
           />
-          <span>{newProfileImg.slice(12)}</span>
+          {/* <span>{newProfileImg[0].slice(12)}</span> */}
           <button onClick={() => selectFile.current.click()}>파일 업로드</button>
-          <button onClick={() => changeProfileImg()} disabled={!newProfileImg ? true : false}>프로필 사진 변경하기</button>
+          <button onClick={() => changeProfileImg()} disabled={!image ? true : false}>프로필 사진 변경하기</button>
         </Modal>
       </div>
     </>

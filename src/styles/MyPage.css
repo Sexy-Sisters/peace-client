@@ -18,12 +18,23 @@
     border: 2px solid black;
 }
 
-.change{
+.changeBtn{
+    width: 40px;
+    height: 40px;
     top: 260px;
     cursor: pointer;
     left: 260px;
-    border: none;
     position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    background-color: white;
+}
+
+.change{
+    width: 25px;
+    height: 25px;
 }
 
 .MyPage-nickname{
