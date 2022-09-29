@@ -44,28 +44,6 @@ $main_blue: #E3E9EF;
     display: flex;
     justify-content: center;
     align-items: center;
-    .SignUp-button{
-      width: 150px;
-      height: 50px;
-      border-radius: 20px;
-      border: none;
-      color: black;
-      background-color: $main_blue;
-      font-family: 'Syncopate', sans-serif;
-      font-size: 24px;
-      cursor: pointer;
-      margin: 0 auto;
-      &.login{
-        margin-top: 60px;
-      }
-      &:hover{
-        transition: all ease 0.3s 0s;
-        background-color: #97B5D2;
-      }
-      &:disabled{
-        background-color: rgba(227, 233, 239, 0.5);
-      }
-    }
   }
   .SignUp-input-div{
     display: flex;
@@ -132,6 +110,34 @@ $main_blue: #E3E9EF;
       width: 20px;
       height: 20px;
       border-radius: 10px;
+    }
+  }
+}
+.SignUp-button{
+  width: 150px;
+  height: 50px;
+  border-radius: 20px;
+  border: none;
+  color: black;
+  background-color: $main_blue;
+  font-family: 'Syncopate', sans-serif;
+  font-size: 24px;
+  cursor: pointer;
+  margin: 0 auto;
+  &.login{
+    margin-top: 60px;
+  }
+  &:hover{
+    transition: all ease 0.3s 0s;
+    background-color: #97B5D2;
+  }
+  &:disabled{
+    background-color: rgba(227, 233, 239, 0.5);
+  }
+  &.result{
+    margin-top: 30px;
+    &.re{
+      width: 200px;
     }
   }
 }

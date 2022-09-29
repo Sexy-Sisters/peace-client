@@ -10,6 +10,7 @@ function Header() {
   const logout = () => {
     localStorage.removeItem('access-token');
     localStorage.removeItem('refresh-token');
+    localStorage.removeItem('user');
     console.log('로그아웃됨!');
     window.location.reload();
   }

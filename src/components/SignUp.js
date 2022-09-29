@@ -74,6 +74,15 @@ function SignUp(props) {
       refreshToken && localStorage.setItem('refresh-token', refreshToken);
       setLoginResult(true);
       console.log('로그인됨!');
+      const loginResponse = await instance.get("user/profile", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      localStorage.setItem('user', JSON.stringify({
+        ...loginResponse.data,
+        img: "./images/cover.png",
+      }));
     } catch (error) {
       console.log(error);
       setLoginResult(false);
@@ -125,6 +134,14 @@ function SignUp(props) {
       setDisabled(false);
     }
   }, [certification, loginInputs.email, loginInputs.password, signUpInputs, signUpStep, type]);
+
+  const reLogin = () => {
+    setLoginResult(null);
+    setLoginInputs({
+      email: "",
+      password: "",
+    });
+  }
 
   return (
     <div className="SignUp">
@@ -204,7 +221,7 @@ function SignUp(props) {
                     {correctPassword ? <AiOutlineCheckCircle className="icon" size={24} /> : <AiOutlineCloseCircle className="icon" size={24} />}
                   </div>
                 </>
-                  : <><img src="./images/logo.png" alt="로고" /><span className="message">회원가입 되었습니다.<br />
+                  : <><img src="/images/logo.png" alt="로고" /><span className="message">회원가입 되었습니다.<br />
                     로그인해주세요!</span></>))}
           </div>
           {signUpStep !== 4 && <div className="step-div">
@@ -223,13 +240,15 @@ function SignUp(props) {
       ) : (
         //로그인
         (loginResult ? <div className="loginResult">
-          <img src="./images/logo.png" alt="로고" />
+          <img src="/images/logo.png" alt="로고" />
           <span>로그인 완료! (´ฅω•ฅ｀)</span>
           <span>평화로운 아침을 만들어보세요.</span>
+          <button className="SignUp-button result" onClick={() => window.location.reload()}>확인</button>
         </div> : loginResult === false ? <div className="loginResult">
-          <img src="./images/logo.png" alt="로고" />
+          <img src="/images/logo.png" alt="로고" />
           <span>로그인 실패 ｡°(´∩ω∩`)°｡</span>
           <span>이메일이나 비밀번호를 확인해주세요.</span>
+          <button className="SignUp-button result re" onClick={() => reLogin()}>다시 로그인하기</button>
         </div> : (<div className="SignUp-modalContainer" onClick={(e) => e.stopPropagation()}>
           <h1 className="SignUp-title">LOGIN</h1>
           <div className="SignUp-input-div">
@@ -261,8 +280,9 @@ function SignUp(props) {
             </button>
           </div>
         </div>))
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }
 
