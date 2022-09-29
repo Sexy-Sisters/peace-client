@@ -5,13 +5,25 @@
 
 .MyPage-info{
     display: flex;
+    position: relative;
     flex-direction: row;
 }
 
 .MyPage-img{
-    width: 80px;
-    height: 80px;
-    margin-right: 40px;
+    width: 320px;
+    cursor: pointer;
+    height: 320px;
+    margin-right: 80px;
+    border-radius: 160px;
+    border: 2px solid black;
+}
+
+.change{
+    top: 260px;
+    cursor: pointer;
+    left: 260px;
+    border: none;
+    position: absolute;
 }
 
 .MyPage-nickname{
@@ -19,4 +31,21 @@
     height: 80px;
     margin: 0;
     line-height: 80px;
+}
+
+.imgdiv > img{
+    width: 80px;    
+    height: 80px;
+}
+
+.original-img{
+    margin: 20px;
+    width: 160px;
+    height: 160px;
+    border-radius: 80px;
+    border: 2px solid black;
+}
+
+.upload{
+    border-radius: 20px;
 }
