@@ -10,6 +10,8 @@ function ChartList({ data, id, index }) {
   const [pushed, setPushed] = useState(false);
   const [like, setLike] = useState(data.numberOfUps);
 
+  const userInfo = localStorage.getItem('user');
+
   useEffect(() => {
     const isPushed = async () => {
       try {
@@ -25,7 +27,7 @@ function ChartList({ data, id, index }) {
       }
     };
     isPushed();
-  }, [data.numberOfUps, id, pushed]);
+  }, [data.numberOfUps, id, pushed, userInfo]);
 
   const pushLike = async () => {
     pushed ? cancelLike() : upLike();
@@ -121,16 +123,19 @@ function Main() {
   const [chart, setChart] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    const getSongChart = async () => {
-      try {
-        setLoading(true);
-        const response = await instance.get("song");
-        setChart(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getSongChart();
+    if (localStorage.getItem('user')) {
+      const getSongChart = async () => {
+        try {
+          setLoading(true);
+          const response = await instance.get("song");
+          setChart(response.data);
+          console.log(response);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      getSongChart();
+    }
     setLoading(false);
   }, []);
 
@@ -145,12 +150,7 @@ function Main() {
           <h1 className="title">DAILY CHART</h1>
         </div>
         {loading ? (
-          <div className="ChartList">
-            <div className="ChartList-top">
-              <div className="ChartList-root"></div>
-              <div className="ChartList right"></div>
-            </div>
-          </div>
+          <div className="nonSearch"></div>
         ) : (
           <div className="ChartList">
             {chart.filter((value, i) => i < 5).length ? (

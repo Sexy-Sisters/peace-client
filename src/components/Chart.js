@@ -82,17 +82,15 @@ function Chart() {
           <h1 className="title">MONTHLY CHART</h1>
         </div>
         {loading ?
-          <div className="ChartList">
-            <div className="ChartList-top">
-              <div className="ChartList-root"></div>
-              <div className="ChartList right"></div>
-            </div>
-          </div> :
+          <div className="nonSearch"></div> :
           <div className="ChartList">
             {chart.filter((value, i) => i < 5).length ?
               chart.map((item, index) => {
                 return <ChartList data={item} key={item.id} id={item.id} index={index} />;
-              }) : <span>노래가 없습니다.</span>}
+              }) : <div className="nonSearch">
+                <img src="./images/sun.png" alt="디자인" className="sun" />{" "}
+                <span>노래가 없습니다~</span>
+              </div>}
           </div>}
       </div>
     </div>
