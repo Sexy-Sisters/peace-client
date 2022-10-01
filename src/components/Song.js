@@ -201,16 +201,18 @@ function Song() {
                 <img src="./images/loading.gif" alt="로딩중~" />
               </>
             ) : searched && (
-              <div className="Song-List">
-                {music.map((item, index) => {
-                  return <SongList item={item} key={index} />;
-                })}
-              </div>
+              <>
+                <div className="Song-List">
+                  {music.map((item, index) => {
+                    return <SongList item={item} key={index} />;
+                  })}
+                </div>
+                <button onClick={() => requestSong()} disabled={disabled} className="request-btn">신청하기</button>
+                <button onClick={() => postPlayList()} disabled={disabled} className="request-btn">플레이리스트 추가</button>
+              </>
             ))}
             {/* <span style={{ color: 'red' }}>{searchError}</span> */}
             <br />
-            <button onClick={() => requestSong()} disabled={disabled} className="request-btn">신청하기</button>
-            <button onClick={() => postPlayList()} disabled={disabled} className="request-btn">플레이리스트 추가</button>
           </div>
         </div>
       </div>
@@ -232,11 +234,13 @@ function Song() {
           },
         }}>
         <div className="modal-header"></div>
-        <div className="song-modal">
-          <img src="./images/logo.png" alt="로고" />
-          <br />
-          {searchError && !loading && <span className="searchError">{searchError}</span>}
-        </div>
+        {searchError && !loading &&
+          <div className="song-modal">
+            <img src="./images/logo.png" alt="로고" />
+            <br />
+            <span className="searchError">{searchError}</span>
+          </div>
+        }
       </Modal>
     </div>
   );
