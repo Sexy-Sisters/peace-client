@@ -4,10 +4,10 @@ import { instance } from '../instance/instance';
 import Header from './Header';
 import '../styles/UserList.scss';
 
-function UserListList() {
+function UserListList({ data }) {
   return (
     <div>
-      wow
+      {data.name}
     </div>
   )
 }
@@ -36,11 +36,11 @@ function UserList() {
           <ImMusic className="title-icon" size={60} />
           <div className="title-vertical"></div>
           <h1 className="title">PLAYLIST</h1>
-          <div className='UserList-list'>
-            {!loading ? userList.map((item) => {
-              return <UserListList data={item} key={item.id}></UserListList>
-            }) : <>로딩중~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</>}
-          </div>
+        </div>
+        <div className='UserList-list'>
+          {!loading ? userList.map((item) => {
+            return <UserListList data={item} key={item.id}></UserListList>
+          }) : <>로딩중~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</>}
         </div>
       </div>
     </>
