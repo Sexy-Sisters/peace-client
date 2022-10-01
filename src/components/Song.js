@@ -3,7 +3,7 @@ import Header from "./Header";
 import "../styles/Song.scss";
 import { instance } from '../instance/instance'
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { musicState, songState, isSelectedMusicState, disabledState } from "../atom";
+import { musicState, songState, isSelectedMusicState, disabledState, userState } from "../atom";
 import Modal from "react-modal";
 import ExpirationToken from "../function/ExpirationToken";
 
@@ -41,6 +41,7 @@ function Song() {
   const [isSelectedMusic, setIsSelectedMusic] = useRecoilState(isSelectedMusicState);
   const [disabled, setDisabled] = useRecoilState(disabledState);
   const [focusIndex, setFocusIndex] = useState(-1);
+  const [user, setUser] = useRecoilState(userState);
 
   useEffect(() => {
     if (isSelectedMusic) {
@@ -147,6 +148,12 @@ function Song() {
           }
         });
         setSearchError('신청 완료!');
+        const loginResponse = await instance.get("user/profile", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access-token')}`,
+          },
+        });
+        setUser(loginResponse.data);
       } catch (res) {
         console.log(res.response.data.message);
         setSearchError(res.response.data.message);

@@ -5,7 +5,6 @@ import { instance } from "../instance/instance";
 import { Link, useNavigate } from "react-router-dom";
 import { AiFillLike } from "react-icons/ai";
 import { ImCross } from "react-icons/im";
-import { MdOutlineChangeCircle } from "react-icons/md";
 import ExpirationToken from "../function/ExpirationToken";
 import styled from "styled-components";
 import Modal from 'react-modal';
@@ -34,7 +33,6 @@ function MyPage() {
   const [isSongExist, setIsSongExist] = useState(false);
   const [image, setImage] = useState(false);
   const [user, setUser] = useRecoilState(userState);
-  const [playlist, setPlayList] = useState([]);
   // const [newProfileImg, setNewProfileImg] = useState("");
   const selectFile = useRef("");
   const imgArr = [
@@ -48,7 +46,7 @@ function MyPage() {
       alert("로그인하세요!!!!!!!!!!!");
       nav("/");
     }
-    else{
+    else {
       setIsSongExist(user.requestedSong !== null);
     }
   }, []);
@@ -65,10 +63,15 @@ function MyPage() {
         },
       });
       console.log(response);
+      setUser({
+        ...user,
+        requestedSong: {},
+      })
       setIsSongExist(false);
     } catch (error) {
       console.log(error);
       ExpirationToken(error.response.data.message);
+      deleteSong();
     }
     setLoading(false);
   };
@@ -93,6 +96,8 @@ function MyPage() {
       })
     } catch (error) {
       console.log(error);
+      ExpirationToken(error.response.data.message);
+      changeProfileImg();
     }
   };
 
@@ -104,10 +109,11 @@ function MyPage() {
     setImage(true);
   }
 
+
   return (
     <>
       <Header />
-      <div className="MyPage-div">
+      {name && <div className="MyPage-div">
         <div className="MyPage-info">
           <img src={profileImg} alt="프로필 사진" onClick={() => setModal(true)} className="MyPage-img" />
           {/* <MdOutlineChangeCircle size={40} onClick={() => setModal(true)} className="change" /> */}
@@ -119,7 +125,7 @@ function MyPage() {
         <h3 className="MyPage-nickname">{nickName}</h3>
         <h1>오늘 신청곡</h1>
         {!loading ? (
-          isSongExist ? (
+          requestedSong?.title ? (
             <div className="ChartList">
               <div className="ChartList-root">
                 <div className="ChartList-div">
@@ -154,7 +160,7 @@ function MyPage() {
         <br />
         <h1>플레이리스트</h1>
 
-        <Link to={`/playlist/${localStorage.getItem("user") && JSON.parse(localStorage.getItem("user")).id}`}>
+        <Link to={`/playlist/${user.id}`}>
           <div>
             {imgArr.map((item, index) => {
               return <PlayListImages item={item} index={index} key={index} />;
@@ -190,7 +196,7 @@ function MyPage() {
           <button onClick={() => selectFile.current.click()}>파일 업로드</button>
           <button onClick={() => changeProfileImg()} disabled={!image ? true : false}>프로필 사진 변경하기</button>
         </Modal>
-      </div>
+      </div>}
     </>
   );
 }

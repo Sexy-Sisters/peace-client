@@ -6,15 +6,14 @@ function ExpirationToken(errorMessage) {
       try {
         const response = await instance.put('auth', null, {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('access-token')}`,
             'Refresh-Token': localStorage.getItem('refresh-token')
           }
         })
         localStorage.setItem('access-token', response.data.accessToken);
       } catch (error) {
         console.log(error);
-        // localStorage.removeItem('access-token');
-        // localStorage.removeItem('refresh-token');
+        localStorage.removeItem('access-token');
+        localStorage.removeItem('refresh-token');
       }
     }
     putRefreshToken();

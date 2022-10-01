@@ -11,25 +11,28 @@ import { useEffect } from "react";
 import { instance } from "./instance/instance";
 import { userState } from "./atom";
 import { useRecoilState } from "recoil";
+import ExpirationToken from "./function/ExpirationToken";
 
 
 function App() {
   const [user, setUser] = useRecoilState(userState);
   useEffect(() => {
     if (localStorage.getItem('access-token')) {
-      (async () => {
+      const setUserInfo = async () => {
         try {
           const loginResponse = await instance.get("user/profile", {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('access-token')}`,
             },
           });
-          console.log(loginResponse.data);
           setUser(loginResponse.data);
         } catch (error) {
           console.log(error);
+          ExpirationToken(error.response.data.message);
+          setUserInfo();
         }
-      })()
+      }
+      setUserInfo();
     }
   }, []);
   return (
