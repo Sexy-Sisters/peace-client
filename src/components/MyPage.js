@@ -10,6 +10,8 @@ import ExpirationToken from "../function/ExpirationToken";
 import styled from "styled-components";
 import Modal from 'react-modal';
 import { useRef } from "react";
+import { useRecoilState } from "recoil";
+import { userState } from "../atom";
 
 const ImageSpan = styled.span`
   position: absolute;
@@ -31,7 +33,7 @@ function MyPage() {
   const [loading, setLoading] = useState(false);
   const [isSongExist, setIsSongExist] = useState(false);
   const [image, setImage] = useState(false);
-  const [changingImg, setChangingImg] = useState(false);
+  const [user, setUser] = useRecoilState(userState);
   const [playlist, setPlayList] = useState([]);
   // const [newProfileImg, setNewProfileImg] = useState("");
   const selectFile = useRef("");
@@ -41,28 +43,16 @@ function MyPage() {
     "/images/cover.png",
   ];
 
-  const [userInfo, setUserInfo] = useState({});
   useEffect(() => {
-    if (localStorage.getItem("user")) {
-      (async () => {
-        try {
-          setLoading(true);
-          setUserInfo(JSON.parse(localStorage.getItem("user")));
-          if (JSON.parse(localStorage.getItem("user")).requestedSong) {
-            setIsSongExist(true);
-          }
-        } catch (error) {
-          console.log(error);
-          ExpirationToken(error.response.data.message);
-        }
-      })();
-      setLoading(false);
-    } else {
+    if (!localStorage.getItem("access-token")) {
       alert("로그인하세요!!!!!!!!!!!");
       nav("/");
     }
-  }, [isSongExist, playlist]);
-  const { nickName, profileImg, requestedSong, name } = userInfo;
+    else{
+      setIsSongExist(user.requestedSong !== null);
+    }
+  }, []);
+  const { nickName, profileImg, requestedSong, name } = user;
 
   const profileImgFormData = new FormData();
 
@@ -86,7 +76,7 @@ function MyPage() {
 
   const changeProfileImg = async () => {
     try {
-      await instance.put(
+      const response = await instance.put(
         "user/profile/img",
         profileImgFormData,
         {
@@ -97,15 +87,10 @@ function MyPage() {
         }
       );
       // console.log(response);
-      const loginResponse = await instance.get("user/profile", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access-token')}`,
-        },
-      });
-      localStorage.setItem('user', JSON.stringify({
-        ...loginResponse.data,
-      }));
-      window.location.reload();
+      setUser({
+        ...user,
+        profileImg: response.data
+      })
     } catch (error) {
       console.log(error);
     }
@@ -168,7 +153,6 @@ function MyPage() {
         <br />
         <br />
         <h1>플레이리스트</h1>
-        <button onClick={() => changeProfileImg()}>변경하기</button>
 
         <Link to={`/playlist/${localStorage.getItem("user") && JSON.parse(localStorage.getItem("user")).id}`}>
           <div>

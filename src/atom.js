@@ -20,3 +20,8 @@ export const disabledState = atom({
     key: `disabled/${v1()}`,
     default: true
 });
+
+export const userState = atom({
+    key: `disabled/${v1()}`,
+    default: {}
+})

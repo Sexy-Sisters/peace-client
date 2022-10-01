@@ -48,6 +48,7 @@ function SignUp(props) {
     });
   };
 
+
   const onChangeLogin = (e) => {
     const { name, value } = e.target;
     const nextInputs = {
@@ -74,15 +75,6 @@ function SignUp(props) {
       refreshToken && localStorage.setItem('refresh-token', refreshToken);
       setLoginResult(true);
       console.log('로그인됨!');
-      const loginResponse = await instance.get("user/profile", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      localStorage.setItem('user', JSON.stringify({
-        ...loginResponse.data,
-        img: "./images/cover.png",
-      }));
     } catch (error) {
       console.log(error);
       setLoginResult(false);

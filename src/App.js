@@ -7,8 +7,31 @@ import NotFound from "./components/NotFound";
 import MyPage from "./components/MyPage";
 import PlayList from "./components/PlayList";
 import UserList from "./components/UserList";
+import { useEffect } from "react";
+import { instance } from "./instance/instance";
+import { userState } from "./atom";
+import { useRecoilState } from "recoil";
+
 
 function App() {
+  const [user, setUser] = useRecoilState(userState);
+  useEffect(() => {
+    if (localStorage.getItem('access-token')) {
+      (async () => {
+        try {
+          const loginResponse = await instance.get("user/profile", {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('access-token')}`,
+            },
+          });
+          console.log(loginResponse.data);
+          setUser(loginResponse.data);
+        } catch (error) {
+          console.log(error);
+        }
+      })()
+    }
+  }, []);
   return (
     <Routes>
       <Route path="/" element={<Main />} />

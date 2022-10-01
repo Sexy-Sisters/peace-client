@@ -118,12 +118,13 @@ function Main() {
     today.getMonth() + 1 < 10
       ? `0${today.getMonth() + 1}`
       : `${today.getMonth() + 1}`;
+  const date = today.getDate() < 10 ? `0${today.getDate()}` : `${today.getDate()}`;
   const WEEKDAY = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
   let week = WEEKDAY[today.getDay()];
   const [chart, setChart] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    if (localStorage.getItem('user')) {
+    if (localStorage.getItem('access-token')) {
       const getSongChart = async () => {
         try {
           setLoading(true);
@@ -143,7 +144,7 @@ function Main() {
     <div>
       <Header />
       <div className="Chart">
-        <h3>{`${month}-${today.getDate()} ${week}`}</h3>
+        <h3>{`${month}-${date} ${week}`}</h3>
         <div className="Chart-title">
           <ImMusic className="title-icon" size={60} />
           <div className="title-vertical"></div>
