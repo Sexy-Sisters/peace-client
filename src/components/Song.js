@@ -3,7 +3,7 @@ import Header from "./Header";
 import "../styles/Song.scss";
 import { instance } from '../instance/instance'
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { musicState, songState, isSelectedMusicState, disabledState } from "../atom";
+import { musicState, songState, isSelectedMusicState, disabledState, userState } from "../atom";
 import Modal from "react-modal";
 import ExpirationToken from "../function/ExpirationToken";
 
@@ -41,6 +41,7 @@ function Song() {
   const [isSelectedMusic, setIsSelectedMusic] = useRecoilState(isSelectedMusicState);
   const [disabled, setDisabled] = useRecoilState(disabledState);
   const [focusIndex, setFocusIndex] = useState(-1);
+  const [user, setUser] = useRecoilState(userState);
 
   useEffect(() => {
     if (isSelectedMusic) {
@@ -147,6 +148,12 @@ function Song() {
           }
         });
         setSearchError('신청 완료!');
+        const loginResponse = await instance.get("user/profile", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access-token')}`,
+          },
+        });
+        setUser(loginResponse.data);
       } catch (res) {
         console.log(res.response.data.message);
         setSearchError(res.response.data.message);
@@ -201,16 +208,18 @@ function Song() {
                 <img src="./images/loading.gif" alt="로딩중~" />
               </>
             ) : searched && (
-              <div className="Song-List">
-                {music.map((item, index) => {
-                  return <SongList item={item} key={index} />;
-                })}
-              </div>
+              <>
+                <div className="Song-List">
+                  {music.map((item, index) => {
+                    return <SongList item={item} key={index} />;
+                  })}
+                </div>
+                <button onClick={() => requestSong()} disabled={disabled} className="request-btn">신청하기</button>
+                <button onClick={() => postPlayList()} disabled={disabled} className="request-btn">플레이리스트 추가</button>
+              </>
             ))}
             {/* <span style={{ color: 'red' }}>{searchError}</span> */}
             <br />
-            <button onClick={() => requestSong()} disabled={disabled} className="request-btn">신청하기</button>
-            <button onClick={() => postPlayList()} disabled={disabled} className="request-btn">플레이리스트 추가</button>
           </div>
         </div>
       </div>
@@ -232,11 +241,13 @@ function Song() {
           },
         }}>
         <div className="modal-header"></div>
-        <div className="song-modal">
-          <img src="./images/logo.png" alt="로고" />
-          <br />
-          {searchError && !loading && <span className="searchError">{searchError}</span>}
-        </div>
+        {searchError && !loading &&
+          <div className="song-modal">
+            <img src="./images/logo.png" alt="로고" />
+            <br />
+            <span className="searchError">{searchError}</span>
+          </div>
+        }
       </Modal>
     </div>
   );

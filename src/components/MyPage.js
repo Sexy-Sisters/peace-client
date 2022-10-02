@@ -6,88 +6,53 @@ import { Link, useNavigate } from "react-router-dom";
 import { AiFillLike } from "react-icons/ai";
 import { ImCross } from "react-icons/im";
 import ExpirationToken from "../function/ExpirationToken";
+import styled from "styled-components";
+import Modal from 'react-modal';
+import { useRef } from "react";
+import { useRecoilState } from "recoil";
+import { userState } from "../atom";
 
-function PlayList({ data, id, index }) {
+const ImageSpan = styled.span`
+  position: absolute;
+  left: ${(props) => props.index * 20}px;
+`;
 
-  const deleteSong = async () => {
-    try {
-      const response = await instance.delete(`playlist/${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access-token")}`,
-        },
-      })
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-      ExpirationToken(error.response.data.message);
-    }
-  }
-
+const PlayListImages = ({ item, index }) => {
   return (
-    <div className="ChartList-top">
-      <div className="ChartList-root">
-        <div className="ChartList-rank">
-          <div>{index + 1}</div>
-        </div>
-        <div className="ChartList text">
-          {/* <img src={data.imgUrl} alt="앨범커버" /> */}
-          <img src="./images/cover.png" alt="앨범커버" />
-          <div className="ChartList left">
-            <span className="ChartList-name">{data.title}</span>
-            <span className="ChartList-artist">{data.singer}</span>
-            <ImCross onClick={() => deleteSong()} />
-            {/* <span className="ChartList-artist">{hour - data.createdHour}</span> */}
-          </div>
-        </div>
-      </div>
-    </div>
+    <ImageSpan index={index}>
+      <span className="imgdiv">
+        <img src={item} alt="앨범커버" />
+      </span>
+    </ImageSpan>
   );
-}
+};
 
 function MyPage() {
   const nav = useNavigate();
   const [loading, setLoading] = useState(false);
   const [isSongExist, setIsSongExist] = useState(false);
-  const [playlist, setPlayList] = useState([]);
+  const [image, setImage] = useState(false);
+  const [user, setUser] = useRecoilState(userState);
+  const [newProfileImg, setNewProfileImg] = useState();
+  const selectFile = useRef("");
+  const imgArr = [
+    "/images/cover.png",
+    "/images/cover.png",
+    "/images/cover.png",
+  ];
 
-  const [userInfo, setUserInfo] = useState({});
   useEffect(() => {
-    if (localStorage.getItem("access-token")) {
-      (async () => {
-        try {
-          setLoading(true);
-          const response = await instance.get("user", {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("access-token")}`,
-            },
-          });
-          setIsSongExist(response.data.requestedSong ? true : false);
-          setUserInfo({
-            ...response.data,
-            img: "./images/cover.png",
-          });
-          const playListResponse = await instance.get(
-            `playlist/${response.data.id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("access-token")}`,
-              },
-            }
-          );
-          console.log(playListResponse);
-          setPlayList(playListResponse.data);
-        } catch (error) {
-          console.log(error);
-          ExpirationToken(error.response.data.message);
-        }
-      })();
-      setLoading(false);
-    } else {
+    if (!localStorage.getItem("access-token")) {
       alert("로그인하세요!!!!!!!!!!!");
       nav("/");
     }
-  }, [isSongExist]);
-  const { nickName, img, requestedSong, name } = userInfo;
+    else {
+      setIsSongExist(user.requestedSong !== null);
+    }
+  }, []);
+  const { nickName, profileImg, requestedSong, name } = user;
+
+  const profileImgFormData = new FormData();
 
   const deleteSong = async () => {
     try {
@@ -98,26 +63,68 @@ function MyPage() {
         },
       });
       console.log(response);
+      setUser({
+        ...user,
+        requestedSong: {},
+      })
       setIsSongExist(false);
     } catch (error) {
       console.log(error);
       ExpirationToken(error.response.data.message);
+      deleteSong();
     }
     setLoading(false);
   };
 
+
+  const changeProfileImg = async () => {
+    try {
+      profileImgFormData.append('image', newProfileImg[0]);
+      const response = await instance.put(
+        "user/profile/img",
+        profileImgFormData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+            "Content-Type": "multipart/form-data; boundary=<calculated when request is sent>",
+          },
+        }
+      );
+      console.log(response);
+      setUser({
+        ...user,
+        profileImg: response.data
+      })
+    } catch (error) {
+      console.log(error);
+      ExpirationToken(error.response.data.message);
+      changeProfileImg();
+    }
+  };
+
+  const [modal, setModal] = useState(false);
+
+  const changeImg = (e) => {
+    setNewProfileImg(e.target.files);
+    setImage(true);
+  }
+
   return (
     <>
       <Header />
-      <div className="MyPage-div">
+      {name && <div className="MyPage-div">
         <div className="MyPage-info">
-          <img src={img} alt="프로필 사진" className="MyPage-img" />
+          <img src={profileImg} alt="프로필 사진" onClick={() => setModal(true)} className="MyPage-img" />
+          {/* <MdOutlineChangeCircle size={40} onClick={() => setModal(true)} className="change" /> */}
+          <button onClick={() => setModal(true)} className="changeBtn">
+            <img src='/images/change.png' alt="프로필 사진" className="change" />
+          </button>
         </div>
         <h2 className="MyPage-nickname">{name}</h2>
         <h3 className="MyPage-nickname">{nickName}</h3>
         <h1>오늘 신청곡</h1>
         {!loading ? (
-          isSongExist ? (
+          requestedSong?.title ? (
             <div className="ChartList">
               <div className="ChartList-root">
                 <div className="ChartList-div">
@@ -148,27 +155,48 @@ function MyPage() {
         ) : (
           <span>로딩중~~~</span>
         )}
-        <div>
-          <br /><br />
-          <h1>내 플레이리스트</h1>
-          {!loading ? (
-            playlist ? (
-              <div className="ChartList">
-                {playlist.map((item, index) => {
-                  return <PlayList data={item} key={item.id} id={item.id} index={index} />;
-                })}
-              </div>
-            ) : (
-              <div>
-                <span>아직 플레이리스트가 없습니다!</span>
-                <Link to={"/song"}>신청하러 가기</Link>
-              </div>
-            )
-          ) : (
-            <span>로딩중~~~</span>
-          )}
-        </div>
-      </div>
+        <br />
+        <br />
+        <h1>플레이리스트</h1>
+
+        <Link to={`/playlist/${user.id}`}>
+          <div>
+            {imgArr.map((item, index) => {
+              return <PlayListImages item={item} index={index} key={index} />;
+            })}
+          </div>
+        </Link>
+        <Modal isOpen={modal}
+          onRequestClose={() => setModal(false)}
+          style={{
+            overlay: {
+              backgroundColor: "rgba(134, 134, 134, 0.2)",
+              zIndex: 100,
+            },
+            content: {
+              width: "700px",
+              height: "500px",
+              margin: "auto",
+              borderRadius: "20px",
+              padding: 0,
+              overflowX: "hidden",
+              backgroundColor: '#FFF9F1',
+            },
+          }}>
+          <div className="modal-header"></div>
+          <img src={profileImg} alt="프로필 사진" className="original-img" />
+          <input
+            type="file"
+            style={{ display: "none" }}
+            ref={selectFile} //input에 접근 하기위해 useRef사용
+            onChange={(e) => changeImg(e)}
+            accept="image/*"
+          />
+          {/* <span>{newProfileImg[0].slice(12)}</span> */}
+          <button onClick={() => selectFile.current.click()}>파일 업로드</button>
+          <button onClick={() => changeProfileImg()} disabled={!image ? true : false}>프로필 사진 변경하기</button>
+        </Modal>
+      </div>}
     </>
   );
 }

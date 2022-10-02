@@ -3,27 +3,21 @@ import "../styles/Header.scss";
 import SignUp from "./SignUp";
 import Modal from "react-modal";
 import { Link } from "react-router-dom";
-import { instance } from "../instance/instance";
 
 function Header() {
   const [modal, setModal] = useState(false);
   const [isSignUp, setIsSignUp] = useState(true);
-  const onClick = () => {
-    setModal((prev) => !prev);
-  };
-  const changeType = () => {
-    setIsSignUp((prev) => !prev);
-  };
   const logout = () => {
     localStorage.removeItem('access-token');
     localStorage.removeItem('refresh-token');
+    localStorage.removeItem('user');
     console.log('로그아웃됨!');
     window.location.reload();
   }
   return (
     <header>
       <Link to="/" style={{ textDecoration: 'none' }}>
-        <img src="./images/logo.png" alt="로고" />
+        <img src="/images/logo.png" alt="로고" />
       </Link>
       <div className="Header list">
         <Link to="/song">
@@ -31,6 +25,9 @@ function Header() {
         </Link>
         <Link to="/chart">
           <span><span className="Header English">BSSM</span> 차트</span>
+        </Link>
+        <Link to={'/userlist'}>
+          <span>플레이리스트</span>
         </Link>
         <a href="https://github.com/Wake-Up-Song/Server/issues"><span>피드백</span></a>
       </div>

@@ -3,12 +3,15 @@ import Header from "./Header";
 import { instance } from "../instance/instance";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import "../styles/Chart.scss";
+import { TiPlus } from 'react-icons/ti';
 import { ImMusic } from "react-icons/im";
 import ExpirationToken from "../function/ExpirationToken";
 
 function ChartList({ data, id, index }) {
   const [pushed, setPushed] = useState(false);
   const [like, setLike] = useState(data.numberOfUps);
+
+  const userInfo = localStorage.getItem('user');
 
   useEffect(() => {
     const isPushed = async () => {
@@ -25,7 +28,7 @@ function ChartList({ data, id, index }) {
       }
     };
     isPushed();
-  }, [data.numberOfUps, id, pushed]);
+  }, [data.numberOfUps, id, pushed, userInfo]);
 
   const pushLike = async () => {
     pushed ? cancelLike() : upLike();
@@ -73,6 +76,27 @@ function ChartList({ data, id, index }) {
     }
   };
 
+  const addPlayList = async () => {
+    // setModal(true);
+    try {
+      const response = await instance.post('playlist/', {
+        title: data.title,
+        singer: data.singer,
+        imgUrl: "추가예정",
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+        },
+      })
+      console.log(response);
+      // setSearchError('신청완료!');
+    } catch (error) {
+      console.log(error);
+      ExpirationToken(error.response.data.message);
+      // setSearchError(error.response.data.message);
+    }
+  }
+
   return (
     <div className="ChartList-top">
       <div className="ChartList-root">
@@ -87,6 +111,7 @@ function ChartList({ data, id, index }) {
             <span className="ChartList-artist">{data.singer}</span>
             {/* <span className="ChartList-artist">{hour - data.createdHour}</span> */}
           </div>
+          <TiPlus size={24} style={{ cursor: 'pointer' }} onClick={() => addPlayList()} />
         </div>
       </div>
       <div className="ChartList right">
@@ -116,21 +141,24 @@ function Main() {
     today.getMonth() + 1 < 10
       ? `0${today.getMonth() + 1}`
       : `${today.getMonth() + 1}`;
+  const date = today.getDate() < 10 ? `0${today.getDate()}` : `${today.getDate()}`;
   const WEEKDAY = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
   let week = WEEKDAY[today.getDay()];
   const [chart, setChart] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    const getSongChart = async () => {
-      try {
-        setLoading(true);
-        const response = await instance.get("song");
-        setChart(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getSongChart();
+    if (localStorage.getItem('access-token')) {
+      const getSongChart = async () => {
+        try {
+          setLoading(true);
+          const response = await instance.get("song");
+          setChart(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      getSongChart();
+    }
     setLoading(false);
   }, []);
 
@@ -138,19 +166,14 @@ function Main() {
     <div>
       <Header />
       <div className="Chart">
-        <h3>{`${month}-${today.getDate()} ${week}`}</h3>
+        <h3>{`${month}-${date} ${week}`}</h3>
         <div className="Chart-title">
           <ImMusic className="title-icon" size={60} />
           <div className="title-vertical"></div>
           <h1 className="title">DAILY CHART</h1>
         </div>
         {loading ? (
-          <div className="ChartList">
-            <div className="ChartList-top">
-              <div className="ChartList-root"></div>
-              <div className="ChartList right"></div>
-            </div>
-          </div>
+          <div className="nonSearch"></div>
         ) : (
           <div className="ChartList">
             {chart.filter((value, i) => i < 5).length ? (
