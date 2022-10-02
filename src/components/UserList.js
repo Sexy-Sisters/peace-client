@@ -3,11 +3,14 @@ import { ImMusic } from 'react-icons/im';
 import { instance } from '../instance/instance';
 import Header from './Header';
 import '../styles/UserList.scss';
+import { Link } from 'react-router-dom';
 
 function UserListList({ data }) {
   return (
     <div>
-      {data.name}
+      <Link to={`/playlist/${data.id}`}>
+        {data.name}
+      </Link>
     </div>
   )
 }

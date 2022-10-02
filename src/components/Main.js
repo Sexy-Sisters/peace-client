@@ -153,7 +153,6 @@ function Main() {
           setLoading(true);
           const response = await instance.get("song");
           setChart(response.data);
-          console.log(response);
         } catch (error) {
           console.log(error);
         }
