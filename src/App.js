@@ -16,6 +16,25 @@ import ExpirationToken from "./function/ExpirationToken";
 
 function App() {
   const [user, setUser] = useRecoilState(userState);
+  if (new Date().getHours() === 0 && new Date().getMinutes() === 0) {
+    if (localStorage.getItem('access-token')) {
+      const setUserInfo = async () => {
+        try {
+          const loginResponse = await instance.get("user/profile", {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('access-token')}`,
+            },
+          });
+          setUser(loginResponse.data);
+        } catch (error) {
+          console.log(error);
+          ExpirationToken(error.response.data.message);
+          setUserInfo();
+        }
+      }
+      setUserInfo();
+    }
+  }
   useEffect(() => {
     if (localStorage.getItem('access-token')) {
       const setUserInfo = async () => {
