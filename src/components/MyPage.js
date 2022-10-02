@@ -33,7 +33,7 @@ function MyPage() {
   const [isSongExist, setIsSongExist] = useState(false);
   const [image, setImage] = useState(false);
   const [user, setUser] = useRecoilState(userState);
-  // const [newProfileImg, setNewProfileImg] = useState("");
+  const [newProfileImg, setNewProfileImg] = useState();
   const selectFile = useRef("");
   const imgArr = [
     "/images/cover.png",
@@ -79,6 +79,7 @@ function MyPage() {
 
   const changeProfileImg = async () => {
     try {
+      profileImgFormData.append('image', newProfileImg[0]);
       const response = await instance.put(
         "user/profile/img",
         profileImgFormData,
@@ -89,7 +90,7 @@ function MyPage() {
           },
         }
       );
-      // console.log(response);
+      console.log(response);
       setUser({
         ...user,
         profileImg: response.data
@@ -104,11 +105,9 @@ function MyPage() {
   const [modal, setModal] = useState(false);
 
   const changeImg = (e) => {
-    console.log(e.target.files);
-    profileImgFormData.append('image', e.target.files[0]);
+    setNewProfileImg(e.target.files);
     setImage(true);
   }
-
 
   return (
     <>
@@ -191,6 +190,7 @@ function MyPage() {
             style={{ display: "none" }}
             ref={selectFile} //input에 접근 하기위해 useRef사용
             onChange={(e) => changeImg(e)}
+            accept="image/*"
           />
           {/* <span>{newProfileImg[0].slice(12)}</span> */}
           <button onClick={() => selectFile.current.click()}>파일 업로드</button>
