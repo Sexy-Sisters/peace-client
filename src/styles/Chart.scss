@@ -5,20 +5,24 @@ $main_deeper_blue: #7895B2;
 .Chart{
     padding-top: 100px;
     box-sizing: border-box;
-    padding-left: 400px;
-    padding-right: 400px;
+    // padding-left: 400px;
+    // padding-right: 400px;
     font-family: "Gothic A1", sans-serif;
     // &.long{
     //     padding-left: 400px;
     //     padding-right: 400px;
     // }
-    h3{
-        font-family: 'Syncopate', sans-serif;
-        margin: 0;
-        margin-right: 128px;
+    .date{
+        width: 600px;
+        margin: 0 auto;
         text-align: right;
-        &.long{
-            margin-right: 88px;
+        h3{
+            font-family: 'Syncopate', sans-serif;
+            margin: 0;
+            margin-right: 68px;
+            &.long{
+                margin-right: 28px;
+            }
         }
     }
     .Chart-title{
@@ -70,6 +74,7 @@ $main_deeper_blue: #7895B2;
 
 .ChartList{
     width: 736px;
+    margin: 0 auto;
 }
 
 .ChartList-div{
@@ -163,6 +168,7 @@ $main_deeper_blue: #7895B2;
     height: 40px;
     display: flex;
     border: none;
+    // flex: 1 1 60px;
     border-radius: 20px;
     flex-direction: column;
     background-color: #FFFAF1;
@@ -175,6 +181,7 @@ $main_deeper_blue: #7895B2;
 
 
 .nonSearch{
+    margin: 0 auto;
     background-color: #FFF9F1;
     border-radius: 40px;
     width: 736px;

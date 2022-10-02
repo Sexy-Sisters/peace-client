@@ -1,12 +1,6 @@
 import "./App.css";
-import Main from "./components/Main";
+import { Chart, Main, MyPage, NotFound, PlayList, Song, UserList } from './allFiles';
 import { Routes, Route } from "react-router-dom";
-import Song from "./components/Song";
-import Chart from "./components/Chart";
-import NotFound from "./components/NotFound";
-import MyPage from "./components/MyPage";
-import PlayList from "./components/PlayList";
-import UserList from "./components/UserList";
 import { useEffect } from "react";
 import { instance } from "./instance/instance";
 import { userState } from "./atom";
