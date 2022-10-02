@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Header from "./Header";
+import Header from "./Header.tsx";
 import "../styles/Song.scss";
 import { instance } from '../instance/instance'
 import { useRecoilState, useSetRecoilState } from 'recoil';

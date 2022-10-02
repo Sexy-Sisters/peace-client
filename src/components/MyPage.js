@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Header from "./Header";
+import Header from "./Header.tsx";
 import "../styles/MyPage.css";
 import { instance } from "../instance/instance";
 import { Link, useNavigate } from "react-router-dom";

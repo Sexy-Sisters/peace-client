@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { ImMusic } from 'react-icons/im';
 import { instance } from '../instance/instance';
-import Header from './Header';
+import Header from './Header.tsx';
 import '../styles/UserList.scss';
 import { Link } from 'react-router-dom';
 

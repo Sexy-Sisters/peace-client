@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Header from "./Header";
+import Header from "./Header.tsx";
 import { instance } from "../instance/instance";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import "../styles/Chart.scss";

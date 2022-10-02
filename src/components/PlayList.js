@@ -1,5 +1,5 @@
 import React from 'react'
-import Header from './Header'
+import Header from './Header.tsx'
 import '../styles/PlayList.scss';
 import { ImMusic, ImCross } from 'react-icons/im';
 import { instance } from '../instance/instance';
