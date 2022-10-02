@@ -6,21 +6,37 @@ import "../styles/Chart.scss";
 import { TiPlus } from "react-icons/ti";
 import { ImMusic } from "react-icons/im";
 import ExpirationToken from "../function/ExpirationToken";
+import styled from "styled-components";
 
 interface Song {
   id: number;
   imgUrl: string;
   title: string;
   singer: string;
-  point: number;
+  numberOfUps: number;
 }
 
-function ChartList({ data, index }) {
+const ChartLeft = styled.div`
+  width: 636px;
+  display: flex;
+  flex-direction: row;
+  height: 70px;
+  background-color: #fffaf1;
+  margin-right: 0;
+  border-radius: ${(props) =>
+    props.size === 1
+      ? "40px"
+      : props.index === 0
+      ? "40px 40px 0px 0px"
+      : props.index === props.size - 1
+      ? "0px 0px 40px 40px"
+      : "0"};
+`;
+
+function ChartList({ data, index, size }) {
   const [pushed, setPushed] = useState(false);
   const [like, setLike] = useState(data.numberOfUps);
-
   const userInfo = localStorage.getItem("user");
-
   useEffect(() => {
     const isPushed = async () => {
       try {
@@ -112,23 +128,25 @@ function ChartList({ data, index }) {
   return (
     <div className="ChartList-top">
       <div className="ChartList-root">
-        <div className="ChartList-rank">
-          <div>{index + 1}</div>
-        </div>
-        <div className="ChartList text">
-          {/* <img src={data.imgUrl} alt="앨범커버" /> */}
-          <img src="./images/cover.png" alt="앨범커버" />
-          <div className="ChartList left">
-            <span className="ChartList-name">{data.title}</span>
-            <span className="ChartList-artist">{data.singer}</span>
-            {/* <span className="ChartList-artist">{hour - data.createdHour}</span> */}
+        <ChartLeft index={index} size={size}>
+          <div className="ChartList-rank">
+            <div>{index + 1}</div>
           </div>
-          <TiPlus
-            size={24}
-            style={{ cursor: "pointer" }}
-            onClick={() => addPlayList()}
-          />
-        </div>
+          <div className="ChartList text">
+            {/* <img src={data.imgUrl} alt="앨범커버" /> */}
+            <img src="./images/cover.png" alt="앨범커버" />
+            <div className="ChartList left">
+              <span className="ChartList-name">{data.title}</span>
+              <span className="ChartList-artist">{data.singer}</span>
+              {/* <span className="ChartList-artist">{hour - data.createdHour}</span> */}
+            </div>
+            <TiPlus
+              size={24}
+              style={{ cursor: "pointer" }}
+              onClick={() => addPlayList()}
+            />
+          </div>
+        </ChartLeft>
       </div>
       <div className="ChartList right">
         <span className="ChartList-username">{data.userName}</span>
@@ -197,7 +215,14 @@ function Main() {
           <div className="ChartList">
             {chart.filter((value, i) => i < 5).length ? (
               chart.map((item: Song, index) => {
-                return <ChartList data={item} key={item.id} index={index} />;
+                return (
+                  <ChartList
+                    data={item}
+                    key={item.id}
+                    index={index}
+                    size={chart.length}
+                  />
+                );
               })
             ) : (
               <div className="nonSearch">

@@ -88,26 +88,16 @@ $main_deeper_blue: #7895B2;
 //     width: 600px;
 // }
 
-
 .ChartList-root{
-    width: 636px;
-    display: flex;
-    flex-direction: row;
-    height: 70px;
-    background-color: #FFFAF1;
-    margin-right: 0;
-    &:first-child{
-        border-radius: 40px 40px 0px 0px;
-    }
-    &:last-child{
-        border-radius: 0px 0px 40px 40px;
+    &.playlist{
+        width: 736px;
     }
     .ChartList-rank{
         font-size: 24px;
         text-align: center;
         color: white;
         // font-weight: bold;
-        width: 100px;
+        width: 72px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -125,7 +115,7 @@ $main_deeper_blue: #7895B2;
     .text{
         // margin: 0 auto;
         display: flex;
-        justify-content: center;
+        justify-content: left;
         align-items: center;
         line-height: 20px;
         gap: 10px;
@@ -137,6 +127,7 @@ $main_deeper_blue: #7895B2;
         }
         .left{
             width: 450px;
+            margin: 0%;
             display: flex;
             flex-direction: column;
             overflow:hidden;

@@ -4,6 +4,7 @@ import { instance } from "../instance/instance";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { ImMusic } from "react-icons/im";
 import { TiPlus } from "react-icons/ti";
+import styled from "styled-components";
 import "../styles/Chart.scss";
 import ExpirationToken from "../function/ExpirationToken";
 
@@ -15,7 +16,22 @@ interface Song {
   point: number;
 }
 
-function ChartList({ data, index }) {
+const ChartLeft = styled.div`
+  width: 636px;
+  display: flex;
+  flex-direction: row;
+  height: 70px;
+  background-color: #fffaf1;
+  margin-right: 0;
+  border-radius: ${(props) =>
+    props.index === 0
+      ? "40px 40px 0px 0px"
+      : props.index === props.size-1
+      ? "0px 0px 40px 40px"
+      : "0"};
+`;
+
+function ChartList({ data, index, size }) {
   const [pushed, setPushed] = useState(false);
 
   useEffect(() => {
@@ -63,23 +79,25 @@ function ChartList({ data, index }) {
   return (
     <div className="ChartList-top">
       <div className="ChartList-root">
-        <div className="ChartList-rank">
-          <div>{index + 1}</div>
-        </div>
-        <div className="ChartList text">
-          {/* <img src={data.imgUrl} alt="앨범커버" /> */}
-          <img src="./images/cover.png" alt="앨범커버" />
-          <div className="ChartList left">
-            <span className="ChartList-name">{data.title}</span>
-            <span className="ChartList-artist">{data.singer}</span>
-            {/* <span className="ChartList-artist">{hour - data.createdHour}</span> */}
+        <ChartLeft index={index} size={size}>
+          <div className="ChartList-rank">
+            <div>{index + 1}</div>
           </div>
-          <TiPlus
-            size={24}
-            style={{ cursor: "pointer" }}
-            onClick={() => addPlayList()}
-          />
-        </div>
+          <div className="ChartList text">
+            {/* <img src={data.imgUrl} alt="앨범커버" /> */}
+            <img src="./images/cover.png" alt="앨범커버" />
+            <div className="ChartList left">
+              <span className="ChartList-name">{data.title}</span>
+              <span className="ChartList-artist">{data.singer}</span>
+              {/* <span className="ChartList-artist">{hour - data.createdHour}</span> */}
+            </div>
+            <TiPlus
+              size={24}
+              style={{ cursor: "pointer" }}
+              onClick={() => addPlayList()}
+            />
+          </div>
+        </ChartLeft>
       </div>
       <div className="ChartList right long">
         <span>
@@ -140,6 +158,7 @@ function Chart() {
                     data={item}
                     key={item.id}
                     index={index}
+                    size={chart.length}
                   />
                 );
               })
