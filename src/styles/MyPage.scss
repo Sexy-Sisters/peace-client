@@ -3,10 +3,37 @@
     height: 100%;
 }
 
-.MyPage-info{
+.MyPage-imgdiv{
     display: flex;
     position: relative;
     flex-direction: row;
+}
+
+.MyPage-info{
+    margin-top: 20px;
+    font-size: 24px;
+    .nickname{
+        font-size: 1.2em;
+        margin-right: 10px;
+        font-weight: bold;
+    }
+    .name{
+        font-size: 0.6em;
+        margin-right: 20px;
+    }
+    .btn{
+        cursor: pointer;
+        background-color: #628BA1;
+        border-radius: 20px;
+        height: 30px;
+        width: 50px;
+        color: white;
+        border: none;
+    }
+    .email{
+        font-size: 0.6em;
+        color: #555;
+    }
 }
 
 .MyPage-img{
