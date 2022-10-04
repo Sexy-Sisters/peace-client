@@ -3,10 +3,9 @@ import { Chart, Main, MyPage, NotFound, PlayList, Song, UserList } from './allFi
 import { Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { instance } from "./instance/instance";
-import { userState } from "./atom";
+import { userState } from "./atom.js";
 import { useRecoilState } from "recoil";
 import ExpirationToken from "./function/ExpirationToken";
-
 
 function App() {
   const [user, setUser] = useRecoilState(userState);

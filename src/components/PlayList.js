@@ -7,13 +7,6 @@ import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Header } from "../allFiles";
 
-interface Song {
-  id: number;
-  imgUrl: string;
-  title: string;
-  singer: string;
-}
-
 function PlayListList({ data, index, size }) {
   const deleteSong = async () => {
     try {
@@ -88,7 +81,7 @@ function PlayList() {
         {!loading ? (
           playlist ? (
             <div className="ChartList">
-              {playlist.map((item: Song, index) => {
+              {playlist.map((item, index) => {
                 return (
                   <PlayListList
                     data={item}
