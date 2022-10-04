@@ -22,7 +22,7 @@ function SignUp(props) {
   const [disabled, setDisabled] = useState(false);
   const [issueCode, setIssueCode] = useState("");
   const [certification, setCertification] = useState(false);
-  const [loginResult, setLoginResult] = useState();
+  const [loginResult, setLoginResult] = useState(0);
 
   useEffect(() => {
     if (signUpInputs.confirmPassword !== "" && signUpInputs.password !== "" && (signUpInputs.confirmPassword === signUpInputs.password)) {
@@ -73,11 +73,11 @@ function SignUp(props) {
       const { accessToken, refreshToken } = response.data;
       accessToken && localStorage.setItem('access-token', accessToken);
       refreshToken && localStorage.setItem('refresh-token', refreshToken);
-      setLoginResult(true);
+      setLoginResult(1);
       console.log('로그인됨!');
     } catch (error) {
       console.log(error);
-      setLoginResult(false);
+      setLoginResult(-1);
     }
   };
 
@@ -128,7 +128,7 @@ function SignUp(props) {
   }, [certification, loginInputs.email, loginInputs.password, signUpInputs, signUpStep, type]);
 
   const reLogin = () => {
-    setLoginResult(null);
+    setLoginResult(0);
     setLoginInputs({
       email: "",
       password: "",
@@ -231,12 +231,12 @@ function SignUp(props) {
         </>
       ) : (
         //로그인
-        (loginResult ? <div className="loginResult">
+        (loginResult === 1 ? <div className="loginResult">
           <img src="/images/logo.png" alt="로고" />
           <span>로그인 완료! (´ฅω•ฅ｀)</span>
           <span>평화로운 아침을 만들어보세요.</span>
           <button className="SignUp-button result" onClick={() => window.location.reload()}>확인</button>
-        </div> : loginResult === false ? <div className="loginResult">
+        </div> : loginResult === -1 ? <div className="loginResult">
           <img src="/images/logo.png" alt="로고" />
           <span>로그인 실패 ｡°(´∩ω∩`)°｡</span>
           <span>이메일이나 비밀번호를 확인해주세요.</span>

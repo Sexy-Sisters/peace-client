@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
-import Header from "./Header";
-import "../styles/MyPage.css";
+import { Header } from "../allFiles";
+import "../styles/MyPage.scss";
 import { instance } from "../instance/instance";
 import { Link, useNavigate } from "react-router-dom";
 import { AiFillLike } from "react-icons/ai";
 import { ImCross } from "react-icons/im";
 import ExpirationToken from "../function/ExpirationToken";
 import styled from "styled-components";
-import Modal from 'react-modal';
+import Modal from "react-modal";
 import { useRef } from "react";
 import { useRecoilState } from "recoil";
 import { userState } from "../atom";
 
 const ImageSpan = styled.span`
   position: absolute;
-  left: ${(props) => props.index * 20}px;
+  left: ${(props) => (props.index * 50) + 40}px;
 `;
 
 const PlayListImages = ({ item, index }) => {
@@ -30,12 +30,18 @@ const PlayListImages = ({ item, index }) => {
 function MyPage() {
   const nav = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [isSongExist, setIsSongExist] = useState(false);
   const [image, setImage] = useState(false);
   const [user, setUser] = useRecoilState(userState);
-  const [newProfileImg, setNewProfileImg] = useState();
-  const selectFile = useRef("");
+  const [newProfileImg, setNewProfileImg] = useState([]);
+  const selectFile = useRef(null);
   const imgArr = [
+    "/images/cover.png",
+    "/images/cover.png",
+    "/images/cover.png",
+    "/images/cover.png",
+    "/images/cover.png",
+    "/images/cover.png",
+    "/images/cover.png",
     "/images/cover.png",
     "/images/cover.png",
     "/images/cover.png",
@@ -46,18 +52,15 @@ function MyPage() {
       alert("로그인하세요!!!!!!!!!!!");
       nav("/");
     }
-    else {
-      setIsSongExist(user.requestedSong !== null);
-    }
   }, []);
-  const { nickName, profileImg, requestedSong, name } = user;
+  const { nickName, profileImg, requestedSong, name, email } = user;
 
   const profileImgFormData = new FormData();
 
   const deleteSong = async () => {
     try {
       setLoading(true);
-      const response = await instance.delete(`song/${requestedSong.id}`, {
+      const response = await instance.delete(`song/${requestedSong?.id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access-token")}`,
         },
@@ -65,9 +68,8 @@ function MyPage() {
       console.log(response);
       setUser({
         ...user,
-        requestedSong: {},
-      })
-      setIsSongExist(false);
+        requestedSong: null,
+      });
     } catch (error) {
       console.log(error);
       ExpirationToken(error.response.data.message);
@@ -76,25 +78,25 @@ function MyPage() {
     setLoading(false);
   };
 
-
   const changeProfileImg = async () => {
     try {
-      profileImgFormData.append('image', newProfileImg[0]);
+      profileImgFormData.append("image", newProfileImg[0]);
       const response = await instance.put(
         "user/profile/img",
         profileImgFormData,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access-token")}`,
-            "Content-Type": "multipart/form-data; boundary=<calculated when request is sent>",
+            "Content-Type":
+              "multipart/form-data; boundary=<calculated when request is sent>",
           },
         }
       );
       console.log(response);
       setUser({
         ...user,
-        profileImg: response.data
-      })
+        profileImg: response.data,
+      });
     } catch (error) {
       console.log(error);
       ExpirationToken(error.response.data.message);
@@ -113,59 +115,67 @@ function MyPage() {
     <>
       <Header />
       {name && <div className="MyPage-div">
-        <div className="MyPage-info">
-          <img src={profileImg} alt="프로필 사진" onClick={() => setModal(true)} className="MyPage-img" />
-          {/* <MdOutlineChangeCircle size={40} onClick={() => setModal(true)} className="change" /> */}
-          <button onClick={() => setModal(true)} className="changeBtn">
-            <img src='/images/change.png' alt="프로필 사진" className="change" />
-          </button>
-        </div>
-        <h2 className="MyPage-nickname">{name}</h2>
-        <h3 className="MyPage-nickname">{nickName}</h3>
-        <h1>오늘 신청곡</h1>
-        {!loading ? (
-          requestedSong?.title ? (
-            <div className="ChartList">
-              <div className="ChartList-root">
-                <div className="ChartList-div">
-                  <img src="./images/cover.png" alt="앨범커버" />
-                  <div className="ChartList-left">
-                    <span className="ChartList-name">
-                      {requestedSong.title}
-                    </span>
-                    <span className="ChartList-artist">
-                      {requestedSong.singer}
-                    </span>
+        <div className="MyPage-top">
+          <div>
+            <div className="MyPage-imgdiv">
+              <img src={profileImg} alt="프로필 사진" onClick={() => setModal(true)} className="MyPage-img" />
+              {/* <MdOutlineChangeCircle size={40} onClick={() => setModal(true)} className="change" /> */}
+              <button onClick={() => setModal(true)} className="changeBtn">
+                <img src='/images/change.png' alt="프로필 사진" className="change" />
+              </button>
+            </div>
+            <div className="MyPage-info">
+              <div>
+                <span className="MyPage nickname">{nickName}</span>
+                <span className="MyPage name">{name}</span>
+                <button className="MyPage btn">수정</button>
+              </div>
+              <span className="MyPage email">{email}</span>
+            </div>
+          </div>
+          <div className="MyPage-song">
+            <div>
+              <h1>오늘 신청곡</h1>
+              {!loading ? (
+                requestedSong?.title ? (
+                  <div className="MyPageSong">
+                    <img src="./images/cover.png" alt="앨범커버" />
+                    <div className="MyPageSong-left">
+                      <span className="MyPageSong-name">
+                        {requestedSong.title}
+                      </span>
+                      <span className="MyPageSong-artist">
+                        {requestedSong.singer}
+                      </span>
+                    </div>
+                    <div className="MyPageSong-right">
+                      <AiFillLike size={32} />
+                      <span>{requestedSong.numberOfUps}</span>
+                    </div>
+                    <ImCross onClick={() => deleteSong()} cursor="pointer" size={32} />
                   </div>
-                  <div className="ChartList-right">
-                    <span>
-                      <AiFillLike /> {requestedSong.numberOfUps}
-                    </span>
+                ) : (
+                  <div>
+                    <span>아직 신청곡이 없습니다!</span>
+                    <Link to={"/song"}>신청하러 가기</Link>
                   </div>
-                  <ImCross onClick={() => deleteSong()} />
-                </div>
+                )
+              ) : (
+                <span>로딩중~~~</span>
+              )}
+            </div>
+            <div className="MyPage-playlist">
+              <h1>플레이리스트</h1>
+              <div className="MyPage-playlist-img">
+                <Link to={`/playlist/${user.id}`}>
+                  {imgArr.map((item, index) => {
+                    return <PlayListImages item={item} index={index} key={index} />;
+                  })}
+                </Link>
               </div>
             </div>
-          ) : (
-            <div>
-              <span>아직 신청곡이 없습니다!</span>
-              <Link to={"/song"}>신청하러 가기</Link>
-            </div>
-          )
-        ) : (
-          <span>로딩중~~~</span>
-        )}
-        <br />
-        <br />
-        <h1>플레이리스트</h1>
-
-        <Link to={`/playlist/${user.id}`}>
-          <div>
-            {imgArr.map((item, index) => {
-              return <PlayListImages item={item} index={index} key={index} />;
-            })}
           </div>
-        </Link>
+        </div>
         <Modal isOpen={modal}
           onRequestClose={() => setModal(false)}
           style={{

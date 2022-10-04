@@ -3,7 +3,10 @@ import { v1 } from 'uuid';
 
 export const musicState = atom({
     key: `musicState/${v1()}`,
-    default: []
+    default: [{
+        singer: "",
+        title: "",
+    }]
 });
 
 export const songState = atom({
@@ -22,6 +25,23 @@ export const disabledState = atom({
 });
 
 export const userState = atom({
-    key: `disabled/${v1()}`,
-    default: {}
+    key: `user/${v1()}`,
+    default: {
+        id: 0,
+        profileImg: "",
+        name: "",
+        nickName: "",
+        email: "",
+        authority: "",
+        requestedSong: {
+            id: 0,
+            imgUrl: "",
+            title: "",
+            singer: "",
+            numberOfUps: 0,
+            userName: "",
+            createdHour: 0,
+        }
+        // requestedSong: null
+    }
 })

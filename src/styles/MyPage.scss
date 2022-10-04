@@ -1,0 +1,161 @@
+.MyPage-div{
+    padding: 100px 100px 30px 100px;
+    height: 100%;
+}
+
+.MyPage-top{
+    display: flex;
+}
+
+.MyPage-playlist{
+    position: relative;
+    .MyPage-playlist-img{
+        padding: 40px;
+        height: 200px;
+        width: 650px;
+        margin: 0;
+        background-color: #E3E9EF;
+        // border: 2px solid black;
+        border: none;
+        border-radius: 30px;
+    }
+}
+
+.MyPageSong{
+    background-color: #FFFAF1;
+    // margin: 0 auto;
+    padding: 20px;
+    width: 700px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    line-height: 20px;
+    border-radius: 40px;
+    gap: 10px;
+    & img{
+        width: 50px;
+        height: 50px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    &-left{
+        width: 700px;
+        margin: 0%;
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        .MyPageSong-name{
+            display: inline-block;
+            font-size: 20px;
+            width: 500px;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+            font-weight: 500;
+        }
+        .MyPageSong-artist{
+            display: inline-block;
+            width: 500px;
+            font-weight: 400;
+        }
+    }
+    &-right{
+        width: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        span{
+            font-size: 24px;
+        }
+    }
+}
+
+.MyPage-imgdiv{
+    position: relative;
+    width: 400px;
+    margin-right: 0;
+}
+
+.MyPage-info{
+    margin-top: 20px;
+    font-size: 24px;
+    width: 500px;
+    .nickname{
+        font-size: 1.2em;
+        margin-right: 10px;
+        font-weight: bold;
+    }
+    .name{
+        font-size: 0.6em;
+        margin-right: 20px;
+    }
+    .btn{
+        cursor: pointer;
+        background-color: #628BA1;
+        border-radius: 20px;
+        height: 30px;
+        width: 50px;
+        color: white;
+        border: none;
+    }
+    .email{
+        font-size: 0.6em;
+        color: #555;
+    }
+}
+
+.MyPage-img{
+    width: 320px;
+    cursor: pointer;
+    height: 320px;
+    // margin-right: 80px;
+    border-radius: 160px;
+    border: 2px solid black;
+}
+
+.MyPage-song{
+    display: inline-block;
+}
+
+.changeBtn{
+    width: 40px;
+    height: 40px;
+    top: 260px;
+    cursor: pointer;
+    left: 260px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    background-color: white;
+}
+
+.change{
+    width: 25px;
+    height: 25px;
+}
+
+.MyPage-nickname{
+    color: black;
+    height: 80px;
+    margin: 0;
+    line-height: 80px;
+}
+
+.imgdiv > img{
+    width: 200px;
+    height: 200px;
+}
+
+.original-img{
+    margin: 20px;
+    width: 160px;
+    height: 160px;
+    border-radius: 80px;
+    border: 2px solid black;
+}
+
+.upload{
+    border-radius: 20px;
+}

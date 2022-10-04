@@ -2,7 +2,8 @@ $main_blue: #E3E9EF;
 
 .modal-header{
   height: 60px;
-  background-color: $main_blue;
+  width: 100%;
+  background-color: rgb(85, 118, 164);
   &.song{
     border-radius: 40px 40px 0px 0px;
     position: relative;
