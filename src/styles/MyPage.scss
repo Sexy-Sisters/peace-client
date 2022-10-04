@@ -3,15 +3,83 @@
     height: 100%;
 }
 
-.MyPage-imgdiv{
+.MyPage-top{
     display: flex;
+}
+
+.MyPage-playlist{
     position: relative;
-    flex-direction: row;
+    .MyPage-playlist-img{
+        padding: 40px;
+        height: 200px;
+        width: 650px;
+        margin: 0;
+        background-color: #E3E9EF;
+        // border: 2px solid black;
+        border: none;
+        border-radius: 30px;
+    }
+}
+
+.MyPageSong{
+    background-color: #FFFAF1;
+    // margin: 0 auto;
+    padding: 20px;
+    width: 700px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    line-height: 20px;
+    border-radius: 40px;
+    gap: 10px;
+    & img{
+        width: 50px;
+        height: 50px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    &-left{
+        width: 700px;
+        margin: 0%;
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        .MyPageSong-name{
+            display: inline-block;
+            font-size: 20px;
+            width: 500px;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+            font-weight: 500;
+        }
+        .MyPageSong-artist{
+            display: inline-block;
+            width: 500px;
+            font-weight: 400;
+        }
+    }
+    &-right{
+        width: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        span{
+            font-size: 24px;
+        }
+    }
+}
+
+.MyPage-imgdiv{
+    position: relative;
+    width: 400px;
+    margin-right: 0;
 }
 
 .MyPage-info{
     margin-top: 20px;
     font-size: 24px;
+    width: 500px;
     .nickname{
         font-size: 1.2em;
         margin-right: 10px;
@@ -40,9 +108,13 @@
     width: 320px;
     cursor: pointer;
     height: 320px;
-    margin-right: 80px;
+    // margin-right: 80px;
     border-radius: 160px;
     border: 2px solid black;
+}
+
+.MyPage-song{
+    display: inline-block;
 }
 
 .changeBtn{
@@ -72,8 +144,8 @@
 }
 
 .imgdiv > img{
-    width: 80px;    
-    height: 80px;
+    width: 200px;
+    height: 200px;
 }
 
 .original-img{

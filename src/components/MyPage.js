@@ -14,7 +14,7 @@ import { userState } from "../atom";
 
 const ImageSpan = styled.span`
   position: absolute;
-  left: ${(props) => props.index * 20}px;
+  left: ${(props) => (props.index * 50) + 40}px;
 `;
 
 const PlayListImages = ({ item, index }) => {
@@ -35,6 +35,13 @@ function MyPage() {
   const [newProfileImg, setNewProfileImg] = useState([]);
   const selectFile = useRef(null);
   const imgArr = [
+    "/images/cover.png",
+    "/images/cover.png",
+    "/images/cover.png",
+    "/images/cover.png",
+    "/images/cover.png",
+    "/images/cover.png",
+    "/images/cover.png",
     "/images/cover.png",
     "/images/cover.png",
     "/images/cover.png",
@@ -108,65 +115,67 @@ function MyPage() {
     <>
       <Header />
       {name && <div className="MyPage-div">
-        <div className="MyPage-imgdiv">
-          <img src={profileImg} alt="프로필 사진" onClick={() => setModal(true)} className="MyPage-img" />
-          {/* <MdOutlineChangeCircle size={40} onClick={() => setModal(true)} className="change" /> */}
-          <button onClick={() => setModal(true)} className="changeBtn">
-            <img src='/images/change.png' alt="프로필 사진" className="change" />
-          </button>
-        </div>
-        <div className="MyPage-info">
+        <div className="MyPage-top">
           <div>
-            <span className="MyPage nickname">{nickName}</span>
-            <span className="MyPage name">{name}</span>
-            <button className="MyPage btn">수정</button>
+            <div className="MyPage-imgdiv">
+              <img src={profileImg} alt="프로필 사진" onClick={() => setModal(true)} className="MyPage-img" />
+              {/* <MdOutlineChangeCircle size={40} onClick={() => setModal(true)} className="change" /> */}
+              <button onClick={() => setModal(true)} className="changeBtn">
+                <img src='/images/change.png' alt="프로필 사진" className="change" />
+              </button>
+            </div>
+            <div className="MyPage-info">
+              <div>
+                <span className="MyPage nickname">{nickName}</span>
+                <span className="MyPage name">{name}</span>
+                <button className="MyPage btn">수정</button>
+              </div>
+              <span className="MyPage email">{email}</span>
+            </div>
           </div>
-          <span className="MyPage email">{email}</span>
-        </div>
-        <h1>오늘 신청곡</h1>
-        {!loading ? (
-          requestedSong?.title ? (
-            <div className="ChartList">
-              <div className="ChartList-root">
-                <div className="ChartList-div">
-                  <img src="./images/cover.png" alt="앨범커버" />
-                  <div className="ChartList-left">
-                    <span className="ChartList-name">
-                      {requestedSong.title}
-                    </span>
-                    <span className="ChartList-artist">
-                      {requestedSong.singer}
-                    </span>
+          <div className="MyPage-song">
+            <div>
+              <h1>오늘 신청곡</h1>
+              {!loading ? (
+                requestedSong?.title ? (
+                  <div className="MyPageSong">
+                    <img src="./images/cover.png" alt="앨범커버" />
+                    <div className="MyPageSong-left">
+                      <span className="MyPageSong-name">
+                        {requestedSong.title}
+                      </span>
+                      <span className="MyPageSong-artist">
+                        {requestedSong.singer}
+                      </span>
+                    </div>
+                    <div className="MyPageSong-right">
+                      <AiFillLike size={32} />
+                      <span>{requestedSong.numberOfUps}</span>
+                    </div>
+                    <ImCross onClick={() => deleteSong()} cursor="pointer" size={32} />
                   </div>
-                  <div className="ChartList-right">
-                    <span>
-                      <AiFillLike /> {requestedSong.numberOfUps}
-                    </span>
+                ) : (
+                  <div>
+                    <span>아직 신청곡이 없습니다!</span>
+                    <Link to={"/song"}>신청하러 가기</Link>
                   </div>
-                  <ImCross onClick={() => deleteSong()} />
-                </div>
+                )
+              ) : (
+                <span>로딩중~~~</span>
+              )}
+            </div>
+            <div className="MyPage-playlist">
+              <h1>플레이리스트</h1>
+              <div className="MyPage-playlist-img">
+                <Link to={`/playlist/${user.id}`}>
+                  {imgArr.map((item, index) => {
+                    return <PlayListImages item={item} index={index} key={index} />;
+                  })}
+                </Link>
               </div>
             </div>
-          ) : (
-            <div>
-              <span>아직 신청곡이 없습니다!</span>
-              <Link to={"/song"}>신청하러 가기</Link>
-            </div>
-          )
-        ) : (
-          <span>로딩중~~~</span>
-        )}
-        <br />
-        <br />
-        <h1>플레이리스트</h1>
-
-        <Link to={`/playlist/${user.id}`}>
-          <div>
-            {imgArr.map((item, index) => {
-              return <PlayListImages item={item} index={index} key={index} />;
-            })}
           </div>
-        </Link>
+        </div>
         <Modal isOpen={modal}
           onRequestClose={() => setModal(false)}
           style={{
