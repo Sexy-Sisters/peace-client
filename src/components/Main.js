@@ -8,29 +8,21 @@ import { ImMusic } from "react-icons/im";
 import ExpirationToken from "../function/ExpirationToken";
 import styled from "styled-components";
 
-interface Song {
-  id: number;
-  imgUrl: string;
-  title: string;
-  singer: string;
-  numberOfUps: number;
-}
-
 const ChartLeft = styled.div`
-  width: 636px;
+  width: 586px;
   display: flex;
   flex-direction: row;
-  height: 70px;
+  height: 90px;
   background-color: #fffaf1;
   margin-right: 0;
   border-radius: ${(props) =>
     props.size === 1
       ? "40px"
       : props.index === 0
-      ? "40px 40px 0px 0px"
-      : props.index === props.size - 1
-      ? "0px 0px 40px 40px"
-      : "0"};
+        ? "40px 40px 0px 0px"
+        : props.index === props.size - 1
+          ? "0px 0px 40px 40px"
+          : "0"};
 `;
 
 function ChartList({ data, index, size }) {
@@ -147,6 +139,7 @@ function ChartList({ data, index, size }) {
             />
           </div>
         </ChartLeft>
+          {index !== size-1 && <hr />}
       </div>
       <div className="ChartList right">
         <span className="ChartList-username">{data.userName}</span>
@@ -181,6 +174,7 @@ function Main() {
   let week = WEEKDAY[today.getDay()];
   const [chart, setChart] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [chartError, setChartError] = useState('노래가 없습니다~');
   useEffect(() => {
     if (localStorage.getItem("access-token")) {
       const getSongChart = async () => {
@@ -193,6 +187,9 @@ function Main() {
         }
       };
       getSongChart();
+    }
+    else {
+      setChartError('로그인하세요~~');
     }
     setLoading(false);
   }, []);
@@ -214,7 +211,7 @@ function Main() {
         ) : (
           <div className="ChartList">
             {chart.filter((value, i) => i < 5).length ? (
-              chart.map((item: Song, index) => {
+              chart.map((item, index) => {
                 return (
                   <ChartList
                     data={item}
@@ -227,7 +224,7 @@ function Main() {
             ) : (
               <div className="nonSearch">
                 <img src="./images/sun.png" alt="디자인" className="sun" />{" "}
-                <span>노래가 없습니다~</span>
+                <span>{chartError}</span>
               </div>
             )}
           </div>
