@@ -7,7 +7,7 @@ import { TiPlus } from "react-icons/ti";
 import { ImMusic } from "react-icons/im";
 import ExpirationToken from "../function/ExpirationToken";
 import styled from "styled-components";
-
+import Modal from 'react-modal';
 const ChartLeft = styled.div`
   width: 586px;
   display: flex;
@@ -28,6 +28,8 @@ const ChartLeft = styled.div`
 function ChartList({ data, index, size }) {
   const [pushed, setPushed] = useState(false);
   const [like, setLike] = useState(data.numberOfUps);
+  const [modal, setModal] = useState(false);
+  const [searchError, setSearchError] = useState('');
   const userInfo = localStorage.getItem("user");
   useEffect(() => {
     const isPushed = async () => {
@@ -93,7 +95,7 @@ function ChartList({ data, index, size }) {
   };
 
   const addPlayList = async () => {
-    // setModal(true);
+    setModal(true);
     try {
       const response = await instance.post(
         "playlist/",
@@ -109,13 +111,15 @@ function ChartList({ data, index, size }) {
         }
       );
       console.log(response);
-      // setSearchError('신청완료!');
+      setSearchError('추가완료!');
     } catch (error) {
       console.log(error);
       ExpirationToken(error.response.data.message);
-      // setSearchError(error.response.data.message);
+      setSearchError(error.response.data.message);
     }
   };
+
+
 
   return (
     <div className="ChartList-top">
@@ -139,25 +143,49 @@ function ChartList({ data, index, size }) {
             />
           </div>
         </ChartLeft>
-          {index !== size-1 && <hr />}
+        {index !== size - 1 && <hr />}
       </div>
-      <div className="ChartList right">
+      <div className="ChartList right"
+        onClick={() => pushLike()}
+        style={{ cursor: "pointer" }}>
         <span className="ChartList-username">{data.userName}</span>
         <span>
           {pushed ? (
-            <AiFillLike
-              onClick={() => pushLike()}
-              style={{ cursor: "pointer" }}
-            />
+            <AiFillLike />
           ) : (
-            <AiOutlineLike
-              onClick={() => pushLike()}
-              style={{ cursor: "pointer" }}
-            />
+            <AiOutlineLike />
           )}{" "}
           {like}
         </span>
       </div>
+      <Modal
+        isOpen={modal}
+        onRequestClose={() => setModal(false)}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(134, 134, 134, 0.2)",
+            zIndex: 100,
+          },
+          content: {
+            width: "700px",
+            height: "500px",
+            margin: "auto",
+            borderRadius: "20px",
+            padding: 0,
+            overflowX: "hidden",
+            backgroundColor: "#FFF9F1",
+          },
+        }}
+      >
+        <div className="modal-header"></div>
+        {searchError  && (
+          <div className="song-modal">
+            <img src="./images/logo.png" alt="로고" />
+            <br />
+            <span className="searchError">{searchError}</span>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

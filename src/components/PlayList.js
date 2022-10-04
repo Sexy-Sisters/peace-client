@@ -23,21 +23,24 @@ function PlayListList({ data, index, size }) {
   };
 
   return (
-    <div className="ChartList-playlist">
-      <div className="ChartList-rank">
-        <div>{index + 1}</div>
-      </div>
-      <div className="ChartList text">
-        <img src="/images/cover.png" alt="앨범커버" />
-        <div className="ChartList left">
-          <span className="ChartList-name">{data.title}</span>
-          <span className="ChartList-artist">{data.singer}</span>
+    <>
+      <div className="ChartList-playlist">
+        <div className="ChartList-rank">
+          <div>{index + 1}</div>
         </div>
-        <div className="ChartList-playlist-right">
-          <ImCross onClick={() => deleteSong()} style={{ cursor: "pointer" }} />
+        <div className="ChartList text">
+          <img src="/images/cover.png" alt="앨범커버" />
+          <div className="ChartList left">
+            <span className="ChartList-name">{data.title}</span>
+            <span className="ChartList-artist">{data.singer}</span>
+          </div>
+          <div className="ChartList-playlist-right">
+            <ImCross onClick={() => deleteSong()} style={{ cursor: "pointer" }} />
+          </div>
         </div>
       </div>
-    </div>
+      {index !== size - 1 && <hr />}
+    </>
   );
 }
 

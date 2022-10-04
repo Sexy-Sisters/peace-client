@@ -6,6 +6,7 @@ import { ImMusic } from "react-icons/im";
 import { TiPlus } from "react-icons/ti";
 import styled from "styled-components";
 import "../styles/Chart.scss";
+import Modal from 'react-modal';
 import ExpirationToken from "../function/ExpirationToken";
 
 const ChartLeft = styled.div`
@@ -25,6 +26,8 @@ const ChartLeft = styled.div`
 
 function ChartList({ data, index, size }) {
   const [pushed, setPushed] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [searchError, setSearchError] = useState('');
 
   useEffect(() => {
     const isPushed = async () => {
@@ -44,7 +47,7 @@ function ChartList({ data, index, size }) {
   }, [data.numberOfUps, data.id, pushed]);
 
   const addPlayList = async () => {
-    // setModal(true);
+    setModal(true);
     try {
       const response = await instance.post(
         "playlist/",
@@ -60,11 +63,11 @@ function ChartList({ data, index, size }) {
         }
       );
       console.log(response);
-      // setSearchError('신청완료!');
+      setSearchError('추가완료!');
     } catch (error) {
       console.log(error);
       ExpirationToken(error.response.data.message);
-      // setSearchError(error.response.data.message);
+      setSearchError(error.response.data.message);
     }
   };
 
@@ -99,6 +102,34 @@ function ChartList({ data, index, size }) {
           </span>
         </div>
       </div>
+      <Modal
+        isOpen={modal}
+        onRequestClose={() => setModal(false)}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(134, 134, 134, 0.2)",
+            zIndex: 100,
+          },
+          content: {
+            width: "700px",
+            height: "500px",
+            margin: "auto",
+            borderRadius: "20px",
+            padding: 0,
+            overflowX: "hidden",
+            backgroundColor: "#FFF9F1",
+          },
+        }}
+      >
+        <div className="modal-header"></div>
+        {searchError && (
+          <div className="song-modal">
+            <img src="./images/logo.png" alt="로고" />
+            <br />
+            <span className="searchError">{searchError}</span>
+          </div>
+        )}
+      </Modal>
     </>
   );
 }
