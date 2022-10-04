@@ -183,6 +183,7 @@ function Song() {
 
   const postPlayList = async () => {
     setModal(true);
+    setSearchError('');
     try {
       let newSong = song.split(" - ");
       const response = await instance.post(
@@ -199,7 +200,7 @@ function Song() {
         }
       );
       console.log(response);
-      setSearchError("신청완료!");
+      setSearchError("추가완료!");
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
         console.log(error);
@@ -227,7 +228,7 @@ function Song() {
             <br />
             {song === "" ? (
               <div className="nonSearch">
-                <img src="./images/sun.png" alt="디자인" className="sun" />{" "}
+                <img src="./images/sun.png" alt="디자인" className="sun" />
                 <span>검색어를 입력해주세요.</span>
               </div>
             ) : loading ? (
