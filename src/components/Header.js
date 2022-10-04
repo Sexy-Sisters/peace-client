@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Header.scss";
-import SignUp from "./SignUp";
 import Modal from "react-modal";
 import { FiMenu } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
+import { SignUp } from "../allFiles";
 
 function Header() {
   const [dropdown, setDropdown] = useState(false);
   const [modal, setModal] = useState(false);
   const [isSignUp, setIsSignUp] = useState(true);
   const size1050 = useMediaQuery({
-    query: "(min-width: 1050px)",
+    query: "(min-width: 1350px)",
   });
   const logout = () => {
     localStorage.removeItem("access-token");
@@ -29,18 +29,18 @@ function Header() {
           </Link>
           <div className="Header list">
             <Link to="/song">
-              <span>기상송 신청</span>
+              <span className="Header English">SEARCH SONG</span>
             </Link>
             <Link to="/chart">
               <span>
-                <span className="Header English">BSSM</span> 차트
+                <span className="Header English">BSSM CHART</span>
               </span>
             </Link>
             <Link to={"/userlist"}>
-              <span>플레이리스트</span>
+              <span className="Header English">PLAYLIST</span>
             </Link>
             <a href="https://github.com/Wake-Up-Song/Server/issues">
-              <span>피드백</span>
+              <span className="Header English">FEEDBACK</span>
             </a>
           </div>
           {localStorage.getItem("access-token") ? (
@@ -86,21 +86,19 @@ function Header() {
           {dropdown && (
             <div className="dropdown">
               <Link to="/song" className="dropdown-item">
-                <span>기상송 신청</span>
+                <span className="Header English">SEARCH SONG</span>
               </Link>
               <Link to="/chart" className="dropdown-item">
-                <span>
-                  <span className="Header English">BSSM</span> 차트
-                </span>
+                <span className="Header English">BSSM CHART</span>
               </Link>
               <Link to={"/userlist"} className="dropdown-item">
-                <span>플레이리스트</span>
+                <span className="Header English">PLAYLIST</span>
               </Link>
               <a
                 href="https://github.com/Wake-Up-Song/Server/issues"
                 className="dropdown-item"
               >
-                <span>피드백</span>
+              <span className="Header English">FEEDBACK</span>
               </a>
               {!localStorage.getItem("access-token") ? (
                 <>
