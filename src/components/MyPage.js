@@ -139,7 +139,7 @@ function MyPage() {
               {!loading ? (
                 requestedSong?.title ? (
                   <div className="MyPageSong">
-                    <img src="./images/cover.png" alt="앨범커버" />
+                    <img src={requestedSong.imgUrl} alt="앨범커버" />
                     <div className="MyPageSong-left">
                       <span className="MyPageSong-name">
                         {requestedSong.title}

@@ -2,78 +2,63 @@ $main_blue: #E3E9EF;
 $main_deep_blue: #628BA1;
 $main_deeper_blue: #7895B2;
 
+a:visited{
+    color: black;
+}
+
+a:link{
+    text-decoration: none;
+}
+.UserListList{
+    width: 736px;
+    margin: 0 auto;
+}
+
 .UserList{
     padding-top: 121.6px;
     box-sizing: border-box;
-    // .ChartList-root{
-    //     width: 636px;
-    //     display: flex;
-    //     flex-direction: row;
-    //     height: 70px;
-    //     background-color: #FFFAF1;
-    //     margin-right: 0;
-    //     &:first-child{
-    //         border-radius: 40px 40px 0px 0px;
-    //     }
-    //     &:last-child{
-    //         border-radius: 0px 0px 40px 40px;
-    //     }
-    //     .ChartList-rank{
-    //         font-size: 24px;
-    //         text-align: center;
-    //         color: white;
-    //         // font-weight: bold;
-    //         width: 100px;
-    //         display: flex;
-    //         justify-content: center;
-    //         align-items: center;
-    //         div{
-    //             width: 36px;
-    //             height: 36px;
-    //             line-height: 36px;
-    //             font-family: 'Syncopate', sans-serif;
-    //             color: black;
-    //             border-radius: 8px;
-    //             border: none;
-    //             background-color: #D6DEE5;
-    //         }
-    //     }
-    //     .text{
-    //         // margin: 0 auto;
-    //         display: flex;
-    //         justify-content: center;
-    //         align-items: center;
-    //         line-height: 20px;
-    //         gap: 10px;
-    //         & img{
-    //             width: 50px;
-    //             height: 50px;
-    //             margin-left: 10px;
-    //             margin-right: 10px;
-    //         }
-    //         .left{
-    //             width: 450px;
-    //             display: flex;
-    //             flex-direction: column;
-    //             overflow:hidden;
-    //             text-overflow:ellipsis;
-    //             justify-content: left;
-    //             white-space:nowrap;
-    //             .ChartList-name{
-    //                 display: inline-block;
-    //                 font-size: 20px;
-    //                 width: 450px;
-    //                 font-weight: 500;
-    //             }
-    //             .ChartList-artist{
-    //                 display: inline-block;
-    //                 width: 450px;
-    //                 font-weight: 400;
-    //             }
-    //         }
-    //     }
-    // }
-    .Chart-title{
+    &-list{
+        width: 736px;
+        display: flex;
+        margin: 0 auto;
+        // margin: 0 auto;
+        flex-direction: column;
+        height: 90px;
+        background-color: #fffaf1;
+        margin-right: 0;
+    }
+    
+    .UserList-text{
+        // margin: 0 auto;
+        & img{
+            width: 50px;
+            height: 50px;
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+        .UserList-left{
+            width: 350px;
+            margin: 0%;
+            display: flex;
+            flex-direction: column;
+            justify-content: left;
+            .UserList-name{
+                display: inline-block;
+                font-size: 20px;
+                width: 350px;
+                overflow:hidden;
+                text-overflow:ellipsis;
+                white-space:nowrap;
+                font-weight: 500;
+            }
+            .UserList-artist{
+                display: inline-block;
+                width: 350px;
+                font-weight: 400;
+            }
+        }
+    }
+    .User-title{
         width: 400px;
         margin: 0 auto;
         margin-bottom: 40px;

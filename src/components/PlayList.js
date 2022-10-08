@@ -29,7 +29,7 @@ function PlayListList({ data, index, size }) {
           <div>{index + 1}</div>
         </div>
         <div className="ChartList text">
-          <img src="/images/cover.png" alt="앨범커버" />
+          <img src={data.imgUrl} alt="앨범커버" />
           <div className="ChartList left">
             <span className="ChartList-name">{data.title}</span>
             <span className="ChartList-artist">{data.singer}</span>

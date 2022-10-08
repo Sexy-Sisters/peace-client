@@ -102,7 +102,7 @@ function ChartList({ data, index, size }) {
         {
           title: data.title,
           singer: data.singer,
-          imgUrl: "추가예정",
+          imgUrl: data.imgUrl,
         },
         {
           headers: {
@@ -119,8 +119,6 @@ function ChartList({ data, index, size }) {
     }
   };
 
-
-
   return (
     <div className="ChartList-top">
       <div className="ChartList-root">
@@ -129,8 +127,7 @@ function ChartList({ data, index, size }) {
             <div>{index + 1}</div>
           </div>
           <div className="ChartList text">
-            {/* <img src={data.imgUrl} alt="앨범커버" /> */}
-            <img src="./images/cover.png" alt="앨범커버" />
+            <img src={data.imgUrl} alt="앨범커버" />
             <div className="ChartList left">
               <span className="ChartList-name">{data.title}</span>
               <span className="ChartList-artist">{data.singer}</span>

@@ -12,14 +12,14 @@ import {
 } from "../atom";
 import Modal from "react-modal";
 import ExpirationToken from "../function/ExpirationToken";
-import axios, { AxiosError } from "axios";
 
-function SongList({ item }) {
+function SongList({ item, setRequest }) {
   const setSong = useSetRecoilState(songState);
   const setIsSelectedMusic = useSetRecoilState(isSelectedMusicState);
   const setDisabled = useSetRecoilState(disabledState);
   const selectSong = async () => {
     setSong(`${item.singer} - ${item.title}`);
+    setRequest(item);
     setIsSelectedMusic(true);
     setDisabled(false);
   };
@@ -34,7 +34,7 @@ function SongList({ item }) {
       onClick={() => selectSong()}
     >
       <img
-        src="./images/cover.png"
+        src={item.imgUrl}
         alt={`${item.singer}의 ${item.title} 앨범 커버`}
       />
       <div className="text">
@@ -57,6 +57,7 @@ function Song() {
   const [disabled, setDisabled] = useRecoilState(disabledState);
   const [focusIndex, setFocusIndex] = useState(-1);
   const [user, setUser] = useRecoilState(userState);
+  const [request, setRequest] = useState({});
 
   useEffect(() => {
     if (isSelectedMusic) {
@@ -96,49 +97,35 @@ function Song() {
   };
 
   const search = async () => {
-    setMusic([]);
-    setLoading(true);
-    setSearchError("");
-    const response = await getSongInfo();
-    const songList = JSON.parse(response);
-    if (songList.results.trackmatches.track.length === 0) {
-      setSearched(false);
-      setSearchError("검색 결과가 없습니다.");
-      setDisabled(true);
-    } else {
-      setSearched(true);
+    try {
+      setMusic([]);
+      setLoading(true);
       setSearchError("");
-    }
-    let newSongList = [];
-    for (let i = 0; i < songList.results.trackmatches.track.length; i++) {
-      newSongList = newSongList.concat({
-        singer: songList.results.trackmatches.track[i].artist,
-        title: songList.results.trackmatches.track[i].name,
+      const response = await instance.get(`song/search?word=${song}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+        },
       });
+      const songList = response.data;
+      for (let i = 0; i < songList.length; i++) {
+        if (songList[i].title.includes('[19금]')) {
+          songList[i].title = songList[i].title.substr(6, songList[i].title.length);
+        }
+      }
+
+      if (songList.length === 0) {
+        setSearched(false);
+        setSearchError("검색 결과가 없습니다.");
+        setDisabled(true);
+      } else {
+        setSearched(true);
+        setSearchError("");
+      }
+      setMusic(songList);
+    } catch (error) {
+      console.log(error);
     }
-    setMusic(newSongList);
     setLoading(false);
-  };
-
-  const getSongInfo = async () => {
-    var axios = require("axios");
-    var config = {
-      method: "get",
-      url: `https://ws.audioscrobbler.com/2.0/?method=track.search&track=${song}&api_key=a7b431d3d0705a9bd1b0398f6f6cb0dd&format=json&limit=10`,
-      headers: {},
-    };
-
-    let str = "";
-
-    await axios(config)
-      .then(function (response) {
-        str = JSON.stringify(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
-    return str;
   };
 
   const requestSong = async () => {
@@ -148,14 +135,7 @@ function Song() {
     } else {
       try {
         setLoading(true);
-        let newSong = song.split(" - ");
-        await instance.post(
-          "song",
-          {
-            title: newSong[1],
-            singer: newSong[0],
-            imgUrl: "추가예정",
-          },
+        await instance.post("song", request,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("access-token")}`,
@@ -169,13 +149,12 @@ function Song() {
           },
         });
         setUser(loginResponse.data);
+        setSong('');
       } catch (res) {
-        if (res instanceof AxiosError && res.response) {
-          console.log(res.response.data.message);
-          setSearchError(res.response.data.message);
-          ExpirationToken(res.response.data.message);
-          console.log(res);
-        }
+        console.log(res.response.data.message);
+        setSearchError(res.response.data.message);
+        ExpirationToken(res.response.data.message);
+        console.log(res);
       }
       setLoading(false);
     }
@@ -185,14 +164,9 @@ function Song() {
     setModal(true);
     setSearchError('');
     try {
-      let newSong = song.split(" - ");
       const response = await instance.post(
         "playlist/",
-        {
-          title: newSong[1],
-          singer: newSong[0],
-          imgUrl: "추가예정",
-        },
+        request,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access-token")}`,
@@ -201,12 +175,11 @@ function Song() {
       );
       console.log(response);
       setSearchError("추가완료!");
+      setSong('');
     } catch (error) {
-      if (error instanceof AxiosError && error.response) {
-        console.log(error);
-        ExpirationToken(error.response.data.message);
-        setSearchError(error.response.data.message);
-      }
+      console.log(error);
+      ExpirationToken(error.response.data.message);
+      setSearchError(error.response.data.message);
     }
   };
 
@@ -241,7 +214,7 @@ function Song() {
                 <>
                   <div className="Song-List">
                     {music.map((item, index) => {
-                      return <SongList item={item} key={index} />;
+                      return <SongList item={item} key={index} setRequest={setRequest} />;
                     })}
                   </div>
                   <button
