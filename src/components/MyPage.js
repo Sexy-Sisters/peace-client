@@ -34,29 +34,52 @@ function MyPage() {
   const [user, setUser] = useRecoilState(userState);
   const [newProfileImg, setNewProfileImg] = useState([]);
   const selectFile = useRef(null);
-  const imgArr = [
-    "/images/cover.png",
-    "/images/cover.png",
-    "/images/cover.png",
-    "/images/cover.png",
-    "/images/cover.png",
-    "/images/cover.png",
-    "/images/cover.png",
-    "/images/cover.png",
-    "/images/cover.png",
-    "/images/cover.png",
-  ];
+  const [imgArr, setImgArr] = useState([]);
+  // const imgArr = [
+  //   "/images/cover.png",
+  //   "/images/cover.png",
+  //   "/images/cover.png",
+  //   "/images/cover.png",
+  //   "/images/cover.png",
+  //   "/images/cover.png",
+  //   "/images/cover.png",
+  //   "/images/cover.png",
+  //   "/images/cover.png",
+  //   "/images/cover.png",
+  // ];
+
 
   useEffect(() => {
     if (!localStorage.getItem("access-token")) {
       alert("로그인하세요!!!!!!!!!!!");
       nav("/");
     }
-  }, []);
+    else {
+      (async () => {
+        try {
+          const response = await instance.get(`/playlist/${user.id}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+            },
+          });
+          console.log(response);
+          let newImgArr = [];
+          response.data.forEach(element => {
+            newImgArr = [...newImgArr, element.imgUrl];
+            console.log(newImgArr);
+          });
+          setImgArr(newImgArr);
+        } catch (error) {
+          console.log(error);
+        }
+      })()
+    }
+  }, [user]);
   const { nickName, profileImg, requestedSong, name, email } = user;
 
   const profileImgFormData = new FormData();
 
+  console.log(imgArr);
   const deleteSong = async () => {
     try {
       setLoading(true);
