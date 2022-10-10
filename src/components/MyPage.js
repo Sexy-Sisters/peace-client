@@ -35,18 +35,6 @@ function MyPage() {
   const [newProfileImg, setNewProfileImg] = useState([]);
   const selectFile = useRef(null);
   const [imgArr, setImgArr] = useState([]);
-  // const imgArr = [
-  //   "/images/cover.png",
-  //   "/images/cover.png",
-  //   "/images/cover.png",
-  //   "/images/cover.png",
-  //   "/images/cover.png",
-  //   "/images/cover.png",
-  //   "/images/cover.png",
-  //   "/images/cover.png",
-  //   "/images/cover.png",
-  //   "/images/cover.png",
-  // ];
 
 
   useEffect(() => {
@@ -178,10 +166,12 @@ function MyPage() {
                     <ImCross onClick={() => deleteSong()} cursor="pointer" size={32} />
                   </div>
                 ) : (
-                  <div>
-                    <span>아직 신청곡이 없습니다!</span>
-                    <Link to={"/song"}>신청하러 가기</Link>
-                  </div>
+                  <Link to="/song">
+                    <div className="MyPageSong nonRequest">
+                      <span>아직 신청곡이 없습니다!</span>
+                      <span>클릭하여 신청</span>
+                    </div>
+                  </Link>
                 )
               ) : (
                 <span>로딩중~~~</span>
