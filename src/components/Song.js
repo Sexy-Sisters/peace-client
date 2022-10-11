@@ -113,7 +113,7 @@ function Song() {
       //   }
       // }
 
-      if (songList.length === 0) {
+      if (songList[0].title === '') {
         setSearched(false);
         setSearchError("검색 결과가 없습니다.");
         setDisabled(true);
@@ -198,7 +198,7 @@ function Song() {
               onKeyDown={(e) => onKeyDown(e)}
               placeholder="신청곡을 검색해보세요."
             />
-            <HiOutlineSearch onClick={() => search()} size={24} cursor="pointer"/>
+            <HiOutlineSearch onClick={() => search()} size={24} className="search-btn"/>
             <br />
             {song === "" ? (
               <div className="nonSearch">

@@ -16,11 +16,18 @@
         padding-top: 40px;
         padding-left: 30px;
         padding-right: 30px;
+        position: relative;
+        .search-btn{
+            position: absolute;
+            top: 57px;
+            right: 130px;
+            cursor: pointer;
+        }
     }
     .Song-input{
         background-color: #F5EDE1;
         color: #6D6363;
-        width: 500px;
+        width: 550px;
         height: 40px;
         font-size: 16px;
         border-radius: 100px;

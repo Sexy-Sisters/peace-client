@@ -3,10 +3,7 @@ import { v1 } from 'uuid';
 
 export const musicState = atom({
     key: `musicState/${v1()}`,
-    default: [{
-        singer: "",
-        title: "",
-    }]
+    default: []
 });
 
 export const songState = atom({
