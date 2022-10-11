@@ -27,21 +27,21 @@ export const disabledState = atom({
 export const userState = atom({
     key: `user/${v1()}`,
     default: {
-        id: 0,
-        profileImg: "",
-        name: "",
-        nickName: "",
-        email: "",
-        authority: "",
-        requestedSong: {
-            id: 0,
-            imgUrl: "",
-            title: "",
-            singer: "",
-            numberOfUps: 0,
-            userName: "",
-            createdHour: 0,
-        }
+        // id: 0,
+        // profileImg: "",
+        // name: "",
+        // nickName: "",
+        // email: "",
+        // authority: "",
+        // requestedSong: {
+        //     id: 0,
+        //     imgUrl: "",
+        //     title: "",
+        //     singer: "",
+        //     numberOfUps: 0,
+        //     userName: "",
+        //     createdHour: 0,
+        // }
         // requestedSong: null
     }
 })

@@ -6,6 +6,7 @@ import "../styles/UserList.scss";
 import { Link } from "react-router-dom";
 import { Header } from "../allFiles";
 import { css } from '@emotion/react';
+import ExpirationToken from "../function/ExpirationToken";
 
 function UserListList({ data, index, size }) {
   return (
@@ -50,6 +51,8 @@ function UserList() {
         setUserList(response.data);
       } catch (error) {
         console.log(error);
+        ExpirationToken(error.response.data.message);
+        getUserList();
       }
     };
     getUserList();

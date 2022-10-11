@@ -64,6 +64,7 @@ function PlayList() {
       } catch (error) {
         console.log(error);
         ExpirationToken(error.response.data.message);
+        getPlayList();
       }
     };
     getPlayList();

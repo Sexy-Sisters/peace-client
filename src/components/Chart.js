@@ -69,6 +69,7 @@ function ChartList({ data, index, size }) {
       console.log(error);
       ExpirationToken(error.response.data.message);
       setSearchError(error.response.data.message);
+      addPlayList();
     }
   };
 
@@ -147,6 +148,8 @@ function Chart() {
   const [chart, setChart] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // console.log(chart);
+
   useEffect(() => {
     const getSongChart = async () => {
       try {
@@ -155,10 +158,12 @@ function Chart() {
         setChart(response.data);
       } catch (error) {
         console.log(error);
+        ExpirationToken(error.response.data.message);
+        getSongChart();
       }
-      setLoading(false);
     };
     getSongChart();
+    setLoading(false);
   }, []);
 
   return (

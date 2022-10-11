@@ -36,38 +36,38 @@ function MyPage() {
   const selectFile = useRef(null);
   const [imgArr, setImgArr] = useState([]);
 
-
   useEffect(() => {
     if (!localStorage.getItem("access-token")) {
       alert("로그인하세요!!!!!!!!!!!");
       nav("/");
     }
     else {
-      (async () => {
+      const getPlayList = async () => {
         try {
-          const response = await instance.get(`/playlist/${user.id}`, {
+          const response = await instance.get(`/playlist/${user?.id}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("access-token")}`,
             },
           });
-          console.log(response);
           let newImgArr = [];
+          console.log(response);
           response.data.forEach(element => {
             newImgArr = [...newImgArr, element.imgUrl];
-            console.log(newImgArr);
           });
           setImgArr(newImgArr);
         } catch (error) {
           console.log(error);
+          ExpirationToken(error.response.data.message);
+          getPlayList();
         }
-      })()
+      }
+      getPlayList();
     }
   }, [user]);
   const { nickName, profileImg, requestedSong, name, email } = user;
 
   const profileImgFormData = new FormData();
 
-  console.log(imgArr);
   const deleteSong = async () => {
     try {
       setLoading(true);
@@ -181,7 +181,7 @@ function MyPage() {
               <h1>플레이리스트</h1>
               <div className="MyPage-playlist-img">
                 <Link to={`/playlist/${user.id}`}>
-                  {imgArr.map((item, index) => {
+                  {imgArr && imgArr.map((item, index) => {
                     return <PlayListImages item={item} index={index} key={index} />;
                   })}
                 </Link>

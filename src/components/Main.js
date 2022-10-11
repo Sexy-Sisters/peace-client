@@ -43,6 +43,7 @@ function ChartList({ data, index, size }) {
       } catch (error) {
         console.log(error);
         ExpirationToken(error.response.data.message);
+        isPushed();
       }
     };
     isPushed();
@@ -70,6 +71,7 @@ function ChartList({ data, index, size }) {
     } catch (error) {
       console.log(error);
       ExpirationToken(error.response.data.message);
+      upLike();
     }
   };
 
@@ -91,6 +93,7 @@ function ChartList({ data, index, size }) {
     } catch (error) {
       console.log(error);
       ExpirationToken(error.response.data.message);
+      cancelLike();
     }
   };
 
@@ -116,6 +119,7 @@ function ChartList({ data, index, size }) {
       console.log(error);
       ExpirationToken(error.response.data.message);
       setSearchError(error.response.data.message);
+      addPlayList();
     }
   };
 
@@ -209,6 +213,8 @@ function Main() {
           setChart(response.data);
         } catch (error) {
           console.log(error);
+          ExpirationToken(error.response.data.message);
+          getSongChart();
         }
       };
       getSongChart();

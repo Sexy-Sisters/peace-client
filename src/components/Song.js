@@ -3,6 +3,7 @@ import "../styles/Song.scss";
 import { instance } from "../instance/instance";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { Header } from "../allFiles";
+import { HiOutlineSearch } from 'react-icons/hi';
 import {
   musicState,
   songState,
@@ -62,8 +63,6 @@ function Song() {
   useEffect(() => {
     if (isSelectedMusic) {
       setMusic([]);
-    } else {
-      search();
     }
     if (song === "") {
       setLoading(false);
@@ -106,12 +105,13 @@ function Song() {
           Authorization: `Bearer ${localStorage.getItem("access-token")}`,
         },
       });
+      console.log(response);
       const songList = response.data;
-      for (let i = 0; i < songList.length; i++) {
-        if (songList[i].title.includes('[19금]')) {
-          songList[i].title = songList[i].title.substr(6, songList[i].title.length);
-        }
-      }
+      // for (let i = 0; i < songList.length; i++) {
+      //   if (songList[i].title.includes('19금')) {
+      //     songList[i].title = songList[i].title.substr(6, songList[i].title.length);
+      //   }
+      // }
 
       if (songList.length === 0) {
         setSearched(false);
@@ -198,6 +198,7 @@ function Song() {
               onKeyDown={(e) => onKeyDown(e)}
               placeholder="신청곡을 검색해보세요."
             />
+            <HiOutlineSearch onClick={() => search()} size={24} cursor="pointer"/>
             <br />
             {song === "" ? (
               <div className="nonSearch">
