@@ -119,7 +119,6 @@ function ChartList({ data, index, size }) {
       console.log(error);
       ExpirationToken(error.response.data.message);
       setSearchError(error.response.data.message);
-      addPlayList();
     }
   };
 
@@ -214,7 +213,6 @@ function Main() {
         } catch (error) {
           console.log(error);
           ExpirationToken(error.response.data.message);
-          getSongChart();
         }
       };
       getSongChart();

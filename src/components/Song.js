@@ -96,36 +96,38 @@ function Song() {
   };
 
   const search = async () => {
-    try {
-      setMusic([]);
-      setLoading(true);
-      setSearchError("");
-      const response = await instance.get(`song/search?word=${song}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access-token")}`,
-        },
-      });
-      console.log(response);
-      const songList = response.data;
-      // for (let i = 0; i < songList.length; i++) {
-      //   if (songList[i].title.includes('19금')) {
-      //     songList[i].title = songList[i].title.substr(6, songList[i].title.length);
-      //   }
-      // }
+    if (localStorage.getItem('access-token')) {
 
-      if (songList[0].title === '') {
-        setSearched(false);
-        setSearchError("검색 결과가 없습니다.");
-        setDisabled(true);
-      } else {
-        setSearched(true);
+      try {
+        setMusic([]);
+        setLoading(true);
         setSearchError("");
+        const response = await instance.get(`song/search?word=${song}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+          },
+        });
+        const songList = response.data;
+        // for (let i = 0; i < songList.length; i++) {
+        //   if (songList[i].title.includes('19금')) {
+        //     songList[i].title = songList[i].title.substr(6, songList[i].title.length);
+        //   }
+        // }
+
+        if (songList[0].title === '') {
+          setSearched(false);
+          setSearchError("검색 결과가 없습니다.");
+          setDisabled(true);
+        } else {
+          setSearched(true);
+          setSearchError("");
+        }
+        setMusic(songList);
+      } catch (error) {
+        console.log(error);
       }
-      setMusic(songList);
-    } catch (error) {
-      console.log(error);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const requestSong = async () => {
@@ -150,6 +152,7 @@ function Song() {
         });
         setUser(loginResponse.data);
         setSong('');
+        setSearched(false);
       } catch (res) {
         console.log(res.response.data.message);
         setSearchError(res.response.data.message);
@@ -164,7 +167,7 @@ function Song() {
     setModal(true);
     setSearchError('');
     try {
-      const response = await instance.post(
+      await instance.post(
         "playlist/",
         request,
         {
@@ -173,7 +176,6 @@ function Song() {
           },
         }
       );
-      console.log(response);
       setSearchError("추가완료!");
       setSong('');
     } catch (error) {
@@ -196,14 +198,17 @@ function Song() {
               value={song}
               className="Song-input"
               onKeyDown={(e) => onKeyDown(e)}
-              placeholder="신청곡을 검색해보세요."
+              placeholder={localStorage.getItem('access-token') ? "신청곡을 검색해보세요." : "로그인하세요~~"}
+              disabled={!localStorage.getItem('access-token')}
+              
+              onKeyPress={(e) => { if (e.key === 'Enter') search() }}
             />
-            <HiOutlineSearch onClick={() => search()} size={24} className="search-btn"/>
+            <HiOutlineSearch onClick={() => search()} size={24} className="search-btn" />
             <br />
             {song === "" ? (
               <div className="nonSearch">
                 <img src="./images/sun.png" alt="디자인" className="sun" />
-                <span>검색어를 입력해주세요.</span>
+                <span>{localStorage.getItem('access-token') ? '검색어를 입력해주세요.' : '로그인하세요~~'}</span>
               </div>
             ) : loading ? (
               <>

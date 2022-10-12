@@ -29,24 +29,6 @@ function ChartList({ data, index, size }) {
   const [modal, setModal] = useState(false);
   const [searchError, setSearchError] = useState('');
 
-  useEffect(() => {
-    const isPushed = async () => {
-      try {
-        const response = await instance.get(`song/${data.id}/up`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access-token")}`,
-          },
-        });
-        setPushed(response.data);
-      } catch (error) {
-        console.log(error);
-        ExpirationToken(error.response.data.message);
-        isPushed();
-      }
-    };
-    isPushed();
-  }, [data.numberOfUps, data.id, pushed]);
-
   const addPlayList = async () => {
     setModal(true);
     try {
@@ -69,7 +51,6 @@ function ChartList({ data, index, size }) {
       console.log(error);
       ExpirationToken(error.response.data.message);
       setSearchError(error.response.data.message);
-      addPlayList();
     }
   };
 
@@ -99,7 +80,7 @@ function ChartList({ data, index, size }) {
         </div>
         <div className="ChartList right long">
           <span>
-            {pushed ? <AiFillLike /> : <AiOutlineLike />} {data.point}
+            <AiFillLike color="gray" /> {data.point}
           </span>
         </div>
       </div>
@@ -196,7 +177,7 @@ function Chart() {
             ) : (
               <div className="nonSearch">
                 <img src="./images/sun.png" alt="디자인" className="sun" />{" "}
-                <span>노래가 없습니다~</span>
+                {/* <span>노래가 없습니다~</span> */}
               </div>
             )}
           </div>

@@ -93,8 +93,7 @@ function SignUp(props) {
   const sendIssueCode = async () => {
     setSendCode(false);
     try {
-      const response = await instance.post(`user/issue-code?email=${signUpInputs.email}`);
-      console.log(response);
+      await instance.post(`user/issue-code?email=${signUpInputs.email}`);
       console.log("인증보냄");
     } catch (error) {
       console.log(error);
@@ -107,9 +106,7 @@ function SignUp(props) {
         code: issueCode,
         email: signUpInputs.email,
       }
-      console.log(requestObj);
-      const response = await instance.delete(`user/check-code`, { data: requestObj });
-      console.log(response);
+      await instance.delete(`user/check-code`, { data: requestObj });
       setCertification(true);
     } catch (error) {
       console.log(error);

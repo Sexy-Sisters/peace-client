@@ -114,9 +114,7 @@ function MyPage() {
       changeProfileImg();
     }
   };
-
-  console.log(selectFile.current?.value);
-
+  
   const [modal, setModal] = useState(false);
 
   const changeImg = (e) => {
@@ -181,13 +179,13 @@ function MyPage() {
             </div>
             <div className="MyPage-playlist">
               <h1>플레이리스트</h1>
-              <div className="MyPage-playlist-img">
-                <Link to={`/playlist/${user.id}`}>
+              <Link to={`/playlist/${user.id}`}>
+                <div className="MyPage-playlist-img">
                   {imgArr && imgArr.map((item, index) => {
                     return <PlayListImages item={item} index={index} key={index} />;
                   })}
-                </Link>
-              </div>
+                </div>
+              </Link>
             </div>
           </div>
         </div>
