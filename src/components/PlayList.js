@@ -6,8 +6,11 @@ import ExpirationToken from "../function/ExpirationToken";
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Header } from "../allFiles";
+import { useRecoilState } from "recoil";
+import { userState } from "../atom";
 
-function PlayListList({ data, index, size }) {
+function PlayListList({ data, index, size, userId }) {
+  const [user, setUser] = useRecoilState(userState);
   const deleteSong = async () => {
     try {
       const response = await instance.delete(`playlist/${data.id}`, {
@@ -34,9 +37,9 @@ function PlayListList({ data, index, size }) {
             <span className="ChartList-name">{data.title}</span>
             <span className="ChartList-artist">{data.singer}</span>
           </div>
-          <div className="ChartList-playlist-right">
+          {user.id === parseInt(userId) && <div className="ChartList-playlist-right">
             <ImCross onClick={() => deleteSong()} style={{ cursor: "pointer" }} />
-          </div>
+          </div>}
         </div>
       </div>
       {index !== size - 1 && <hr />}
@@ -90,6 +93,7 @@ function PlayList() {
                   <PlayListList
                     data={item}
                     key={item.id}
+                    userId={param.id}
                     index={index}
                     size={playlist.length}
                   />
