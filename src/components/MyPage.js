@@ -115,6 +115,8 @@ function MyPage() {
     }
   };
 
+  console.log(selectFile.current?.value);
+
   const [modal, setModal] = useState(false);
 
   const changeImg = (e) => {
@@ -215,7 +217,7 @@ function MyPage() {
             onChange={(e) => changeImg(e)}
             accept="image/*"
           />
-          {/* <span>{newProfileImg[0].slice(12)}</span> */}
+          <span>{selectFile.current?.value.slice(12)}</span>
           <button onClick={() => selectFile.current.click()}>파일 업로드</button>
           <button onClick={() => changeProfileImg()} disabled={!image ? true : false}>프로필 사진 변경하기</button>
         </Modal>
