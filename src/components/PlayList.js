@@ -9,7 +9,7 @@ import { Header } from "../allFiles";
 import { useRecoilState } from "recoil";
 import { userState } from "../atom";
 
-function PlayListList({ data, index, size, userId }) {
+function PlayListList({ data, index, size, userId, setRender }) {
   const [user, setUser] = useRecoilState(userState);
   const deleteSong = async () => {
     try {
@@ -19,6 +19,7 @@ function PlayListList({ data, index, size, userId }) {
         },
       });
       console.log(response);
+      setRender(prev => !prev);
     } catch (error) {
       console.log(error);
       ExpirationToken(error.response.data.message);
@@ -50,6 +51,7 @@ function PlayListList({ data, index, size, userId }) {
 function PlayList() {
   const [loading, setLoading] = useState(false);
   const [playlist, setPlayList] = useState([]);
+  const [render, setRender] = useState(false);
 
   const param = useParams();
 
@@ -72,7 +74,7 @@ function PlayList() {
     };
     getPlayList();
     setLoading(false);
-  }, []);
+  }, [param.id, render]);
 
   return (
     <>
@@ -96,6 +98,7 @@ function PlayList() {
                     userId={param.id}
                     index={index}
                     size={playlist.length}
+                    setRender={setRender}
                   />
                 );
               })}
