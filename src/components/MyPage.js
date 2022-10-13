@@ -34,25 +34,36 @@ function MyPage() {
   const [user, setUser] = useRecoilState(userState);
   const [newProfileImg, setNewProfileImg] = useState([]);
   const selectFile = useRef(null);
-  const imgArr = [
-    "/images/cover.png",
-    "/images/cover.png",
-    "/images/cover.png",
-    "/images/cover.png",
-    "/images/cover.png",
-    "/images/cover.png",
-    "/images/cover.png",
-    "/images/cover.png",
-    "/images/cover.png",
-    "/images/cover.png",
-  ];
+  const [imgArr, setImgArr] = useState([]);
 
   useEffect(() => {
     if (!localStorage.getItem("access-token")) {
       alert("로그인하세요!!!!!!!!!!!");
       nav("/");
     }
-  }, []);
+    else {
+      const getPlayList = async () => {
+        try {
+          const response = await instance.get(`/playlist/${user?.id}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+            },
+          });
+          let newImgArr = [];
+          console.log(response);
+          response.data.forEach(element => {
+            newImgArr = [...newImgArr, element.imgUrl];
+          });
+          setImgArr(newImgArr);
+        } catch (error) {
+          console.log(error);
+          ExpirationToken(error.response.data.message);
+          getPlayList();
+        }
+      }
+      getPlayList();
+    }
+  }, [user]);
   const { nickName, profileImg, requestedSong, name, email } = user;
 
   const profileImgFormData = new FormData();
@@ -103,7 +114,7 @@ function MyPage() {
       changeProfileImg();
     }
   };
-
+  
   const [modal, setModal] = useState(false);
 
   const changeImg = (e) => {
@@ -139,7 +150,7 @@ function MyPage() {
               {!loading ? (
                 requestedSong?.title ? (
                   <div className="MyPageSong">
-                    <img src="./images/cover.png" alt="앨범커버" />
+                    <img src={requestedSong.imgUrl} alt="앨범커버" />
                     <div className="MyPageSong-left">
                       <span className="MyPageSong-name">
                         {requestedSong.title}
@@ -155,10 +166,12 @@ function MyPage() {
                     <ImCross onClick={() => deleteSong()} cursor="pointer" size={32} />
                   </div>
                 ) : (
-                  <div>
-                    <span>아직 신청곡이 없습니다!</span>
-                    <Link to={"/song"}>신청하러 가기</Link>
-                  </div>
+                  <Link to="/song">
+                    <div className="MyPageSong nonRequest">
+                      <span>아직 신청곡이 없습니다!</span>
+                      <span>클릭하여 신청</span>
+                    </div>
+                  </Link>
                 )
               ) : (
                 <span>로딩중~~~</span>
@@ -166,13 +179,13 @@ function MyPage() {
             </div>
             <div className="MyPage-playlist">
               <h1>플레이리스트</h1>
-              <div className="MyPage-playlist-img">
-                <Link to={`/playlist/${user.id}`}>
-                  {imgArr.map((item, index) => {
+              <Link to={`/playlist/${user.id}`}>
+                <div className="MyPage-playlist-img">
+                  {imgArr && imgArr.map((item, index) => {
                     return <PlayListImages item={item} index={index} key={index} />;
                   })}
-                </Link>
-              </div>
+                </div>
+              </Link>
             </div>
           </div>
         </div>
@@ -202,7 +215,7 @@ function MyPage() {
             onChange={(e) => changeImg(e)}
             accept="image/*"
           />
-          {/* <span>{newProfileImg[0].slice(12)}</span> */}
+          <span>{selectFile.current?.value.slice(12)}</span>
           <button onClick={() => selectFile.current.click()}>파일 업로드</button>
           <button onClick={() => changeProfileImg()} disabled={!image ? true : false}>프로필 사진 변경하기</button>
         </Modal>

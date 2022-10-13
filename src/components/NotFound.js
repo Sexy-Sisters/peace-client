@@ -1,6 +1,6 @@
 import React from 'react'
 import { Header } from '../allFiles';
-import "../styles/NotFound.css";
+import "../styles/NotFound.scss";
 
 function NotFound() {
   return (

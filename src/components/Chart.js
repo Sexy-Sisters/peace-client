@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../allFiles";
 import { instance } from "../instance/instance";
-import { AiFillLike, AiOutlineLike } from "react-icons/ai";
+import { AiOutlineHeart } from "react-icons/ai";
 import { ImMusic } from "react-icons/im";
 import { TiPlus } from "react-icons/ti";
 import styled from "styled-components";
@@ -29,23 +29,6 @@ function ChartList({ data, index, size }) {
   const [modal, setModal] = useState(false);
   const [searchError, setSearchError] = useState('');
 
-  useEffect(() => {
-    const isPushed = async () => {
-      try {
-        const response = await instance.get(`song/${data.id}/up`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access-token")}`,
-          },
-        });
-        setPushed(response.data);
-      } catch (error) {
-        console.log(error);
-        ExpirationToken(error.response.data.message);
-      }
-    };
-    isPushed();
-  }, [data.numberOfUps, data.id, pushed]);
-
   const addPlayList = async () => {
     setModal(true);
     try {
@@ -54,7 +37,7 @@ function ChartList({ data, index, size }) {
         {
           title: data.title,
           singer: data.singer,
-          imgUrl: "추가예정",
+          imgUrl: data.imgUrl,
         },
         {
           headers: {
@@ -80,8 +63,7 @@ function ChartList({ data, index, size }) {
               <div>{index + 1}</div>
             </div>
             <div className="ChartList text">
-              {/* <img src={data.imgUrl} alt="앨범커버" /> */}
-              <img src="./images/cover.png" alt="앨범커버" />
+              <img src={data.imgUrl} alt="앨범커버" />
               <div className="ChartList left">
                 <span className="ChartList-name">{data.title}</span>
                 <span className="ChartList-artist">{data.singer}</span>
@@ -98,7 +80,7 @@ function ChartList({ data, index, size }) {
         </div>
         <div className="ChartList right long">
           <span>
-            {pushed ? <AiFillLike /> : <AiOutlineLike />} {data.point}
+            <AiOutlineHeart /> {data.point}
           </span>
         </div>
       </div>
@@ -147,6 +129,8 @@ function Chart() {
   const [chart, setChart] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // console.log(chart);
+
   useEffect(() => {
     const getSongChart = async () => {
       try {
@@ -155,10 +139,12 @@ function Chart() {
         setChart(response.data);
       } catch (error) {
         console.log(error);
+        ExpirationToken(error.response.data.message);
+        getSongChart();
       }
-      setLoading(false);
     };
     getSongChart();
+    setLoading(false);
   }, []);
 
   return (
@@ -191,7 +177,7 @@ function Chart() {
             ) : (
               <div className="nonSearch">
                 <img src="./images/sun.png" alt="디자인" className="sun" />{" "}
-                <span>노래가 없습니다~</span>
+                {/* <span>노래가 없습니다~</span> */}
               </div>
             )}
           </div>

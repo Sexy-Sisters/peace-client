@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../allFiles";
 import { instance } from "../instance/instance";
-import { AiFillLike, AiOutlineLike } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart, } from "react-icons/ai";
 import "../styles/Chart.scss";
 import { TiPlus } from "react-icons/ti";
 import { ImMusic } from "react-icons/im";
@@ -43,6 +43,7 @@ function ChartList({ data, index, size }) {
       } catch (error) {
         console.log(error);
         ExpirationToken(error.response.data.message);
+        isPushed();
       }
     };
     isPushed();
@@ -63,13 +64,12 @@ function ChartList({ data, index, size }) {
           Authorization: `Bearer ${localStorage.getItem("access-token")}`,
         },
       });
-      console.log(response);
       setLike(response.data);
       setPushed(true);
-      console.log("따봉박음!");
     } catch (error) {
       console.log(error);
       ExpirationToken(error.response.data.message);
+      upLike();
     }
   };
 
@@ -84,13 +84,12 @@ function ChartList({ data, index, size }) {
           Authorization: `Bearer ${localStorage.getItem("access-token")}`,
         },
       });
-      console.log(response.data);
       setLike(response.data);
       setPushed(false);
-      console.log("따봉취소!");
     } catch (error) {
       console.log(error);
       ExpirationToken(error.response.data.message);
+      cancelLike();
     }
   };
 
@@ -102,7 +101,7 @@ function ChartList({ data, index, size }) {
         {
           title: data.title,
           singer: data.singer,
-          imgUrl: "추가예정",
+          imgUrl: data.imgUrl,
         },
         {
           headers: {
@@ -119,8 +118,6 @@ function ChartList({ data, index, size }) {
     }
   };
 
-
-
   return (
     <div className="ChartList-top">
       <div className="ChartList-root">
@@ -129,8 +126,7 @@ function ChartList({ data, index, size }) {
             <div>{index + 1}</div>
           </div>
           <div className="ChartList text">
-            {/* <img src={data.imgUrl} alt="앨범커버" /> */}
-            <img src="./images/cover.png" alt="앨범커버" />
+            <img src={data.imgUrl} alt="앨범커버" />
             <div className="ChartList left">
               <span className="ChartList-name">{data.title}</span>
               <span className="ChartList-artist">{data.singer}</span>
@@ -149,11 +145,11 @@ function ChartList({ data, index, size }) {
         onClick={() => pushLike()}
         style={{ cursor: "pointer" }}>
         <span className="ChartList-username">{data.userName}</span>
-        <span>
+        <span className="ChartList-heart">
           {pushed ? (
-            <AiFillLike />
+            <AiFillHeart color="red"/>
           ) : (
-            <AiOutlineLike />
+            <AiOutlineHeart />
           )}{" "}
           {like}
         </span>
@@ -178,7 +174,7 @@ function ChartList({ data, index, size }) {
         }}
       >
         <div className="modal-header"></div>
-        {searchError  && (
+        {searchError && (
           <div className="song-modal">
             <img src="./images/logo.png" alt="로고" />
             <br />
@@ -212,6 +208,7 @@ function Main() {
           setChart(response.data);
         } catch (error) {
           console.log(error);
+          ExpirationToken(error.response.data.message);
         }
       };
       getSongChart();

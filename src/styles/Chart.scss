@@ -2,6 +2,13 @@ $main_blue: #E3E9EF;
 $main_deep_blue: #628BA1;
 $main_deeper_blue: #7895B2;
 
+hr{
+    margin: 0 auto;
+    background-color: #F5EBC9;
+    height: 3px;
+    width: 80%;
+    border: none;
+}
 .Chart{
     padding-top: 100px;
     // box-sizing: border-box;
@@ -12,13 +19,6 @@ $main_deeper_blue: #7895B2;
     //     padding-left: 400px;
     //     padding-right: 400px;
     // }
-    hr{
-        margin: 0 auto;
-        background-color: #F5EBC9;
-        height: 3px;
-        width: 80%;
-        border: none;
-    }
     .date{
         width: 600px;
         margin: 0 auto;
@@ -198,6 +198,11 @@ $main_deeper_blue: #7895B2;
     &.long{
         justify-content: center;
         align-items: center;
+    }
+    .ChartList-heart{
+        display: flex;
+        justify-content: center;
+        gap: 5px;
     }
 }
 

@@ -6,8 +6,11 @@ import ExpirationToken from "../function/ExpirationToken";
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Header } from "../allFiles";
+import { useRecoilState } from "recoil";
+import { userState } from "../atom";
 
-function PlayListList({ data, index, size }) {
+function PlayListList({ data, index, size, userId, setRender }) {
+  const [user, setUser] = useRecoilState(userState);
   const deleteSong = async () => {
     try {
       const response = await instance.delete(`playlist/${data.id}`, {
@@ -16,6 +19,7 @@ function PlayListList({ data, index, size }) {
         },
       });
       console.log(response);
+      setRender(prev => !prev);
     } catch (error) {
       console.log(error);
       ExpirationToken(error.response.data.message);
@@ -29,14 +33,14 @@ function PlayListList({ data, index, size }) {
           <div>{index + 1}</div>
         </div>
         <div className="ChartList text">
-          <img src="/images/cover.png" alt="앨범커버" />
+          <img src={data.imgUrl} alt="앨범커버" />
           <div className="ChartList left">
             <span className="ChartList-name">{data.title}</span>
             <span className="ChartList-artist">{data.singer}</span>
           </div>
-          <div className="ChartList-playlist-right">
+          {user.id === parseInt(userId) && <div className="ChartList-playlist-right">
             <ImCross onClick={() => deleteSong()} style={{ cursor: "pointer" }} />
-          </div>
+          </div>}
         </div>
       </div>
       {index !== size - 1 && <hr />}
@@ -47,6 +51,7 @@ function PlayListList({ data, index, size }) {
 function PlayList() {
   const [loading, setLoading] = useState(false);
   const [playlist, setPlayList] = useState([]);
+  const [render, setRender] = useState(false);
 
   const param = useParams();
 
@@ -64,11 +69,12 @@ function PlayList() {
       } catch (error) {
         console.log(error);
         ExpirationToken(error.response.data.message);
+        getPlayList();
       }
     };
     getPlayList();
     setLoading(false);
-  }, []);
+  }, [param.id, render]);
 
   return (
     <>
@@ -89,8 +95,10 @@ function PlayList() {
                   <PlayListList
                     data={item}
                     key={item.id}
+                    userId={param.id}
                     index={index}
                     size={playlist.length}
+                    setRender={setRender}
                   />
                 );
               })}
