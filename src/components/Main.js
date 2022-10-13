@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../allFiles";
 import { instance } from "../instance/instance";
-import { AiFillLike, AiOutlineLike } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart, } from "react-icons/ai";
 import "../styles/Chart.scss";
 import { TiPlus } from "react-icons/ti";
 import { ImMusic } from "react-icons/im";
@@ -64,10 +64,8 @@ function ChartList({ data, index, size }) {
           Authorization: `Bearer ${localStorage.getItem("access-token")}`,
         },
       });
-      console.log(response);
       setLike(response.data);
       setPushed(true);
-      console.log("따봉박음!");
     } catch (error) {
       console.log(error);
       ExpirationToken(error.response.data.message);
@@ -86,10 +84,8 @@ function ChartList({ data, index, size }) {
           Authorization: `Bearer ${localStorage.getItem("access-token")}`,
         },
       });
-      console.log(response.data);
       setLike(response.data);
       setPushed(false);
-      console.log("따봉취소!");
     } catch (error) {
       console.log(error);
       ExpirationToken(error.response.data.message);
@@ -149,11 +145,11 @@ function ChartList({ data, index, size }) {
         onClick={() => pushLike()}
         style={{ cursor: "pointer" }}>
         <span className="ChartList-username">{data.userName}</span>
-        <span>
+        <span className="ChartList-heart">
           {pushed ? (
-            <AiFillLike />
+            <AiFillHeart color="red"/>
           ) : (
-            <AiOutlineLike />
+            <AiOutlineHeart />
           )}{" "}
           {like}
         </span>
@@ -178,7 +174,7 @@ function ChartList({ data, index, size }) {
         }}
       >
         <div className="modal-header"></div>
-        {searchError  && (
+        {searchError && (
           <div className="song-modal">
             <img src="./images/logo.png" alt="로고" />
             <br />

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../allFiles";
 import { instance } from "../instance/instance";
-import { AiFillLike, AiOutlineLike } from "react-icons/ai";
+import { AiOutlineHeart } from "react-icons/ai";
 import { ImMusic } from "react-icons/im";
 import { TiPlus } from "react-icons/ti";
 import styled from "styled-components";
@@ -80,7 +80,7 @@ function ChartList({ data, index, size }) {
         </div>
         <div className="ChartList right long">
           <span>
-            <AiFillLike color="gray" /> {data.point}
+            <AiOutlineHeart /> {data.point}
           </span>
         </div>
       </div>
