@@ -41,7 +41,6 @@ function App() {
         } catch (error) {
           console.log(error);
           ExpirationToken(error.response.data.message);
-          setUserInfo();
         }
       }
       setUserInfo();

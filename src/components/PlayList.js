@@ -56,24 +56,25 @@ function PlayList() {
   const param = useParams();
 
   useEffect(() => {
-    const getPlayList = async () => {
-      try {
-        setLoading(true);
-        const playListResponse = await instance.get(`playlist/${param.id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access-token")}`,
-          },
-        });
-        setPlayList(playListResponse.data);
-        console.log(playListResponse);
-      } catch (error) {
-        console.log(error);
-        ExpirationToken(error.response.data.message);
-        getPlayList();
-      }
-    };
-    getPlayList();
-    setLoading(false);
+    if (localStorage.getItem('access-token')) {
+      const getPlayList = async () => {
+        try {
+          setLoading(true);
+          const playListResponse = await instance.get(`playlist/${param.id}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+            },
+          });
+          setPlayList(playListResponse.data);
+          console.log(playListResponse);
+        } catch (error) {
+          console.log(error);
+          ExpirationToken(error.response.data.message);
+        }
+      };
+      getPlayList();
+      setLoading(false);
+    }
   }, [param.id, render]);
 
   return (
