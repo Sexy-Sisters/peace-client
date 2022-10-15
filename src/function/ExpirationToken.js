@@ -1,6 +1,6 @@
 import { instance } from "../instance/instance";
 
-function ExpirationToken(errorMessage) {
+function ExpirationToken(errorMessage, refreshFunc) {
   if (errorMessage === "만료된 토큰입니다.") {
     const putRefreshToken = async () => {
       try {
@@ -17,6 +17,7 @@ function ExpirationToken(errorMessage) {
       }
     }
     putRefreshToken();
+    refreshFunc();
   }
 }
 

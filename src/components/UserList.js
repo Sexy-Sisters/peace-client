@@ -51,8 +51,7 @@ function UserList() {
         setUserList(response.data);
       } catch (error) {
         console.log(error);
-        ExpirationToken(error.response.data.message);
-        getUserList();
+        ExpirationToken(error.response.data.message, getUserList);
       }
     };
     getUserList();

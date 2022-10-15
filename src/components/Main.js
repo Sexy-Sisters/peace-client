@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Header } from "../allFiles";
 import { instance } from "../instance/instance";
 import { AiFillHeart, AiOutlineHeart, } from "react-icons/ai";
@@ -10,7 +10,6 @@ import ExpirationToken from "../function/ExpirationToken";
 import styled from "styled-components";
 import Modal from 'react-modal';
 import { css, keyframes } from '@emotion/react';
-import { debounce } from "lodash";
 
 const reSize = keyframes`
   from{
@@ -63,7 +62,7 @@ function ChartList({ data, index, size }) {
         setPushed(response.data);
       } catch (error) {
         console.log(error);
-        ExpirationToken(error.response.data.message)
+        ExpirationToken(error.response.data.message, isPushed)
       }
     };
     isPushed();
@@ -93,7 +92,7 @@ function ChartList({ data, index, size }) {
       setLike(response.data);
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message);
+      ExpirationToken(error.response.data.message, upLike);
     }
     setLoading(false);
   };
@@ -114,7 +113,7 @@ function ChartList({ data, index, size }) {
       setLike(response.data);
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message);
+      ExpirationToken(error.response.data.message, cancelLike);
     }
     setLoading(false);
   };
@@ -139,7 +138,7 @@ function ChartList({ data, index, size }) {
       setSearchError('추가완료!');
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message);
+      ExpirationToken(error.response.data.message, addPlayList);
       setSearchError(error.response.data.message);
     }
   };

@@ -21,8 +21,7 @@ function App() {
           setUser(loginResponse.data);
         } catch (error) {
           console.log(error);
-          ExpirationToken(error.response.data.message);
-          setUserInfo();
+          ExpirationToken(error.response.data.message, setUserInfo);
         }
       }
       setUserInfo();
@@ -40,7 +39,7 @@ function App() {
           setUser(loginResponse.data);
         } catch (error) {
           console.log(error);
-          ExpirationToken(error.response.data.message);
+          ExpirationToken(error.response.data.message, setUserInfo);
         }
       }
       setUserInfo();

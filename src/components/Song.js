@@ -125,6 +125,7 @@ function Song() {
         setMusic(songList);
       } catch (error) {
         console.log(error);
+        ExpirationToken(error.response.data.message, search);
       }
       setLoading(false);
     }
@@ -155,7 +156,7 @@ function Song() {
         setSearched(false);
       } catch (res) {
         console.log(res.response.data.message);
-        setSearchError(res.response.data.message);
+        setSearchError(res.response.data.message, requestSong);
         ExpirationToken(res.response.data.message);
         console.log(res);
       }
@@ -180,7 +181,7 @@ function Song() {
       setSong('');
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message);
+      ExpirationToken(error.response.data.message, postPlayList);
       setSearchError(error.response.data.message);
     }
   };
@@ -200,7 +201,7 @@ function Song() {
               onKeyDown={(e) => onKeyDown(e)}
               placeholder={localStorage.getItem('access-token') ? "신청곡을 검색해보세요." : "로그인하세요~~"}
               disabled={!localStorage.getItem('access-token')}
-              
+
               onKeyPress={(e) => { if (e.key === 'Enter') search() }}
             />
             <HiOutlineSearch onClick={() => search()} size={24} className="search-btn" />

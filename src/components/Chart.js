@@ -25,7 +25,6 @@ const ChartLeft = styled.div`
 `;
 
 function ChartList({ data, index, size }) {
-  const [pushed, setPushed] = useState(false);
   const [modal, setModal] = useState(false);
   const [searchError, setSearchError] = useState('');
 
@@ -49,7 +48,7 @@ function ChartList({ data, index, size }) {
       setSearchError('추가완료!');
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message);
+      ExpirationToken(error.response.data.message, addPlayList);
       setSearchError(error.response.data.message);
     }
   };
@@ -139,8 +138,7 @@ function Chart() {
         setChart(response.data);
       } catch (error) {
         console.log(error);
-        ExpirationToken(error.response.data.message);
-        getSongChart();
+        ExpirationToken(error.response.data.message, getSongChart);
       }
     };
     getSongChart();

@@ -57,8 +57,7 @@ function MyPage() {
           setImgArr(newImgArr);
         } catch (error) {
           console.log(error);
-          ExpirationToken(error.response.data.message);
-          getPlayList();
+          ExpirationToken(error.response.data.message, getPlayList);
         }
       }
       getPlayList();
@@ -83,8 +82,7 @@ function MyPage() {
       });
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message);
-      deleteSong();
+      ExpirationToken(error.response.data.message, deleteSong);
     }
     setLoading(false);
   };
@@ -110,8 +108,7 @@ function MyPage() {
       });
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message);
-      changeProfileImg();
+      ExpirationToken(error.response.data.message, changeProfileImg);
     }
   };
   

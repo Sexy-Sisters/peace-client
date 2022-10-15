@@ -22,7 +22,7 @@ function PlayListList({ data, index, size, userId, setRender }) {
       setRender(prev => !prev);
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message);
+      ExpirationToken(error.response.data.message, deleteSong);
     }
   };
 

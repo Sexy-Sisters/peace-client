@@ -62,10 +62,8 @@ function SignUp(props) {
   };
 
   const signUp = () => {
-    // if (() => checkBlank()) {
     postSignUp();
     setSignUpStep(prev => prev + 1);
-    // }
   };
   const Login = async () => {
     try {
