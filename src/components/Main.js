@@ -10,6 +10,9 @@ import ExpirationToken from "../function/ExpirationToken";
 import styled from "styled-components";
 import Modal from 'react-modal';
 import { css, keyframes } from '@emotion/react';
+import SnackBar from "./SnackBar";
+import { SnackbarState } from "../atom";
+import { useRecoilState } from "recoil";
 
 const reSize = keyframes`
   from{
@@ -50,6 +53,7 @@ function ChartList({ data, index, size }) {
   const [loading, setLoading] = useState(false);
   const firstPush = useRef(false);
   const [searchError, setSearchError] = useState('');
+  const [snackbar, setSnackbar] = useRecoilState(SnackbarState);
   const userInfo = localStorage.getItem("user");
   useEffect(() => {
     const isPushed = async () => {
@@ -140,6 +144,11 @@ function ChartList({ data, index, size }) {
       console.log(error);
       ExpirationToken(error.response.data.message, addPlayList);
       setSearchError(error.response.data.message);
+      setSnackbar({
+        isOpen: true,
+        message: error.response.data.message,
+        severity: 'error',
+      })
     }
   };
 
@@ -185,7 +194,7 @@ function ChartList({ data, index, size }) {
           {like}
         </span>
       </div>
-      <Modal
+      {/* <Modal
         isOpen={modal}
         onRequestClose={() => setModal(false)}
         style={{
@@ -212,7 +221,8 @@ function ChartList({ data, index, size }) {
             <span className="searchError">{searchError}</span>
           </div>
         )}
-      </Modal>
+      </Modal> */}
+      <SnackBar message={snackbar.message} />
     </div>
   );
 }
@@ -230,6 +240,7 @@ function Main() {
   const [chart, setChart] = useState([]);
   const [loading, setLoading] = useState(false);
   const [chartError, setChartError] = useState('노래가 없습니다~');
+  const [snackbar, setSnackbar] = useRecoilState(SnackbarState);
   useEffect(() => {
     if (localStorage.getItem("access-token")) {
       const getSongChart = async () => {
@@ -286,6 +297,7 @@ function Main() {
           </div>
         )}
       </div>
+      <SnackBar />
     </div>
   );
 }
