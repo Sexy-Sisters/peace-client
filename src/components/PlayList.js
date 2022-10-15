@@ -69,11 +69,11 @@ function PlayList() {
           console.log(playListResponse);
         } catch (error) {
           console.log(error);
-          ExpirationToken(error.response.data.message);
+          ExpirationToken(error.response.data.message, getPlayList);
         }
+        setLoading(false);
       };
       getPlayList();
-      setLoading(false);
     }
   }, [param.id, render]);
 
@@ -114,6 +114,7 @@ function PlayList() {
           <span>로딩중~~~</span>
         )}
       </div>
+      
     </>
   );
 }
