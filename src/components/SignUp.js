@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import "../styles/SignUp.scss";
 import { AiOutlineCloseCircle, AiOutlineCheckCircle, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { instance } from '../instance/instance';
-function SignUp(props) {
-  const { type } = props;
+import { useRecoilState } from "recoil";
+import { snackbarState } from "../atom";
+function SignUp({ type }) {
+  const [snackbar, setSnackbar] = useRecoilState(snackbarState);
   const [correctPassword, setCorrectPassword] = useState(false);
   const [visible, setVisible] = useState(false);
   const [signUpInputs, setSignUpInputs] = useState({
@@ -79,6 +81,8 @@ function SignUp(props) {
     }
   };
 
+  console.log(issueCode);
+
   const postSignUp = async () => {
     try {
       setIssueCode(await instance.post("user", signUpInputs));
@@ -89,13 +93,27 @@ function SignUp(props) {
   };
 
   const sendIssueCode = async () => {
-    setSendCode(false);
-    try {
-      await instance.post(`user/issue-code?email=${signUpInputs.email}`);
-      console.log("인증보냄");
-    } catch (error) {
-      console.log(error);
+    console.log(signUpInputs.email)
+    if (/^20[0-9]{7}@bssm.hs.kr$/g.test(signUpInputs.email)) {
+      setSendCode(false);
+      try {
+        await instance.post(`user/issue-code?email=${signUpInputs.email}`);
+        setSnackbar({
+          isOpen: true,
+          message: '인증을 보냈습니다. 이메일을 확인하세요.',
+          severity: 'success'
+        })
+      } catch (error) {
+        console.log(error);
+      }
     }
+    else {
+      setSnackbar({
+        isOpen: true,
+        severity: 'error',
+        message: '학교 이메일 계정만 사용 가능합니다.'
+      })
+    };
   };
 
   const sendCheckCode = async () => {
@@ -106,15 +124,28 @@ function SignUp(props) {
       }
       await instance.delete(`user/check-code`, { data: requestObj });
       setCertification(true);
+      setSnackbar({
+        isOpen: true,
+        message: '인증완료!',
+        severity: 'success'
+      })
     } catch (error) {
       console.log(error);
-      alert("인증에 실패했습니다.");
+      setSnackbar({
+        isOpen: true,
+        message: '인증에 실패했습니다.',
+        severity: 'error'
+      })
+      setSignUpInputs({
+        ...signUpInputs,
+        email: '',
+      })
+      setIssueCode('');
     }
-  };
-
+  }
   useEffect(() => {
     const { name, nickName, password, confirmPassword } = signUpInputs;
-    if ((signUpStep === 2 && !certification) || (type && (name === "" || nickName === "")) || (signUpStep === 3 && (password === "" || confirmPassword === "")) || (!type && (loginInputs.email === "" || loginInputs.password === ""))) {
+    if ((signUpStep === 2 && !certification) || (type && (name === "" || nickName === "")) || (signUpStep === 3 && (password === "" || confirmPassword === "")) || (!type && (!/^20[0-9]{7}@bssm.hs.kr$/g.test(loginInputs.email) || loginInputs.password === ""))) {
       setDisabled(true);
     }
     else {
@@ -135,7 +166,7 @@ function SignUp(props) {
       {type ? (
         //회원가입
         <>
-          <h1 className="SignUp-title">SIGN UP</h1>
+          {signUpStep !== 4 && <h1 className="SignUp-title">SIGN UP</h1>}
           <div className="SignUp-input-div">
             {signUpStep === 1 ? <><input
               name="name"
@@ -143,7 +174,7 @@ function SignUp(props) {
               value={signUpInputs.name}
               onChange={(e) => onChangeSignUp(e)}
               className="SignUp-input"
-              onKeyPress={(e) => { if (e.key === 'Enter') setSignUpStep(prev => prev + 1) }}
+              onKeyPress={(e) => { if (e.key === 'Enter' && !disabled) setSignUpStep(prev => prev + 1) }}
             />
               <input
                 name="nickName"
@@ -151,7 +182,7 @@ function SignUp(props) {
                 value={signUpInputs.nickName}
                 onChange={(e) => onChangeSignUp(e)}
                 className="SignUp-input"
-                onKeyPress={(e) => { if (e.key === 'Enter') setSignUpStep(prev => prev + 1) }}
+                onKeyPress={(e) => { if (e.key === 'Enter' && !disabled) setSignUpStep(prev => prev + 1) }}
               /></> : (
               signUpStep === 2 ?
                 <>
@@ -193,7 +224,7 @@ function SignUp(props) {
                     value={signUpInputs.password}
                     onChange={(e) => onChangeSignUp(e)}
                     className="SignUp-input"
-                    onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
+                    onKeyPress={(e) => { if (e.key === 'Enter' && !disabled) signUp() }}
                   />
                   <div className="confirm">
                     <input
@@ -203,7 +234,7 @@ function SignUp(props) {
                       value={signUpInputs.confirmPassword}
                       onChange={(e) => onChangeSignUp(e)}
                       className="SignUp-input confirmPassword"
-                      onKeyPress={(e) => { if (e.key === 'Enter') signUp() }}
+                      onKeyPress={(e) => { if (e.key === 'Enter' && !disabled) signUp() }}
                     />
                     {correctPassword ? <AiOutlineCheckCircle className="icon" size={24} /> : <AiOutlineCloseCircle className="icon" size={24} />}
                   </div>
@@ -219,7 +250,22 @@ function SignUp(props) {
           <div className="next">
             {signUpStep === 3 ? <button className="SignUp-button" onClick={() => signUp()} disabled={disabled}>
               회원가입
-            </button> : (signUpStep !== 4 && <button className="SignUp-button" onClick={() => setSignUpStep(prev => prev + 1)} disabled={disabled}>
+            </button> : (signUpStep !== 4 && <button className="SignUp-button" onClick={() => {
+              if (signUpStep === 1 && !/^[가-힣]{2,4}$/.test(signUpInputs.name)) {
+                setSnackbar({
+                  isOpen: true,
+                  severity: 'error',
+                  message: '반드시 본명을 입력해주세요!'
+                })
+                setSignUpInputs({
+                  ...signUpInputs,
+                  name: '',
+                })
+              }
+              else {
+                setSignUpStep(prev => prev + 1);
+              }
+            }} disabled={disabled}>
               NEXT
             </button>)}
           </div>

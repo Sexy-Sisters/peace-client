@@ -10,6 +10,7 @@ import {
   isSelectedMusicState,
   disabledState,
   userState,
+  snackbarState,
 } from "../atom";
 import Modal from "react-modal";
 import ExpirationToken from "../function/ExpirationToken";
@@ -58,6 +59,7 @@ function Song() {
   const [disabled, setDisabled] = useRecoilState(disabledState);
   const [focusIndex, setFocusIndex] = useState(-1);
   const [user, setUser] = useRecoilState(userState);
+  const [snackbar, setSnackbar] = useRecoilState(snackbarState);
   const [request, setRequest] = useState({});
 
   useEffect(() => {
@@ -125,7 +127,7 @@ function Song() {
         setMusic(songList);
       } catch (error) {
         console.log(error);
-        ExpirationToken(error.response.data.message, search);
+        ExpirationToken(error.response.data.message, search, setSnackbar);
       }
       setLoading(false);
     }
@@ -134,7 +136,12 @@ function Song() {
   const requestSong = async () => {
     setModal(true);
     if (!song) {
-      setSearchError("노래가 선택되지 않았습니다.");
+      // setSearchError("노래가 선택되지 않았습니다.");
+      setSnackbar({
+        isOpen: true,
+        message: '노래가 선택되지 않았습니다.',
+        severity: 'error'
+      })
     } else {
       try {
         setLoading(true);
@@ -145,7 +152,7 @@ function Song() {
             },
           }
         );
-        setSearchError("신청 완료!");
+        // setSearchError("신청 완료!");
         const loginResponse = await instance.get("user/profile", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access-token")}`,
@@ -154,10 +161,15 @@ function Song() {
         setUser(loginResponse.data);
         setSong('');
         setSearched(false);
+        setSnackbar({
+          isOpen: true,
+          message: '추가 완료!',
+          severity: 'success'
+        })
       } catch (res) {
         console.log(res.response.data.message);
-        setSearchError(res.response.data.message, requestSong);
-        ExpirationToken(res.response.data.message);
+        // setSearchError(res.response.data.message, requestSong);
+        ExpirationToken(res.response.data.message, requestSong, setSnackbar);
         console.log(res);
       }
       setLoading(false);
@@ -179,9 +191,14 @@ function Song() {
       );
       setSearchError("추가완료!");
       setSong('');
+      setSnackbar({
+        isOpen: true,
+        message: '추가 완료!',
+        severity: 'success',
+      })
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message, postPlayList);
+      ExpirationToken(error.response.data.message, postPlayList, setSnackbar);
       setSearchError(error.response.data.message);
     }
   };
@@ -246,7 +263,7 @@ function Song() {
           </div>
         </div>
       </div>
-      <Modal
+      {/* <Modal
         isOpen={modal}
         onRequestClose={() => setModal(false)}
         style={{
@@ -273,7 +290,7 @@ function Song() {
             <span className="searchError">{searchError}</span>
           </div>
         )}
-      </Modal>
+      </Modal> */}
     </div>
   );
 }

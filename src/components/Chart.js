@@ -8,6 +8,8 @@ import styled from "styled-components";
 import "../styles/Chart.scss";
 import Modal from 'react-modal';
 import ExpirationToken from "../function/ExpirationToken";
+import { useRecoilState } from "recoil";
+import { snackbarState } from "../atom";
 
 const ChartLeft = styled.div`
   width: 586px;
@@ -25,11 +27,12 @@ const ChartLeft = styled.div`
 `;
 
 function ChartList({ data, index, size }) {
-  const [modal, setModal] = useState(false);
-  const [searchError, setSearchError] = useState('');
+  // const [modal, setModal] = useState(false);
+  // const [searchError, setSearchError] = useState('');
+  const [snackbar, setSnackbar] = useRecoilState(snackbarState);
 
   const addPlayList = async () => {
-    setModal(true);
+    // setModal(true);
     try {
       const response = await instance.post(
         "playlist/",
@@ -45,11 +48,16 @@ function ChartList({ data, index, size }) {
         }
       );
       console.log(response);
-      setSearchError('추가완료!');
+      // setSearchError('추가완료!');
+      setSnackbar({
+        isOpen: true,
+        message: '추가 완료!',
+        severity: 'success',
+      })
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message, addPlayList);
-      setSearchError(error.response.data.message);
+      ExpirationToken(error.response.data.message, addPlayList, setSnackbar);
+      // setSearchError(error.response.data.message);
     }
   };
 
@@ -83,7 +91,7 @@ function ChartList({ data, index, size }) {
           </span>
         </div>
       </div>
-      <Modal
+      {/* <Modal
         isOpen={modal}
         onRequestClose={() => setModal(false)}
         style={{
@@ -110,7 +118,7 @@ function ChartList({ data, index, size }) {
             <span className="searchError">{searchError}</span>
           </div>
         )}
-      </Modal>
+      </Modal> */}
     </>
   );
 }

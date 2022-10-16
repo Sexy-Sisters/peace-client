@@ -2,10 +2,10 @@ import React from 'react'
 
 import { Snackbar, Alert, Slide } from "@mui/material";
 import { useRecoilState } from "recoil";
-import { SnackbarState } from '../atom';
+import { snackbarState } from '../atom';
 
 function SnackBar() {
-  const [snackbar, setSnackbar] = useRecoilState(SnackbarState);
+  const [snackbar, setSnackbar] = useRecoilState(snackbarState);
   return (
     <Snackbar
       open={snackbar.isOpen}

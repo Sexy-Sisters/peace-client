@@ -10,8 +10,7 @@ import ExpirationToken from "../function/ExpirationToken";
 import styled from "styled-components";
 import Modal from 'react-modal';
 import { css, keyframes } from '@emotion/react';
-import SnackBar from "./SnackBar";
-import { SnackbarState } from "../atom";
+import { snackbarState } from "../atom";
 import { useRecoilState } from "recoil";
 
 const reSize = keyframes`
@@ -53,7 +52,7 @@ function ChartList({ data, index, size }) {
   const [loading, setLoading] = useState(false);
   const firstPush = useRef(false);
   const [searchError, setSearchError] = useState('');
-  const [snackbar, setSnackbar] = useRecoilState(SnackbarState);
+  const [snackbar, setSnackbar] = useRecoilState(snackbarState);
   const userInfo = localStorage.getItem("user");
   useEffect(() => {
     const isPushed = async () => {
@@ -73,7 +72,6 @@ function ChartList({ data, index, size }) {
   }, [data.numberOfUps, data.id, userInfo]);
 
   const pushLike = async () => {
-    console.log(pushed);
     firstPush.current = true;
     setPushed(prev => !prev);
     !loading && (pushed ? cancelLike() : upLike());
@@ -96,7 +94,7 @@ function ChartList({ data, index, size }) {
       setLike(response.data);
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message, upLike);
+      ExpirationToken(error.response.data.message, upLike, setSnackbar);
     }
     setLoading(false);
   };
@@ -117,7 +115,7 @@ function ChartList({ data, index, size }) {
       setLike(response.data);
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message, cancelLike);
+      ExpirationToken(error.response.data.message, cancelLike, setSnackbar);
     }
     setLoading(false);
   };
@@ -140,15 +138,15 @@ function ChartList({ data, index, size }) {
       );
       console.log(response);
       setSearchError('추가완료!');
-    } catch (error) {
-      console.log(error);
-      ExpirationToken(error.response.data.message, addPlayList);
-      setSearchError(error.response.data.message);
       setSnackbar({
         isOpen: true,
-        message: error.response.data.message,
-        severity: 'error',
+        message: '추가완료!',
+        severity: 'success'
       })
+    } catch (error) {
+      console.log(error);
+      ExpirationToken(error.response.data.message, addPlayList, setSnackbar);
+      setSearchError(error.response.data.message);
     }
   };
 
@@ -222,7 +220,6 @@ function ChartList({ data, index, size }) {
           </div>
         )}
       </Modal> */}
-      <SnackBar message={snackbar.message} />
     </div>
   );
 }
@@ -240,7 +237,6 @@ function Main() {
   const [chart, setChart] = useState([]);
   const [loading, setLoading] = useState(false);
   const [chartError, setChartError] = useState('노래가 없습니다~');
-  const [snackbar, setSnackbar] = useRecoilState(SnackbarState);
   useEffect(() => {
     if (localStorage.getItem("access-token")) {
       const getSongChart = async () => {
@@ -297,7 +293,7 @@ function Main() {
           </div>
         )}
       </div>
-      <SnackBar />
+      {/* <SnackBar /> */}
     </div>
   );
 }

@@ -43,8 +43,8 @@ export const userState = atom({
     }
 })
 
-export const SnackbarState = atom({
-    key: `Snackbar/${v1()}`,
+export const snackbarState = atom({
+    key: `snackbar/${v1()}`,
     default: {
         isOpen: false,
         message: '',
