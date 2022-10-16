@@ -83,10 +83,20 @@
     margin-right: 0;
 }
 
+.mypage-modal-root{
+    display: flex;
+    
+}
+
 .MyPage-info{
     margin-top: 20px;
     font-size: 24px;
     width: 500px;
+    &.modal{
+        display: inline-block;
+        width: 300px;
+        margin: 0;
+    }
     .nickname{
         font-size: 1.2em;
         margin-right: 10px;
@@ -159,9 +169,9 @@
 
 .original-img{
     margin: 20px;
-    width: 160px;
-    height: 160px;
-    border-radius: 80px;
+    width: 320px;
+    height: 320px;
+    border-radius: 160px;
     border: 2px solid black;
 }
 
