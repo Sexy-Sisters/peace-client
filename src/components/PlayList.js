@@ -87,7 +87,7 @@ function PlayList() {
           <h1 className="title">PLAYLIST</h1>
         </div>
       </div>
-      <div>
+      <div className="ChartList-playlist-root">
         {!loading ? (
           playlist ? (
             <div className="ChartList">

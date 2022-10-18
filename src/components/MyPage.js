@@ -14,7 +14,12 @@ import { userState } from "../atom";
 
 const ImageSpan = styled.span`
   position: absolute;
+  top: 95px;
   left: ${(props) => (props.index * 50) + 40}px;
+  transition: all ease 0.2s;
+  &:hover{
+    transform: translateY(-20px);
+  }
 `;
 
 const PlayListImages = ({ item, index }) => {
@@ -192,6 +197,13 @@ function MyPage() {
               <h1>플레이리스트</h1>
               <Link to={`/playlist/${user.id}`}>
                 <div className="MyPage-playlist-img">
+                  <div className="modal-header-mypage">
+                    <div className="modal-header-mypage circle">
+                      <div className="top-circle" style={{backgroundColor: '#EA0303'}}></div>
+                      <div className="top-circle" style={{backgroundColor: '#F6C927'}}></div>
+                      <div className="top-circle" style={{backgroundColor: '#2A9A0E'}}></div>
+                    </div>
+                  </div>
                   {imgArr && imgArr.map((item, index) => {
                     return <PlayListImages item={item} index={index} key={index} />;
                   })}
@@ -221,7 +233,9 @@ function MyPage() {
               backgroundColor: '#FFF9F1',
             },
           }}>
-          <div className="modal-header"></div>
+          <div className="modal-header">
+            <div className="modal-header circle"></div>
+          </div>
           <div className="mypage-modal-root">
             <div>
               <img src={profileImg} alt="프로필 사진" className="original-img" />
