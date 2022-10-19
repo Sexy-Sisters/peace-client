@@ -11,6 +11,7 @@ import Modal from "react-modal";
 import { useRef } from "react";
 import { useRecoilState } from "recoil";
 import { userState } from "../atom";
+import HeaderPoint from "./HeaderPoint";
 
 const ImageSpan = styled.span`
   position: absolute;
@@ -197,13 +198,7 @@ function MyPage() {
               <h1>플레이리스트</h1>
               <Link to={`/playlist/${user.id}`}>
                 <div className="MyPage-playlist-img">
-                  <div className="modal-header-mypage">
-                    <div className="modal-header-mypage circle">
-                      <div className="top-circle" style={{backgroundColor: '#EA0303'}}></div>
-                      <div className="top-circle" style={{backgroundColor: '#F6C927'}}></div>
-                      <div className="top-circle" style={{backgroundColor: '#2A9A0E'}}></div>
-                    </div>
-                  </div>
+                  <HeaderPoint />
                   {imgArr && imgArr.map((item, index) => {
                     return <PlayListImages item={item} index={index} key={index} />;
                   })}

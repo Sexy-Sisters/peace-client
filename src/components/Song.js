@@ -14,6 +14,7 @@ import {
 } from "../atom";
 import Modal from "react-modal";
 import ExpirationToken from "../function/ExpirationToken";
+import HeaderPoint from "./HeaderPoint";
 
 function SongList({ item, setRequest }) {
   const setSong = useSetRecoilState(songState);
@@ -208,7 +209,8 @@ function Song() {
       <Header />
       <div className="Song-div">
         <div className="Song-div main">
-          <div className="modal-header song"></div>
+          {/* <div className="modal-header song"></div> */}
+          <HeaderPoint/>
           <div className="Song-div content">
             <input
               type="text"
