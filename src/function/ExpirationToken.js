@@ -1,7 +1,7 @@
 import { instance } from "../instance/instance";
 
-function ExpirationToken(errorMessage) {
-  if (errorMessage === "만료된 토큰입니다.") {
+function ExpirationToken(errorMessage, refreshFunc, setSnackbar) {
+  if (errorMessage === '만료된 토큰입니다.') {
     const putRefreshToken = async () => {
       try {
         const response = await instance.put('auth', null, {
@@ -17,6 +17,14 @@ function ExpirationToken(errorMessage) {
       }
     }
     putRefreshToken();
+    refreshFunc();
+  }
+  else {
+    setSnackbar({
+      isOpen: true,
+      message: errorMessage,
+      severity: 'error'
+    })
   }
 }
 

@@ -2,9 +2,12 @@ $main_blue: #E3E9EF;
 $main_deep_blue: #628BA1;
 $main_deeper_blue: #7895B2;
 
+.ChartList-playlist-root{
+    padding-bottom: 80px;
+}
+
 .PlayList{
     padding-top: 121.6px;
-    box-sizing: border-box;
     .ChartList-root{
         width: 636px;
         display: flex;

@@ -22,7 +22,7 @@ function PlayListList({ data, index, size, userId, setRender }) {
       setRender(prev => !prev);
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message);
+      ExpirationToken(error.response.data.message, deleteSong);
     }
   };
 
@@ -56,24 +56,25 @@ function PlayList() {
   const param = useParams();
 
   useEffect(() => {
-    const getPlayList = async () => {
-      try {
-        setLoading(true);
-        const playListResponse = await instance.get(`playlist/${param.id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access-token")}`,
-          },
-        });
-        setPlayList(playListResponse.data);
-        console.log(playListResponse);
-      } catch (error) {
-        console.log(error);
-        ExpirationToken(error.response.data.message);
-        getPlayList();
-      }
-    };
-    getPlayList();
-    setLoading(false);
+    if (localStorage.getItem('access-token')) {
+      const getPlayList = async () => {
+        try {
+          setLoading(true);
+          const playListResponse = await instance.get(`playlist/${param.id}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+            },
+          });
+          setPlayList(playListResponse.data);
+          console.log(playListResponse);
+        } catch (error) {
+          console.log(error);
+          ExpirationToken(error.response.data.message, getPlayList);
+        }
+        setLoading(false);
+      };
+      getPlayList();
+    }
   }, [param.id, render]);
 
   return (
@@ -86,7 +87,7 @@ function PlayList() {
           <h1 className="title">PLAYLIST</h1>
         </div>
       </div>
-      <div>
+      <div className="ChartList-playlist-root">
         {!loading ? (
           playlist ? (
             <div className="ChartList">
@@ -113,6 +114,7 @@ function PlayList() {
           <span>로딩중~~~</span>
         )}
       </div>
+      
     </>
   );
 }

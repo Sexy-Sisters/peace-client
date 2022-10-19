@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+/** @jsxImportSource @emotion/react */
+import React, { useEffect, useRef, useState } from "react";
 import { Header } from "../allFiles";
 import { instance } from "../instance/instance";
 import { AiFillHeart, AiOutlineHeart, } from "react-icons/ai";
@@ -8,6 +9,25 @@ import { ImMusic } from "react-icons/im";
 import ExpirationToken from "../function/ExpirationToken";
 import styled from "styled-components";
 import Modal from 'react-modal';
+import { css, keyframes } from '@emotion/react';
+import { snackbarState } from "../atom";
+import { useRecoilState } from "recoil";
+
+const reSize = keyframes`
+  from{
+    width: 16px;
+    height: 16px;
+  }
+  50%{
+    width: 20px;
+    height: 20px;
+  }
+  to{
+    width: 16px;
+    height: 16px;
+  }
+`
+
 const ChartLeft = styled.div`
   width: 586px;
   display: flex;
@@ -29,7 +49,10 @@ function ChartList({ data, index, size }) {
   const [pushed, setPushed] = useState(false);
   const [like, setLike] = useState(data.numberOfUps);
   const [modal, setModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const firstPush = useRef(false);
   const [searchError, setSearchError] = useState('');
+  const [snackbar, setSnackbar] = useRecoilState(snackbarState);
   const userInfo = localStorage.getItem("user");
   useEffect(() => {
     const isPushed = async () => {
@@ -42,55 +65,59 @@ function ChartList({ data, index, size }) {
         setPushed(response.data);
       } catch (error) {
         console.log(error);
-        ExpirationToken(error.response.data.message);
-        isPushed();
+        ExpirationToken(error.response.data.message, isPushed)
       }
     };
     isPushed();
-  }, [data.numberOfUps, data.id, pushed, userInfo]);
+  }, [data.numberOfUps, data.id, userInfo]);
 
   const pushLike = async () => {
-    pushed ? cancelLike() : upLike();
+    firstPush.current = true;
+    setPushed(prev => !prev);
+    !loading && (pushed ? cancelLike() : upLike());
   };
 
+
   const upLike = async () => {
+    // setPushed(prev => !prev);
     if (!localStorage.getItem("access-token")) {
       alert("로그인이 필요합니다!");
       return;
     }
     try {
+      setLoading(true);
       const response = await instance.post(`song/${data.id}/up`, null, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access-token")}`,
         },
       });
       setLike(response.data);
-      setPushed(true);
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message);
-      upLike();
+      ExpirationToken(error.response.data.message, upLike, setSnackbar);
     }
+    setLoading(false);
   };
 
   const cancelLike = async () => {
+    // setPushed(prev => !prev);
     if (!localStorage.getItem("access-token")) {
       alert("로그인이 필요합니다!");
       return;
     }
     try {
+      setLoading(true);
       const response = await instance.delete(`song/${data.id}/up`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access-token")}`,
         },
       });
       setLike(response.data);
-      setPushed(false);
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message);
-      cancelLike();
+      ExpirationToken(error.response.data.message, cancelLike, setSnackbar);
     }
+    setLoading(false);
   };
 
   const addPlayList = async () => {
@@ -111,9 +138,14 @@ function ChartList({ data, index, size }) {
       );
       console.log(response);
       setSearchError('추가완료!');
+      setSnackbar({
+        isOpen: true,
+        message: '추가완료!',
+        severity: 'success'
+      })
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message);
+      ExpirationToken(error.response.data.message, addPlayList, setSnackbar);
       setSearchError(error.response.data.message);
     }
   };
@@ -143,18 +175,24 @@ function ChartList({ data, index, size }) {
       </div>
       <div className="ChartList right"
         onClick={() => pushLike()}
-        style={{ cursor: "pointer" }}>
+        style={{ cursor: "pointer" }}
+      >
         <span className="ChartList-username">{data.userName}</span>
         <span className="ChartList-heart">
           {pushed ? (
-            <AiFillHeart color="red"/>
+            <AiFillHeart css={css`
+              animation: ${firstPush.current ? css`${reSize} 0.15s ease-in-out 1` : 'none'};
+              color: red;
+            `} />
           ) : (
-            <AiOutlineHeart />
+            <AiOutlineHeart css={css`
+              animation: ${firstPush.current ? css`${reSize} 0.15s ease-in-out 1` : 'none'};
+            `} />
           )}{" "}
           {like}
         </span>
       </div>
-      <Modal
+      {/* <Modal
         isOpen={modal}
         onRequestClose={() => setModal(false)}
         style={{
@@ -181,7 +219,7 @@ function ChartList({ data, index, size }) {
             <span className="searchError">{searchError}</span>
           </div>
         )}
-      </Modal>
+      </Modal> */}
     </div>
   );
 }
@@ -255,6 +293,7 @@ function Main() {
           </div>
         )}
       </div>
+      {/* <SnackBar /> */}
     </div>
   );
 }

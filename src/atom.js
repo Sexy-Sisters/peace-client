@@ -42,3 +42,12 @@ export const userState = atom({
         // requestedSong: null
     }
 })
+
+export const snackbarState = atom({
+    key: `snackbar/${v1()}`,
+    default: {
+        isOpen: false,
+        message: '',
+        severity: 'error',
+    }
+})

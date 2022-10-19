@@ -7,22 +7,45 @@
     display: flex;
 }
 
+
+.modal-header-mypage{
+    height: 55px;
+    width: 100%;
+    background-color: rgb(85, 118, 164);
+    border-radius: 40px 40px 0 0;
+    display: flex;
+    align-items: center;
+    .circle{
+        display: flex;
+        gap: 10px;
+        margin-left: 20px;
+    }
+    .top-circle{
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        border-radius: 7.5px;
+    }
+}
+
+
 .MyPage-playlist{
-    position: relative;
     .MyPage-playlist-img{
-        padding: 40px;
-        height: 200px;
-        width: 650px;
+        position: relative;
+        // padding: 40px;
+        // padding-top: 0;
+        height: 330px;
+        width: 730px;
         margin: 0;
         background-color: #7895B2;
         // border: 2px solid black;
         border: none;
-        border-radius: 30px;
+        border-radius: 40px;
     }
 }
 
 .MyPageSong{
-    background-color: #FFFAF1;
+    background-color: #E3E9EF;
     // margin: 0 auto;
     padding: 20px;
     width: 700px;
@@ -83,10 +106,20 @@
     margin-right: 0;
 }
 
+.mypage-modal-root{
+    display: flex;
+    
+}
+
 .MyPage-info{
     margin-top: 20px;
     font-size: 24px;
     width: 500px;
+    &.modal{
+        display: inline-block;
+        width: 300px;
+        margin: 0;
+    }
     .nickname{
         font-size: 1.2em;
         margin-right: 10px;
@@ -154,14 +187,14 @@
     width: 200px;
     height: 200px;
     border-radius: 20px;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, .3);
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, .3);
 }
 
 .original-img{
     margin: 20px;
-    width: 160px;
-    height: 160px;
-    border-radius: 80px;
+    width: 320px;
+    height: 320px;
+    border-radius: 160px;
     border: 2px solid black;
 }
 

@@ -11,10 +11,16 @@ import Modal from "react-modal";
 import { useRef } from "react";
 import { useRecoilState } from "recoil";
 import { userState } from "../atom";
+import HeaderPoint from "./HeaderPoint";
 
 const ImageSpan = styled.span`
   position: absolute;
+  top: 95px;
   left: ${(props) => (props.index * 50) + 40}px;
+  transition: all ease 0.2s;
+  &:hover{
+    transform: translateY(-20px);
+  }
 `;
 
 const PlayListImages = ({ item, index }) => {
@@ -33,6 +39,7 @@ function MyPage() {
   const [image, setImage] = useState(false);
   const [user, setUser] = useRecoilState(userState);
   const [newProfileImg, setNewProfileImg] = useState([]);
+  const [isChangeNickname, setIsChangeNickname] = useState(false);
   const selectFile = useRef(null);
   const [imgArr, setImgArr] = useState([]);
 
@@ -57,8 +64,7 @@ function MyPage() {
           setImgArr(newImgArr);
         } catch (error) {
           console.log(error);
-          ExpirationToken(error.response.data.message);
-          getPlayList();
+          ExpirationToken(error.response.data.message, getPlayList);
         }
       }
       getPlayList();
@@ -83,8 +89,7 @@ function MyPage() {
       });
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message);
-      deleteSong();
+      ExpirationToken(error.response.data.message, deleteSong);
     }
     setLoading(false);
   };
@@ -110,11 +115,23 @@ function MyPage() {
       });
     } catch (error) {
       console.log(error);
-      ExpirationToken(error.response.data.message);
-      changeProfileImg();
+      ExpirationToken(error.response.data.message, changeProfileImg);
     }
   };
-  
+
+  const changeNickname = async () => {
+    try {
+      const response = await instance.put('user', null, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const [modal, setModal] = useState(false);
 
   const changeImg = (e) => {
@@ -139,7 +156,7 @@ function MyPage() {
               <div>
                 <span className="MyPage nickname">{nickName}</span>
                 <span className="MyPage name">{name}</span>
-                <button className="MyPage btn">수정</button>
+                <button className="MyPage btn" onClick={() => setModal(true)}>수정</button>
               </div>
               <span className="MyPage email">{email}</span>
             </div>
@@ -181,6 +198,7 @@ function MyPage() {
               <h1>플레이리스트</h1>
               <Link to={`/playlist/${user.id}`}>
                 <div className="MyPage-playlist-img">
+                  <HeaderPoint />
                   {imgArr && imgArr.map((item, index) => {
                     return <PlayListImages item={item} index={index} key={index} />;
                   })}
@@ -190,7 +208,11 @@ function MyPage() {
           </div>
         </div>
         <Modal isOpen={modal}
-          onRequestClose={() => setModal(false)}
+          onRequestClose={() => {
+            setModal(false);
+            setImage('');
+            setIsChangeNickname(false);
+          }}
           style={{
             overlay: {
               backgroundColor: "rgba(134, 134, 134, 0.2)",
@@ -206,18 +228,35 @@ function MyPage() {
               backgroundColor: '#FFF9F1',
             },
           }}>
-          <div className="modal-header"></div>
-          <img src={profileImg} alt="프로필 사진" className="original-img" />
-          <input
-            type="file"
-            style={{ display: "none" }}
-            ref={selectFile} //input에 접근 하기위해 useRef사용
-            onChange={(e) => changeImg(e)}
-            accept="image/*"
-          />
-          <span>{selectFile.current?.value.slice(12)}</span>
-          <button onClick={() => selectFile.current.click()}>파일 업로드</button>
-          <button onClick={() => changeProfileImg()} disabled={!image ? true : false}>프로필 사진 변경하기</button>
+          <div className="modal-header">
+            <div className="modal-header circle"></div>
+          </div>
+          <div className="mypage-modal-root">
+            <div>
+              <img src={profileImg} alt="프로필 사진" className="original-img" />
+              <div>
+                <span>{selectFile.current?.value.slice(12)}</span>
+                <button onClick={() => selectFile.current.click()}>파일 업로드</button>
+                <button onClick={() => changeProfileImg()} disabled={!image ? true : false}>프로필 사진 변경하기</button>
+              </div>
+            </div>
+            <input
+              type="file"
+              style={{ display: "none" }}
+              ref={selectFile}
+              onChange={(e) => changeImg(e)}
+              accept="image/*"
+            />
+            <div className="MyPage-info modal">
+              <div>
+                {isChangeNickname ?
+                  <input type='text' placeholder={nickName} /> : <span className="MyPage nickname">{nickName}</span>}
+                <span className="MyPage name">{name}</span>
+                <button className="MyPage btn" onClick={() => (isChangeNickname ? changeNickname() : setIsChangeNickname(true))}>수정</button>
+              </div>
+              <span className="MyPage email">{email}</span>
+            </div>
+          </div>
         </Modal>
       </div>}
     </>

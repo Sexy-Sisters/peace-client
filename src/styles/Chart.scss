@@ -203,8 +203,21 @@ hr{
         display: flex;
         justify-content: center;
         gap: 5px;
+        svg{
+            transition: 0.2s 0.2s all;
+            // &:hover{
+            //     width: 18px;
+            //     height: 18px;
+            // }
+        }
     }
+    // &:hover{
+    //     width: 70px;
+    //     height: 70px;
+    // }
 }
+
+
 
 
 .nonSearch{

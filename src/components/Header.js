@@ -5,6 +5,7 @@ import { FiMenu } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import { SignUp } from "../allFiles";
+import HeaderPoint from "./HeaderPoint";
 
 function Header() {
   const [dropdown, setDropdown] = useState(false);
@@ -98,7 +99,7 @@ function Header() {
                 href="https://github.com/Wake-Up-Song/Server/issues"
                 className="dropdown-item"
               >
-              <span className="Header English">FEEDBACK</span>
+                <span className="Header English">FEEDBACK</span>
               </a>
               {!localStorage.getItem("access-token") ? (
                 <>
@@ -153,14 +154,14 @@ function Header() {
             width: "700px",
             height: "500px",
             margin: "auto",
-            borderRadius: "20px",
+            borderRadius: "40px",
             padding: 0,
             overflowX: "hidden",
             backgroundColor: "#FFF9F1",
           },
         }}
       >
-        <div className="modal-header"></div>
+        <HeaderPoint setModal={setModal} />
         <SignUp type={isSignUp} />
       </Modal>
     </header>
