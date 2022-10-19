@@ -4,6 +4,7 @@ import { AiOutlineCloseCircle, AiOutlineCheckCircle, AiOutlineEye, AiOutlineEyeI
 import { instance } from '../instance/instance';
 import { useRecoilState } from "recoil";
 import { snackbarState } from "../atom";
+import { useRef } from "react";
 function SignUp({ type }) {
   const [snackbar, setSnackbar] = useRecoilState(snackbarState);
   const [correctPassword, setCorrectPassword] = useState(false);
@@ -25,6 +26,7 @@ function SignUp({ type }) {
   const [issueCode, setIssueCode] = useState("");
   const [certification, setCertification] = useState(false);
   const [loginResult, setLoginResult] = useState(0);
+  const lastBtn = useRef(null);
 
   useEffect(() => {
     if (signUpInputs.confirmPassword !== "" && signUpInputs.password !== "" && (signUpInputs.confirmPassword === signUpInputs.password)) {
@@ -49,7 +51,6 @@ function SignUp({ type }) {
       confirmPassword: nextInputs.confirmPassword,
     });
   };
-
 
   const onChangeLogin = (e) => {
     const { name, value } = e.target;
@@ -81,8 +82,6 @@ function SignUp({ type }) {
     }
   };
 
-  console.log(issueCode);
-
   const postSignUp = async () => {
     try {
       setIssueCode(await instance.post("user", signUpInputs));
@@ -91,6 +90,11 @@ function SignUp({ type }) {
       console.log(e);
     }
   };
+
+  // if(window.event.keyCode === 13){
+  //   console.log('asdffads');
+  // }
+
 
   const sendIssueCode = async () => {
     console.log(signUpInputs.email)
@@ -161,6 +165,11 @@ function SignUp({ type }) {
     });
   }
 
+  useEffect(() => {
+    console.log(lastBtn.current);
+    lastBtn.current && lastBtn?.current.focus();
+  }, [loginResult]);
+
   return (
     <div className="SignUp">
       {type ? (
@@ -174,7 +183,7 @@ function SignUp({ type }) {
               value={signUpInputs.name}
               onChange={(e) => onChangeSignUp(e)}
               className="SignUp-input"
-              onKeyPress={(e) => { if (e.key === 'Enter' && !disabled) setSignUpStep(prev => prev + 1) }}
+              onKeyPress={(e) => { if (e.key === 'Enter' && !disabled) setSignUpStep(prev => prev + 1); }}
             />
               <input
                 name="nickName"
@@ -276,12 +285,14 @@ function SignUp({ type }) {
           <img src="/images/logo.png" alt="로고" />
           <span>로그인 완료! (´ฅω•ฅ｀)</span>
           <span>평화로운 아침을 만들어보세요.</span>
-          <button className="SignUp-button result" onClick={() => window.location.reload()}>확인</button>
+          <button className="SignUp-button result" onClick={() => window.location.reload()}
+            onKeyPress={(e) => { if (e.key === 'Enter') window.location.reload() }} ref={lastBtn}>확인</button>
         </div> : loginResult === -1 ? <div className="loginResult">
           <img src="/images/logo.png" alt="로고" />
           <span>로그인 실패 ｡°(´∩ω∩`)°｡</span>
           <span>이메일이나 비밀번호를 확인해주세요.</span>
-          <button className="SignUp-button result re" onClick={() => reLogin()}>다시 로그인하기</button>
+          <button className="SignUp-button result re" onClick={() => reLogin()}
+            onKeyPress={(e) => { if (e.key === 'Enter') window.location.reload() }} ref={lastBtn}>다시 로그인하기</button>
         </div> : (<div className="SignUp-modalContainer" onClick={(e) => e.stopPropagation()}>
           <h1 className="SignUp-title">LOGIN</h1>
           <div className="SignUp-input-div">
